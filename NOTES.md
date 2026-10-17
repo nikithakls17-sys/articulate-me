@@ -53,3 +53,8 @@ Running log of decisions, bugs and fixes. Feeds the "How I Built It" section of 
 - Scenario openings came out **addressed to the partner** ("Sarah, you mentioned leadership skills…" when Sarah is the interviewer). Prompt now says the partner speaks to "you", and the builder rejects openings that start with the partner's own name.
 - Build time per chapter on CPU: 322-347 s, ~3.4-3.9k input / ~1.6-1.7k output tokens across 3 calls (pages, quiz, worlds).
 - Hand-review edits (`scripts/review_edits.py`, re-run after rebuilding): Day 1 comparison table was off-topic ("good vs bad sources: U.S. Department of Labor vs Wikipedia", 1 row) → replaced with a PREP step-by-step table; Day 1 partners were generic ("Professor", "Interviewer") → named; Day 3 customer-facing opening had the customer saying "I can see you're frustrated" → rewritten.
+
+## First full spoken conversation (local, gemma3:1b, Whisper tiny.en)
+- Day 1, job seeker, 3 spoken replies (Windows TTS clips). Turn latency 5.8 s / 3.4 s / 2.5 s (Whisper + partner reply); grading 27.3 s (14 small calls, 2.3k in / 220 out tokens). Metrics across the 3 turns: 144 WPM, 5.7 fillers/min (um, uh, like), 4 pauses > 0.7 s.
+- Partner (Dana, interviewer) stayed in character and reacted to answers ("That's a really impressive ability to manage chaos… can you give me a specific example?").
+- **Weakness:** 1B grading is generous: 100% even though reply 2 was "I'd, like, handle it by talking to people and stuff. It depends." Feedback is generic praise. The validator still hid one quote it couldn't find. Hosted mode (bigger Gemma, one-call JSON) is the demo path; local 1B is the privacy/cost path.
