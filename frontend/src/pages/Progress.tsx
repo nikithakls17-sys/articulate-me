@@ -52,8 +52,8 @@ export default function ProgressPage() {
         </section>
       )}
 
-      <section className="flex flex-col gap-2">
-        <h2 className="text-xl font-black">Targets</h2>
+      <section className="grid gap-2 md:grid-cols-2">
+        <h2 className="text-xl font-black md:col-span-2">Targets</h2>
         {p.targets.map((t) => {
           const pct = t.current == null ? 0 : t.lower ? (t.done ? 100 : Math.max(5, Math.min(95, (t.goal / Math.max(t.current, 0.1)) * 100)))
             : Math.min(100, (t.current / t.goal) * 100)
@@ -76,7 +76,7 @@ export default function ProgressPage() {
 
       <section>
         <h2 className="text-xl font-black">Badges <span className="text-base text-muted">{earned}/{p.badges.length}</span></h2>
-        <div className="mt-3 grid grid-cols-3 gap-3">
+        <div className="mt-3 grid grid-cols-3 gap-3 md:grid-cols-5">
           {p.badges.map((b) => (
             <div key={b.id} className="flex flex-col items-center gap-1 text-center" title={b.desc}>
               <BadgeIcon id={b.id} earned={b.earned} />

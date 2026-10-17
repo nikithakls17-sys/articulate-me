@@ -11,8 +11,8 @@ export default function Textbook() {
   if (!course || !user) return <div className="py-20 text-center text-muted">Loading…</div>
 
   return (
-    <div className="flex flex-col gap-4">
-      <header>
+    <div className="grid gap-4 md:grid-cols-2">
+      <header className="md:col-span-2">
         <h1 className="text-3xl font-black">Textbook</h1>
         <p className="text-muted">Short illustrated chapters, written from two open college public speaking textbooks.</p>
       </header>
@@ -37,7 +37,7 @@ export default function Textbook() {
           ? <Link key={d.day} to={`/read/${d.day}`} className="card flex items-center gap-4">{inner}</Link>
           : <div key={d.day} className="card flex items-center gap-4 opacity-60">{inner}</div>
       })}
-      <Link to="/sources" className="text-center text-sm font-bold text-sky underline">About the textbooks and licenses</Link>
+      <Link to="/sources" className="text-center text-sm font-bold text-sky underline md:col-span-2">About the textbooks and licenses</Link>
     </div>
   )
 }

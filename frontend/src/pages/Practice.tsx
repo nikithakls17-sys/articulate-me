@@ -12,8 +12,8 @@ export default function Practice() {
 
   const base = user.days['0']
   return (
-    <div className="flex flex-col gap-4">
-      <header>
+    <div className="grid gap-4 md:grid-cols-2">
+      <header className="md:col-span-2">
         <h1 className="text-3xl font-black">Practice corner</h1>
         <p className="text-muted">Short spoken conversations. The other person will push you to use each chapter's technique.</p>
       </header>

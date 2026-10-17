@@ -67,7 +67,7 @@ export default function CoursePage() {
             <p className="flex items-center gap-2 text-xl font-black">{w.title} {w.locked && <Lock size={18} />}</p>
           </div>
           {w.locked ? <p className="px-2 pt-2 text-sm text-muted">Unlocks after Week 1.</p> : (
-            <ol className="mt-3 flex flex-col gap-2">
+            <ol className="mt-3 grid gap-3 md:grid-cols-2">
               {lessons.map((d) => {
                 const st = user.days[String(d.day)]
                 const base = user.days['0']

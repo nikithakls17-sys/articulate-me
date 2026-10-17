@@ -88,8 +88,8 @@ export default function Overview() {
         ))}
       </section>
 
-      <section className="flex flex-col gap-2">
-        <h2 className="text-xl font-black">Targets to hit</h2>
+      <section className="grid gap-2 md:grid-cols-2">
+        <h2 className="text-xl font-black md:col-span-2">Targets to hit</h2>
         {course.targets.map((t) => (
           <div key={t.id} className="card flex items-center gap-3 py-3">
             <Target className="shrink-0 text-coral" size={22} aria-hidden />
@@ -100,7 +100,7 @@ export default function Overview() {
 
       <section>
         <h2 className="text-xl font-black">Badges you can earn</h2>
-        <div className="mt-3 grid grid-cols-3 gap-3">
+        <div className="mt-3 grid grid-cols-3 gap-3 md:grid-cols-5">
           {course.badges.map((b) => (
             <div key={b.id} className="flex flex-col items-center gap-1 text-center">
               <BadgeIcon id={b.id} />
