@@ -58,3 +58,8 @@ Running log of decisions, bugs and fixes. Feeds the "How I Built It" section of 
 - Day 1, job seeker, 3 spoken replies (Windows TTS clips). Turn latency 5.8 s / 3.4 s / 2.5 s (Whisper + partner reply); grading 27.3 s (14 small calls, 2.3k in / 220 out tokens). Metrics across the 3 turns: 144 WPM, 5.7 fillers/min (um, uh, like), 4 pauses > 0.7 s.
 - Partner (Dana, interviewer) stayed in character and reacted to answers ("That's a really impressive ability to manage chaos… can you give me a specific example?").
 - **Weakness:** 1B grading is generous: 100% even though reply 2 was "I'd, like, handle it by talking to people and stuff. It depends." Feedback is generic praise. The validator still hid one quote it couldn't find. Hosted mode (bigger Gemma, one-call JSON) is the demo path; local 1B is the privacy/cost path.
+
+## Oct 18: textbook + brutalist redesign
+- **Palette lives in `:root` CSS variables** (`--paper`, `--surface`, `--ink`, `--accent`, `--highlight`…) and Tailwind's colour names are mapped onto them with `@theme inline`, so the existing pages restyled without touching every class, and a new palette is a 15-line swap. Placeholder palette until Niki's reference images arrive.
+- **Brutalism via tokens:** every `rounded-*` radius token set to 0 (circles like the mic stay round), `--color-line` (all borders) is now ink, cards/buttons get 2-3 px black borders and hard 4 px offset shadows with no blur; a 24 px graph-paper grid on the page background.
+- **Type:** EB Garamond body, Libre Baskerville headings, IBM Plex Mono for UI labels. Trick: every `.uppercase` label in the app is set in the mono face by one CSS rule, instead of editing ~60 class lists.

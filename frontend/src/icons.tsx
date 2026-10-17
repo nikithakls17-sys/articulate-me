@@ -13,9 +13,9 @@ export const WORLD_ICONS: Record<World, LucideIcon> = {
 export function Logo({ size = 40 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden>
-      <rect width="64" height="64" rx="16" fill="var(--color-coral)" />
-      <path d="M16 20h32a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H30l-8 7v-7h-6a4 4 0 0 1-4-4V24a4 4 0 0 1 4-4z" fill="#fff" />
-      <path d="M25 28v6M32 25v12M39 28v6" stroke="var(--color-coral)" strokeWidth="3" strokeLinecap="round" />
+      <rect x="2" y="2" width="60" height="60" fill="var(--accent)" stroke="var(--ink)" strokeWidth="4" />
+      <path d="M14 18h36v24H30l-8 8v-8h-8z" fill="var(--surface)" stroke="var(--ink)" strokeWidth="3" strokeLinejoin="miter" />
+      <path d="M25 27v6M32 24v12M39 27v6" stroke="var(--ink)" strokeWidth="4" strokeLinecap="square" />
     </svg>
   )
 }

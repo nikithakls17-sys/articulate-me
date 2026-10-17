@@ -1,37 +1,178 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
-  --color-cream: #fff7ed;
-  --color-ink: #1f1a17;
-  --color-muted: #6b5e55;
-  --color-coral: #f2542d;
-  --color-coral-dark: #c43d1b;
-  --color-sun: #ffb627;
-  --color-leaf: #2f9e5b;
-  --color-leaf-soft: #e3f5ea;
-  --color-sky: #2f6fde;
-  --color-line: #ecdccb;
+/* ------------------------------------------------------------------
+   PALETTE: placeholder. Swap these values only; everything else
+   (Tailwind colours, borders, shadows) reads from them.
+   ------------------------------------------------------------------ */
+:root {
+  --paper: #fbede6;        /* page background */
+  --paper-deep: #f3dccf;   /* inset areas, progress tracks */
+  --surface: #fffaf6;      /* cards, book pages */
+  --ink: #141110;          /* text, borders, hard shadows */
+  --ink-soft: #5c4f47;     /* secondary text */
+  --accent: #d6402b;       /* primary action, chapter numbers */
+  --accent-deep: #8f2416;
+  --highlight: #ffd23f;    /* key terms, highlighter */
+  --good: #1f7a4d;
+  --good-soft: #dcefe2;
+  --info: #1d4ed8;
+  --info-soft: #dfe7fb;
+  --warn-soft: #fde7c8;
+  --grid-line: rgba(20, 17, 16, 0.06);
+
+  --border: 2px;
+  --border-heavy: 3px;
+  --shadow: 4px 4px 0 var(--ink);
+  --shadow-lg: 6px 6px 0 var(--ink);
+}
+
+@theme inline {
+  --font-serif: "EB Garamond", "Libre Caslon Text", Georgia, serif;
+  --font-heading: "Libre Baskerville", Georgia, serif;
+  --font-label: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-sans: var(--font-serif);
+
+  /* existing colour names mapped onto the palette */
+  --color-cream: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--ink-soft);
+  --color-coral: var(--accent);
+  --color-coral-dark: var(--accent-deep);
+  --color-sun: var(--highlight);
+  --color-leaf: var(--good);
+  --color-leaf-soft: var(--good-soft);
+  --color-sky: var(--info);
+  --color-line: var(--ink);
+  --color-white: var(--surface);
+  --color-orange-50: var(--warn-soft);
+  --color-amber-50: #fff3c4;
+  --color-blue-50: var(--info-soft);
+  --color-paper-deep: var(--paper-deep);
+
+  /* brutalism: square corners everywhere (rounded-full stays round for dots and the mic) */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
 }
 
 html, body, #root { min-height: 100%; }
-html { -webkit-text-size-adjust: 100%; }
-body { overflow-x: hidden; overscroll-behavior-y: none; }
+html { -webkit-text-size-adjust: 100%; font-size: 17px; }
+@media (min-width: 1024px) { html { font-size: 18px; } }
+body {
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+  background-color: var(--paper);
+  /* visible grid, like graph paper under the book */
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  -webkit-tap-highlight-color: transparent;
+}
 button, a { touch-action: manipulation; }
-body { background: var(--color-cream); color: var(--color-ink); -webkit-tap-highlight-color: transparent; }
+h1, h2, h3, legend { font-family: var(--font-heading); letter-spacing: -0.01em; }
+::selection { background: var(--highlight); color: var(--ink); }
 
+/* every small uppercase label in the app is set in the mono "UI" face */
+.uppercase { font-family: var(--font-label); letter-spacing: 0.08em; }
+:focus-visible { outline: 3px solid var(--info); outline-offset: 2px; }
+
+@utility label {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-lg font-extrabold transition active:translate-y-0.5 disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 px-5 py-3.5 text-[0.85rem] font-semibold uppercase transition disabled:opacity-50;
+  font-family: var(--font-label);
+  letter-spacing: 0.06em;
+  border: var(--border-heavy) solid var(--ink);
+  box-shadow: var(--shadow);
+  &:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: none; }
 }
 @utility btn-primary {
-  @apply btn bg-coral text-white shadow-[0_4px_0_var(--color-coral-dark)] active:shadow-none;
+  @apply btn;
+  background: var(--accent);
+  color: var(--surface);
 }
 @utility btn-ghost {
-  @apply btn border-2 border-line bg-white text-ink shadow-[0_4px_0_var(--color-line)] active:shadow-none;
+  @apply btn;
+  background: var(--surface);
+  color: var(--ink);
 }
 @utility card {
-  @apply rounded-3xl border-2 border-line bg-white p-5;
+  @apply p-5;
+  background: var(--surface);
+  border: var(--border) solid var(--ink);
+  box-shadow: var(--shadow);
 }
 @utility chip {
-  @apply inline-flex items-center gap-1 rounded-full bg-white border border-line px-3 py-1 text-sm font-bold text-muted;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-[0.7rem] font-semibold uppercase;
+  font-family: var(--font-label);
+  letter-spacing: 0.06em;
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--border) solid var(--ink);
+}
+@utility rule {
+  border-top: var(--border) solid var(--ink);
+}
+
+/* ---------- textbook furniture ---------- */
+.running-head {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--ink);
+}
+.folio { font-family: var(--font-label); font-size: 0.7rem; color: var(--ink-soft); }
+.figure-caption { font-family: var(--font-serif); font-style: italic; font-size: 0.9rem; color: var(--ink-soft); }
+.figure-caption b { font-style: normal; font-family: var(--font-label); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink); }
+.keyterm { background: var(--highlight); border: var(--border) solid var(--ink); box-shadow: var(--shadow); }
+.margin-note { border-left: 3px solid var(--accent); font-size: 0.92rem; }
+.footnotes { border-top: 1px solid var(--ink); font-size: 0.8rem; color: var(--ink-soft); }
+.drop-cap::first-letter {
+  float: left; font-family: var(--font-heading); font-size: 3.2em; line-height: 0.85;
+  padding: 0.05em 0.08em 0 0; color: var(--accent);
+}
+
+/* ---------- flipbook ---------- */
+.book { position: relative; perspective: 2200px; }
+.leaf {
+  position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: left center;
+  transition: transform 0.75s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.2s linear;
+}
+.leaf.flipped { transform: rotateY(-180deg); }
+.face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--surface); border: var(--border) solid var(--ink); overflow: hidden;
+}
+.face.back { transform: rotateY(180deg); }
+/* spine shading is a hard stripe, not a gradient */
+.spread .face.front { border-left-width: 1px; }
+.spread .face.back { border-right-width: 1px; }
+.single .leaf.flipped { opacity: 0; transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s linear 0.45s; }
+.corner {
+  position: absolute; bottom: 0; width: 44px; height: 44px; cursor: pointer; z-index: 2;
+  background: linear-gradient(135deg, transparent 50%, var(--ink) 50%, var(--ink) 54%, var(--paper-deep) 54%);
+}
+.corner.left { left: 0; transform: scaleX(-1); }
+.corner.right { right: 0; }
+.corner:hover { width: 56px; height: 56px; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.fade-in { animation: fade-in 0.25s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .animate-pulse, .animate-bounce { animation: none !important; }
 }
