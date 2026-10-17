@@ -60,7 +60,7 @@ def _transcribe_elevenlabs(path: str, content_type: str) -> dict:
             headers={"xi-api-key": config.ELEVENLABS_API_KEY},
             data={"model_id": os.getenv("ELEVENLABS_STT_MODEL", "scribe_v1"), "language_code": "en",
                   "timestamps_granularity": "word", "tag_audio_events": "false"},
-            files={"file": ("answer.webm", f, content_type or "audio/webm")},
+            files={"file": (f"answer{_suffix(content_type)}", f, content_type or "audio/webm")},
             timeout=120,
         )
     r.raise_for_status()
@@ -70,8 +70,20 @@ def _transcribe_elevenlabs(path: str, content_type: str) -> dict:
     return {"text": body.get("text", "").strip(), "words": words}
 
 
+def _suffix(content_type: str) -> str:
+    """iPhone Safari records audio/mp4 (AAC); Chrome/Android/Firefox record audio/webm (Opus)."""
+    ct = (content_type or "").lower()
+    if any(k in ct for k in ("mp4", "m4a", "aac")):
+        return ".mp4"
+    if "wav" in ct:
+        return ".wav"
+    if "ogg" in ct:
+        return ".ogg"
+    return ".webm"
+
+
 def transcribe(audio: bytes, content_type: str = "audio/webm") -> dict:
-    suffix = ".mp4" if "mp4" in (content_type or "") else ".webm"
+    suffix = _suffix(content_type)
     with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
         tmp.write(audio)
         path = tmp.name

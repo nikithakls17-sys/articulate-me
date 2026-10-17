@@ -1,4 +1,4 @@
-# I Talk, You Listen
+# Articulate Me
 
 A daily 5-minute speaking course, like Duolingo for talking. Learn one real technique from open public speaking
 textbooks, practice it out loud in your own world (student, job seeker, customer-facing, creator, everyday), and

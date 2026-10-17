@@ -21,8 +21,10 @@ from app.rag import retrieve  # noqa: E402
 
 PAGES_PROMPT = """You are writing one short chapter of a speaking course, like a friendly illustrated textbook.
 Technique: {technique} ("{title}"). Goal: {learn}
+The technique, as this course teaches it: {outline}
 
-Use ONLY the textbook excerpts below. Do not add advice they don't support. Plain language for an adult
+The "steps" must follow that outline. Explain and support everything with the textbook excerpts below; do not
+add advice they don't support. The before/after must be an everyday spoken answer, not a speech about a speech. Plain language for an adult
 beginner, short sentences, no walls of text. Each field has a word limit; stay under it.
 
 EXCERPTS:
@@ -59,8 +61,9 @@ For EACH world below write:
 - "scenario": a short role-play where the learner talks with the partner listed for that world. The partner's
   questions must make the learner need this technique. Partner behaviour: {partner_push}
   Fields: "partner" (a first name or title), "role" (who they are, max 8 words), "setup" (max 20 words,
-  addressed to the learner as "you"), "opening" (the partner's first line to the learner, max 30 words, must be a
-  question or request that calls for the technique).
+  addressed to the learner as "you"), "opening" (the FIRST thing the partner says TO the learner, max 30 words,
+  spoken by the partner, calling the learner "you". It must be a question or request that calls for the technique.
+  Never start it with the partner's own name.)
 
 Worlds (with typical partners):
 {worlds}
@@ -107,9 +110,29 @@ def _check_quiz(d):
     return None
 
 
+def _check_worlds(d):
+    for w in WORLDS:
+        x = d.get(w)
+        if not (isinstance(x, dict) and x.get("example") and isinstance(x.get("scenario"), dict)):
+            return f"missing world {w}"
+        sc = x["scenario"]
+        if not all(sc.get(k) for k in ("partner", "role", "setup", "opening")):
+            return f"incomplete scenario {w}"
+        first = sc["partner"].split()[-1].lower().strip(".,")
+        if sc["opening"].lower().lstrip("\"' ").startswith((sc["partner"].lower(), first)):
+            return f"opening for {w} is addressed to the partner, not the learner"
+    return None
+
+
 def build_day(day: int, retries: int = 2):
     p = plan_for(day)
-    chunks = retrieve(p["query"], k=6)
+    # several focused searches beat one long query (one long query pulled only "conclusions" chunks for PREP)
+    chunks, seen_ids = [], set()
+    for q in p.get("queries") or [p["query"]]:
+        for c in retrieve(q, k=2):
+            if c["id"] not in seen_ids and len(chunks) < 6:
+                seen_ids.add(c["id"])
+                chunks.append(c)
     if not chunks:
         sys.exit("Vector store is empty. Run scripts/ingest_books.py first.")
     stats = {"input_tokens": 0, "output_tokens": 0, "latency_ms": 0}
@@ -163,9 +186,7 @@ def build_day(day: int, retries: int = 2):
     steps_txt = "; ".join(f"{s['label']}: {s['text']}" for s in pg["steps"])
     per_world = call(
         WORLD_PROMPT.format(steps=steps_txt, worlds=worlds_txt, keys=", ".join(WORLDS), **p),
-        lambda d: None if all(isinstance(d.get(w), dict) and d[w].get("example")
-                              and isinstance(d[w].get("scenario"), dict) and d[w]["scenario"].get("opening")
-                              for w in WORLDS) else "missing world",
+        lambda d: _check_worlds(d),
         max_tokens=2500,
     )
     citations, seen = [], set()

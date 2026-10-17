@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: i-talk-you-listen
+    name: articulate-me
     runtime: docker
     plan: starter
     healthCheckPath: /api/health

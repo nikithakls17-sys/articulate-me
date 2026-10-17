@@ -76,3 +76,20 @@ def marked_transcript(words: list[dict], text: str) -> str:
             out.append("[pause]")
         out.append(b["word"])
     return " ".join(out)
+
+
+def join_turns(turns: list[dict]) -> tuple[list[dict], str]:
+    """Stitch the learner's turns into one timeline so compute() sees one speech.
+    Each turn is shifted to start 0.3 s after the previous one, so the partner's talking time
+    never counts as a pause or slows the WPM."""
+    words, texts, offset = [], [], 0.0
+    for t in turns:
+        ws = t.get("words") or []
+        texts.append(t["text"])
+        if not ws:
+            continue
+        shift = offset - ws[0]["start"]
+        for w in ws:
+            words.append({"word": w["word"], "start": round(w["start"] + shift, 2), "end": round(w["end"] + shift, 2)})
+        offset = words[-1]["end"] + 0.3
+    return words, " ".join(texts)

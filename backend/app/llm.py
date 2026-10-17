@@ -48,6 +48,7 @@ def chat(messages: list[dict], *, temperature: float = 0.3, max_tokens: int = 12
         )
         latency = int((time.perf_counter() - t0) * 1000)
         text = resp.choices[0].message.content or ""
+        finish = resp.choices[0].finish_reason
         usage = resp.usage
         in_tok = getattr(usage, "prompt_tokens", 0) or 0
         out_tok = getattr(usage, "completion_tokens", 0) or 0
@@ -55,7 +56,7 @@ def chat(messages: list[dict], *, temperature: float = 0.3, max_tokens: int = 12
         span.set_data("gen_ai.usage.output_tokens", out_tok)
         span.set_data("gen_ai.response.model", resp.model)
         span.set_data("latency_ms", latency)
-    return {"text": text, "input_tokens": in_tok, "output_tokens": out_tok, "latency_ms": latency}
+    return {"text": text, "input_tokens": in_tok, "output_tokens": out_tok, "latency_ms": latency, "finish_reason": finish}
 
 
 def parse_json(text: str) -> dict:
@@ -67,9 +68,15 @@ def parse_json(text: str) -> dict:
     start, end = text.find("{"), text.rfind("}")
     if start == -1 or end == -1:
         raise ValueError("no JSON object in model output")
-    return json.loads(text[start : end + 1])
+    body = text[start : end + 1]
+    # Gemma 4 occasionally emits a raw control character inside a string, which strict JSON rejects
+    body = "".join(ch for ch in body if ch >= " " or ch in "\n\t")
+    return json.loads(body, strict=False)
 
 
 def chat_json(messages: list[dict], **kw) -> tuple[dict, dict]:
     out = chat(messages, json_mode=True, **kw)
+    if out.get("finish_reason") == "length":
+        # Ollama's default context is 4096 tokens: a long prompt leaves little room and the JSON gets cut off
+        raise ValueError(f"output truncated at {out['output_tokens']} tokens (prompt {out['input_tokens']})")
     return parse_json(out["text"]), out
