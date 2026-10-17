@@ -1,98 +1,137 @@
-import { ArrowDown, Quote, ThumbsDown, ThumbsUp } from 'lucide-react'
-import type { Page } from '../api'
-import CitationChip from './CitationChip'
+import { ArrowDown } from 'lucide-react'
+import type { Citation, Page } from '../api'
 
-/** One textbook page. Every kind is visual first: a flow diagram, a table, a before/after, a term list. */
-export default function PageView({ page, technique }: { page: Page; technique: string }) {
+function cite(c: Citation) {
+  const book = c.book.replace(/\s*\(.*\)$/, '')
+  return `${book}, “${c.chapter.replace(/^Chapter \d+:\s*/, '')},” p. ${c.page}.`
+}
+
+/** One printed textbook page: running head, body, figure captions, footnote citation, folio. */
+export default function PageView({ page, chapter, chapterTitle, technique, pageNo, figureNo }:
+  { page: Page; chapter: number; chapterTitle: string; technique: string; pageNo: number; figureNo: number }) {
+  const even = pageNo % 2 === 0
+  const c = 'cite' in page ? page.cite : null
   return (
-    <article className="flex flex-col gap-4">
-      <h2 className="text-2xl font-black leading-tight">{page.title}</h2>
-      <Body page={page} technique={technique} />
-      {'cite' in page && page.cite && <div><CitationChip c={page.cite} /></div>}
-    </article>
+    <div className="flex h-full flex-col px-6 pb-3 pt-4 sm:px-8">
+      <header className={`running-head flex justify-between pb-1 ${even ? '' : 'flex-row-reverse'}`}>
+        <span>Chapter {chapter}</span>
+        <span className="truncate pl-3">{chapterTitle}</span>
+      </header>
+
+      <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-1 [scrollbar-width:thin]">
+        <h2 className="text-[1.45rem] font-bold leading-tight">
+          {page.title}{c && <sup className="ml-0.5 font-label text-xs text-coral">1</sup>}
+        </h2>
+        <div className="mt-3 text-[1.08rem] leading-relaxed">
+          <Body page={page} chapter={chapter} technique={technique} figureNo={figureNo} />
+        </div>
+      </div>
+
+      {c && (
+        <p className="footnotes mt-3 pt-1.5">
+          <sup className="font-label text-coral">1</sup>{' '}
+          {c.url ? <a href={c.url} target="_blank" rel="noreferrer" className="underline decoration-dotted">{cite(c)}</a> : cite(c)}
+          {' '}CC BY-NC-SA 4.0.
+        </p>
+      )}
+      <footer className={`folio mt-2 flex ${even ? 'justify-start' : 'justify-end'}`}>{pageNo}</footer>
+    </div>
   )
 }
 
-function Body({ page, technique }: { page: Page; technique: string }) {
+function Caption({ n, chapter, children }: { n: number; chapter: number; children: React.ReactNode }) {
+  return <p className="figure-caption mt-2"><b>Figure {chapter}.{n}</b> &nbsp;{children}</p>
+}
+
+function Body({ page, chapter, technique, figureNo }: { page: Page; chapter: number; technique: string; figureNo: number }) {
   switch (page.kind) {
     case 'intro':
       return (
         <>
-          <p className="text-lg leading-relaxed">{page.body}</p>
-          <div className="rounded-2xl bg-sky/10 p-4">
-            <p className="text-xs font-extrabold uppercase tracking-wide text-sky">In this chapter</p>
-            <p className="mt-1 text-lg font-bold">{page.learn}</p>
-          </div>
+          <p className="drop-cap">{page.body}</p>
+          <aside className="margin-note mt-5 pl-3">
+            <p className="label text-coral">In this chapter</p>
+            <p className="mt-1 font-semibold">{page.learn}</p>
+          </aside>
         </>
       )
     case 'steps':
       return (
-        <ol className="flex flex-col items-stretch" aria-label={`${technique} steps`}>
-          {page.steps.map((s, i) => (
-            <li key={i} className="flex flex-col items-center">
-              <div className="flex w-full items-stretch overflow-hidden rounded-2xl border-2 border-sky/40 bg-white">
-                <span className="grid w-12 shrink-0 place-items-center bg-sky text-lg font-black text-white">{i + 1}</span>
-                <div className="min-w-0 p-3">
-                  <p className="font-black">{s.label}</p>
-                  <p className="text-sm leading-snug text-muted">{s.text}</p>
+        <figure>
+          <ol className="flex flex-col" aria-label={`${technique} steps`}>
+            {page.steps.map((s, i) => (
+              <li key={i} className="flex flex-col items-center">
+                <div className="flex w-full items-stretch border-2 border-ink bg-white">
+                  <span className="grid w-11 shrink-0 place-items-center border-r-2 border-ink bg-coral font-heading text-lg font-bold text-white">{i + 1}</span>
+                  <div className="min-w-0 px-3 py-2">
+                    <p className="label">{s.label}</p>
+                    <p className="text-[0.98rem] leading-snug">{s.text}</p>
+                  </div>
                 </div>
-              </div>
-              {i < page.steps.length - 1 && <ArrowDown className="my-1 text-sky" size={22} aria-hidden />}
-            </li>
-          ))}
-        </ol>
+                {i < page.steps.length - 1 && <ArrowDown className="my-0.5" size={20} strokeWidth={2.5} aria-hidden />}
+              </li>
+            ))}
+          </ol>
+          <Caption n={figureNo} chapter={chapter}>The {technique} sequence, step by step.</Caption>
+        </figure>
       )
     case 'terms':
       return (
-        <dl className="flex flex-col gap-2">
+        <dl className="flex flex-col gap-3">
           {page.terms.map((t) => (
-            <div key={t.term} className="rounded-2xl border-2 border-line bg-white p-3">
-              <dt className="font-black text-coral-dark">{t.term}</dt>
-              <dd className="text-sm leading-snug">{t.meaning}</dd>
+            <div key={t.term} className="keyterm px-3 py-2">
+              <dt className="label">Key term</dt>
+              <dd>
+                <span className="font-heading text-lg font-bold">{t.term}.</span>{' '}
+                <span className="leading-snug">{t.meaning}</span>
+              </dd>
             </div>
           ))}
         </dl>
       )
     case 'table':
       return (
-        <div className="overflow-hidden rounded-2xl border-2 border-line bg-white">
-          <table className="w-full table-fixed text-left text-sm">
-            <thead className="bg-cream">
-              <tr>{page.columns.map((c) => <th key={c} className="p-2.5 font-black">{c}</th>)}</tr>
+        <figure>
+          <table className="w-full table-fixed border-2 border-ink bg-white text-left text-[0.95rem]">
+            <thead className="bg-ink text-white">
+              <tr>{page.columns.map((col) => <th key={col} className="label p-2 text-white">{col}</th>)}</tr>
             </thead>
             <tbody>
               {page.rows.map((r, i) => (
-                <tr key={i} className="border-t border-line align-top">
-                  {r.map((cell, j) => <td key={j} className="p-2.5 leading-snug [overflow-wrap:anywhere]">{cell}</td>)}
+                <tr key={i} className="border-t-2 border-ink align-top">
+                  {r.map((cell, j) => <td key={j} className={`p-2 leading-snug [overflow-wrap:anywhere] ${j === 0 ? 'font-semibold' : ''}`}>{cell}</td>)}
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+          <Caption n={figureNo} chapter={chapter}>{page.title}.</Caption>
+        </figure>
       )
     case 'before_after':
       return (
-        <>
-          {page.situation && <p className="font-bold text-muted">{page.situation}</p>}
-          <div className="rounded-2xl border-2 border-coral/30 bg-orange-50 p-4">
-            <p className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wide text-coral-dark"><ThumbsDown size={14} /> Before</p>
-            <p className="mt-1 text-lg italic">“{page.before}”</p>
+        <figure>
+          {page.situation && <p className="italic text-muted">{page.situation}</p>}
+          <div className="mt-3 grid gap-3">
+            <div className="border-2 border-ink bg-orange-50 p-3">
+              <p className="label text-coral-dark">Before</p>
+              <p className="mt-1 italic">“{page.before}”</p>
+            </div>
+            <div className="border-2 border-ink bg-leaf-soft p-3 shadow-[4px_4px_0_var(--ink)]">
+              <p className="label text-leaf">After</p>
+              <p className="mt-1 italic">“{page.after}”</p>
+            </div>
           </div>
-          <div className="rounded-2xl border-2 border-leaf/40 bg-leaf-soft p-4">
-            <p className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wide text-leaf"><ThumbsUp size={14} /> After</p>
-            <p className="mt-1 text-lg italic">“{page.after}”</p>
-          </div>
-          {page.why && <p className="text-muted">{page.why}</p>}
-        </>
+          <Caption n={figureNo} chapter={chapter}>{page.why}</Caption>
+        </figure>
       )
     case 'why':
-      return <p className="text-lg leading-relaxed">{page.body}</p>
+      return <p className="drop-cap">{page.body}</p>
     case 'example':
       return (
-        <div className="relative rounded-3xl bg-leaf-soft p-5">
-          <Quote className="text-leaf" size={28} aria-hidden />
-          <p className="mt-2 text-lg italic leading-relaxed">{page.body}</p>
-        </div>
+        <figure>
+          <blockquote className="border-l-4 border-coral pl-4 text-[1.15rem] italic leading-relaxed">{page.body}</blockquote>
+          <Caption n={figureNo} chapter={chapter}>An example from your world.</Caption>
+        </figure>
       )
   }
 }

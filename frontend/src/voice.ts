@@ -15,7 +15,7 @@ export function unlockAudio() {
 
 /** ElevenLabs via the backend in hosted mode; the browser's own voice otherwise (local mode never leaves the machine).
  *  Resolves when speech ends (or right away if nothing can speak). */
-export function speak(text: string): Promise<void> {
+export function speak(text: string, voice = 'narrator'): Promise<void> {
   stopSpeaking()
   return new Promise((resolve) => {
     pendingEnd = resolve
@@ -29,7 +29,7 @@ export function speak(text: string): Promise<void> {
       window.speechSynthesis.speak(u)
     }
     if (ttsAvailable === false) return browserVoice()
-    fetch('/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+    fetch('/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, voice }) })
       .then(async (r) => {
         if (!r.ok) { ttsAvailable = false; return browserVoice() }
         ttsAvailable = true
