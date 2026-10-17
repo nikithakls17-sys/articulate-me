@@ -9,3 +9,4 @@ data/local_store/
 data/chunks.jsonl
 .fastembed_cache/
 *.log
+data/models/

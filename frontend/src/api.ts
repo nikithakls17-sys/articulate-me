@@ -98,6 +98,7 @@ export interface Attempt extends AttemptSummary {
 
 export interface Conversation {
   id: string; day: number; world: World; scenario: Scenario; status: string; turns: Turn[]; max_user_turns: number; user_turns: number
+  voice: { key: string; label: string }
 }
 export interface TurnResult { user_text: string; partner_text: string; done: boolean; user_turns: number; max_user_turns: number }
 
@@ -119,7 +120,7 @@ export interface Progress {
   targets: (Target & { current: number | null; done: boolean })[]
 }
 
-export interface Health { mode: string; llm: string; model: string; grader: string; stt: string; tts: boolean; max_recording_sec: number }
+export interface Health { mode: string; llm: string; model: string; grader: string; stt: string; tts: boolean; tts_engine: string; max_recording_sec: number }
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
   const r = await fetch(path, init)

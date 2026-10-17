@@ -49,9 +49,9 @@ export default function Talk() {
   const userTurns = turns.filter((t) => t.speaker === 'user').length
   const maxTurns = convo?.max_user_turns ?? (day === 0 ? 2 : 3)
 
-  const partnerSays = async (text: string) => {
+  const partnerSays = async (text: string, voice = convo?.voice.key) => {
     setStage('partner')
-    await speak(text)
+    await speak(text, voice)
     setStage('your-turn')
   }
 
@@ -62,7 +62,7 @@ export default function Talk() {
       const c = await api.startConversation(user.id, day, lesson.world)
       setConvo(c)
       setTurns(c.turns)
-      await partnerSays(c.turns[0].text)
+      await partnerSays(c.turns[0].text, c.voice.key)
     } catch (e) { setError((e as Error).message) }
   }
 
@@ -93,7 +93,7 @@ export default function Talk() {
       setTurns((t) => [...t, { speaker: 'user', text: r.user_text }, { speaker: 'partner', text: r.partner_text }])
       if (r.done) {
         setStage('partner')
-        await speak(r.partner_text)
+        await speak(r.partner_text, convo.voice.key)
         await finish(convo)
       } else {
         await partnerSays(r.partner_text)
@@ -190,7 +190,7 @@ export default function Talk() {
               <li key={n} className={`flex ${t.speaker === 'user' ? 'justify-end' : ''}`}>
                 <div className={`max-w-[85%] rounded-3xl px-4 py-3 text-[17px] leading-snug ${t.speaker === 'user'
                   ? 'rounded-br-md bg-coral text-white' : 'rounded-bl-md border-2 border-line bg-white'}`}>
-                  {t.speaker === 'partner' && <p className="text-xs font-extrabold text-sky">{sc.partner}</p>}
+                  {t.speaker === 'partner' && <p className="label text-read">{sc.partner}{convo?.voice && ` · ${convo.voice.label}`}</p>}
                   {t.text}
                 </div>
               </li>

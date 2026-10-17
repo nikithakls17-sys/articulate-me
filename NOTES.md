@@ -74,3 +74,16 @@ Running log of decisions, bugs and fixes. Feeds the "How I Built It" section of 
 - **Background:** warm light-grey paper, faint grid, four large blurred orbs (blue, coral, orange, green) on a fixed layer, plus an SVG `feTurbulence` film-grain overlay. No images.
 - **Blob, the mascot:** an SVG orb whose edge is roughed up with `feTurbulence` + `feDisplacementMap` (fuzz) and speckled with a second noise layer (grain), filled with a radial gradient in its mood colour. Eyes only (arcs, dots, closed lines) carry the expression; stick arms/legs change pose by mood; accessories: specs, grad cap, coffee, nightcap with z's, headphones. 8 moods. Blob gently bobs (off with reduced motion). `/blobs` shows the whole cast.
 - **Teacher voice with the learner's name:** Blob appears on welcome ("Hi, I'm Blob"), onboarding ("Nice to meet you, Niki!"), overview ("Niki, here's the plan I put together for you"), the course card (time-of-day accessory: coffee in the morning, nightcap after 10 pm, "Still up, Niki"), chapter cover and end page ("Nice reading, Niki."), the quick check, the conversation intro ("You've got this, Niki. Try PREP on Dana."), grading (thinking Blob), feedback (mood by score), empty notes (sleepy Blob), timer and progress.
+
+## Voice: before / after (item 5)
+| | Before | After (local) | After (hosted) |
+|---|---|---|---|
+| Engine | browser `speechSynthesis` | **Kokoro 82M** (kokoro-onnx, int8 ONNX, Apache-2.0) | **ElevenLabs `eleven_v4`** ("most emotive" model) |
+| Personas | one OS voice for everyone | voice + speed per persona (`am_michael` 0.94× strict interviewer, `am_adam` 1.08× upset customer, `af_bella` friendly classmate, `bf_emma` curious professor…) | own voice per persona + an audio tag for mood: `[calm, serious, a little skeptical]`, `[frustrated sigh]`, `[warm, cheerful]`, `[curious]`, `[excited]` |
+| Emotion | none | approximated by voice choice + speed (Kokoro has no emotion tags) | audio tags; falls back to `eleven_flash_v2_5` (no tags) if v4 is refused |
+| Cost / privacy | free, local | free, local, 115 MB of model files | per character; text goes to ElevenLabs |
+| Measured | instant, robotic, varies by OS/browser | +325 MB RAM; first line 12.2 s (model load, now warmed at startup), then 2.6-3.3 s for a 3-4 s line (real-time factor 0.78-0.85) | not measured yet (no API key) |
+
+- Persona is chosen from the partner's role text (`voices.persona_for`): "Hiring Manager" → strict, "frustrated customer on their third call" → upset, "someone you just met at a party" → friendly, "Course Professor" → curious. Returned with the conversation and passed to `/api/tts`.
+- ElevenLabs docs checked Oct 18: `eleven_v4` = most emotive; `eleven_v4_turbo` = expressive real-time (~100 ms), not confirmed on the plain TTS endpoint; `eleven_flash_v2_5` ~75 ms. Audio tags go in square brackets before the line; speed 0.7-1.2. Voice ids are ElevenLabs default-library voices, overridable with `ELEVENLABS_VOICES` JSON.
+- Installing kokoro-onnx upgraded onnxruntime to 1.31 (pip warns fastembed wants <1.20); checked fastembed still embeds (384-dim) fine.

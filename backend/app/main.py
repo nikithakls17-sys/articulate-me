@@ -1,17 +1,18 @@
 import asyncio
 import mimetypes
+import threading
 import json
 import uuid
 from datetime import date, datetime, timedelta
 
-import httpx
+import sentry_sdk
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import config, conversation, feedback, llm, metrics, stt
+from . import config, conversation, feedback, llm, metrics, stt, voices
 from .course_plan import BADGES, MINUTES_PER_LESSON, PLAN, WEEKS, WORLDS
 from .observability import init_sentry
 from .store import now_iso, store
@@ -28,12 +29,17 @@ def load_course():
     """course/*.json is the hand-reviewed source of truth; sync it into the store on boot."""
     for f in sorted(config.COURSE_DIR.glob("day_*.json")):
         store().upsert_lesson(json.loads(f.read_text(encoding="utf-8")))
+    if not config.HOSTED and voices.kokoro_available():
+        # first Kokoro call loads the model (~12 s); do it now so the partner's first line isn't slow
+        threading.Thread(target=lambda: voices.kokoro_tts("Hello.", "narrator"), daemon=True).start()
 
 
 @app.get("/api/health")
 def health():
     return {"ok": True, "mode": config.MODE, "llm": config.LLM_PROVIDER, "model": llm.model_name(),
-            "grader": config.GRADER, "stt": config.STT_PROVIDER, "tts": config.TTS_ENABLED,
+            "grader": config.GRADER, "stt": config.STT_PROVIDER, "tts": voices.tts_enabled(),
+            "tts_engine": ("elevenlabs " + voices.ELEVEN_MODEL) if config.HOSTED and config.ELEVENLABS_API_KEY
+            else "kokoro" if voices.kokoro_available() else "browser",
             "store": type(store()).__name__, "max_recording_sec": config.MAX_RECORDING_SEC}
 
 
@@ -358,6 +364,7 @@ class NewConversation(BaseModel):
 
 def _public_convo(c: dict) -> dict:
     return {"id": c["id"], "day": c["day"], "world": c["world"], "scenario": c["scenario"], "status": c["status"],
+            "voice": voices.voice_info(c.get("voice", "friendly")),
             "turns": [{"speaker": t["speaker"], "text": t["text"]} for t in c["turns"]],
             "max_user_turns": c["max_user_turns"],
             "user_turns": sum(1 for t in c["turns"] if t["speaker"] == "user")}
@@ -370,6 +377,7 @@ def start_conversation(body: NewConversation):
     world = _pick_world(user, l, body.world)
     scenario = l["scenarios"][world]
     c = {"id": uuid.uuid4().hex, "user_id": user["id"], "day": body.day, "world": world, "scenario": scenario,
+         "voice": voices.persona_for(scenario, world),
          "status": "active", "max_user_turns": conversation.max_turns(body.day), "created_at": now_iso(),
          "turns": [{"speaker": "partner", "text": scenario["opening"]}], "llm": []}
     store().insert("conversations", c)
@@ -469,21 +477,24 @@ async def finish_conversation(conv_id: str, body: FinishBody):
 
 class TTSBody(BaseModel):
     text: str
+    voice: str = "narrator"
 
 
 @app.post("/api/tts")
 def tts(body: TTSBody):
-    if not config.TTS_ENABLED:
+    """Hosted: ElevenLabs eleven_v4 with a persona voice + mood tag. Local: Kokoro. Otherwise 404 and the
+    browser falls back to its own speechSynthesis."""
+    if not voices.tts_enabled():
         raise HTTPException(404, "TTS off in this mode; use browser speech")
-    r = httpx.post(
-        f"https://api.elevenlabs.io/v1/text-to-speech/{config.ELEVENLABS_VOICE_ID}",
-        headers={"xi-api-key": config.ELEVENLABS_API_KEY, "accept": "audio/mpeg"},
-        json={"text": body.text[:1200], "model_id": "eleven_flash_v2_5"},
-        timeout=60,
-    )
-    if r.status_code != 200:
+    text = body.text.strip()
+    if not text:
+        raise HTTPException(400, "empty text")
+    try:
+        audio, media = voices.synthesize(text, body.voice)
+    except Exception as e:  # noqa: BLE001
+        sentry_sdk.capture_exception(e)
         raise HTTPException(502, "TTS failed")
-    return Response(r.content, media_type="audio/mpeg")
+    return Response(audio, media_type=media, headers={"Cache-Control": "private, max-age=86400"})
 
 
 # ---------- frontend ----------
