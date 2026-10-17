@@ -1,0 +1,51 @@
+{
+  "day": 0,
+  "technique": "Baseline",
+  "title": "Your starting line",
+  "teach": [],
+  "why_it_works": "",
+  "examples": {},
+  "drills": {
+    "student": [
+      {
+        "prompt": "Introduce yourself to a new class as if it's the first day of a seminar.",
+        "time_limit_sec": 60
+      }
+    ],
+    "job_seeker": [
+      {
+        "prompt": "An interviewer says: \"So, tell me about yourself.\" Answer.",
+        "time_limit_sec": 60
+      }
+    ],
+    "customer_facing": [
+      {
+        "prompt": "Introduce yourself to a new customer or patient and say how you'll help them today.",
+        "time_limit_sec": 60
+      }
+    ],
+    "creator": [
+      {
+        "prompt": "Record the opening of a video where you introduce yourself to new viewers.",
+        "time_limit_sec": 60
+      }
+    ],
+    "everyday": [
+      {
+        "prompt": "You're at a friend's party and meet someone new. Introduce yourself.",
+        "time_limit_sec": 60
+      }
+    ]
+  },
+  "rubric": [
+    {
+      "id": "who_you_are",
+      "check": "Says who they are or what they do in the first two sentences"
+    },
+    {
+      "id": "concrete_detail",
+      "check": "Gives at least one specific, concrete detail (a name, number, place or example) rather than only general claims"
+    }
+  ],
+  "citations": []
+}
