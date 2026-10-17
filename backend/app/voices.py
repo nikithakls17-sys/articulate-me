@@ -8,6 +8,7 @@ import io
 import json
 import os
 import re
+import threading
 import time
 import wave
 from functools import lru_cache
@@ -99,6 +100,10 @@ def kokoro_available() -> bool:
     return (MODEL_DIR / "kokoro-v1.0.int8.onnx").exists() and (MODEL_DIR / "voices-v1.0.bin").exists()
 
 
+# espeak (Kokoro's phonemizer) is not thread-safe: two requests at once crashed one of them (502)
+_kokoro_lock = threading.Lock()
+
+
 @lru_cache(maxsize=1)
 def _kokoro():
     from kokoro_onnx import Kokoro
@@ -111,7 +116,8 @@ def kokoro_tts(text: str, key: str) -> tuple[bytes, str]:
     lang = "en-gb" if voice.startswith("b") else "en-us"
     with sentry_sdk.start_span(op="ai.tts", name="tts kokoro") as span:
         t0 = time.perf_counter()
-        samples, rate = _kokoro().create(text[:600], voice=voice, speed=speed, lang=lang)
+        with _kokoro_lock:
+            samples, rate = _kokoro().create(text[:1000], voice=voice, speed=speed, lang=lang)
         span.set_data("latency_ms", int((time.perf_counter() - t0) * 1000))
         span.set_data("persona", key)
     pcm = (np.clip(samples, -1, 1) * 32767).astype(np.int16)

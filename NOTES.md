@@ -100,3 +100,12 @@ Running log of decisions, bugs and fixes. Feeds the "How I Built It" section of 
 ## Study tabs + hourglass (item 4)
 - Built together with the responsive layout: Notes (highlights grouped by chapter, with your own note), Targets (today's study goal, lessons left, targets, next badges) and Timer (goal 10/15/20/30 min, default 15). Time counts only while the tab is visible and you've interacted in the last 2 minutes; stored per day in localStorage.
 - SVG hourglass in the top bar: sand drains from the top bulb into the bottom one as today's time approaches the goal, with "12:30 / 15:00" next to it. Tap: laptop switches the side panel to Timer; tablet opens the drawer on Timer; phone opens the Study tab.
+
+## Oct 18: "voice is good but not working properly" → read-aloud rebuilt
+Three bugs found from the server log + code:
+1. **Overlapping/late audio.** `speak()` fetched the audio, then played it even if Stop (or a newer line) had happened while it was being generated. Fix: a generation counter; `stopSpeaking()` bumps it and stale audio is dropped.
+2. **Random 502s.** Kokoro's phonemizer (espeak) isn't thread-safe; two requests at once (prefetch + current) crashed one. Fix: a lock around Kokoro synthesis. Test: 3 simultaneous requests → 200/200/200.
+3. **One failure = robotic voice for the rest of the session.** Any non-OK reply flipped a global "no TTS" flag. Now only a 404 ("no voice in this mode") does; a failed line just falls back for that line.
+Also: whole pages were sent as one request (long silent wait, and cut at 600 characters).
+
+New read-aloud (`reading.ts`): every sentence / step / key term / table cell on a page is a `[data-say]` unit. Start reading → reads the visible page(s) sentence by sentence, highlights the current sentence, prefetches the next one while the current one plays (audio cached per sentence), turns the page by itself and stops at the end of the chapter. Tap any sentence to put the reading cursor there (blue bar); Start reads from the cursor, and tapping while reading jumps there. Stop leaves the cursor where you were, so Start resumes. Volume slider (remembered) applies to Kokoro/ElevenLabs audio and the browser voice. Per-sentence latency with Kokoro: 1.0-2.1 s for the first sentence, then near-continuous thanks to prefetch.

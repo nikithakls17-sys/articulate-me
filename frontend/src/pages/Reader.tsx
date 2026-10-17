@@ -1,24 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Highlighter, Volume2, VolumeX, X } from 'lucide-react'
-import { api, type Lesson, type Page, type QuizResult } from '../api'
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Highlighter, Loader2, Play, Square, Volume1, Volume2, VolumeX, X } from 'lucide-react'
+import { api, type Lesson, type QuizResult } from '../api'
 import { useSession } from '../session'
 import PageView from '../components/PageView'
 import Book, { useMedia } from '../components/Book'
-import { speak, stopSpeaking } from '../voice'
+import { getVolume, setVolume, stopSpeaking } from '../voice'
+import { useReadAloud } from '../reading'
 import { useStudy } from '../study'
 import Blob, { BlobSays } from '../components/Blob'
-
-function pageText(p: Page): string {
-  switch (p.kind) {
-    case 'steps': return p.steps.map((s) => `${s.label}. ${s.text}`).join(' ')
-    case 'terms': return p.terms.map((t) => `${t.term}: ${t.meaning}`).join(' ')
-    case 'table': return p.rows.map((r) => r.join(', ')).join('. ')
-    case 'before_after': return `Before: ${p.before}. After: ${p.after}. ${p.why}`
-    case 'intro': return `${p.body} ${p.learn}`
-    default: return p.body
-  }
-}
 
 const FIGURE_KINDS = new Set(['steps', 'table', 'before_after', 'example'])
 
@@ -37,8 +27,17 @@ export default function Reader() {
   const [result, setResult] = useState<QuizResult | null>(null)
   const [selection, setSelection] = useState('')
   const [saved, setSaved] = useState('')
-  const [reading, setReading] = useState(false)
+  const [volume, setVol] = useState(getVolume)
   const bookRef = useRef<HTMLDivElement>(null)
+  const posRef = useRef(0)
+  const leavesRef = useRef(0)
+  posRef.current = pos
+  // read-aloud turns the page itself at the end of the visible page(s); stops at the end of the chapter
+  const read = useReadAloud(bookRef, () => {
+    if (posRef.current + 1 >= leavesRef.current) return false
+    setPos(posRef.current + 1)
+    return true
+  })
 
   // depend on the user id, not the user object: refresh() replaces the object and must not reload the lesson
   useEffect(() => {
@@ -81,7 +80,9 @@ export default function Reader() {
       pageNo={i + 1} figureNo={figureNos[i]} />
   ))
 
-  const turn = (n: number) => { stopSpeaking(); setReading(false); setPos(Math.max(0, Math.min(leaves, n))) }
+  leavesRef.current = leaves
+  // turning by hand stops reading and clears the cursor
+  const turn = (n: number) => { read.stop(); read.setCursor(null); setPos(Math.max(0, Math.min(leaves, n))) }
 
   const saveNote = async () => {
     const text = selection
@@ -94,12 +95,6 @@ export default function Reader() {
     window.setTimeout(() => setSaved(''), 1800)
   }
 
-  const readAloud = async () => {
-    if (reading) { stopSpeaking(); setReading(false); return }
-    setReading(true)
-    for (const n of visible) await speak(`${pages[n].title}. ${pageText(pages[n])}`, 'narrator')
-    setReading(false)
-  }
 
   const submit = async () => {
     const r = await api.quiz(day, user.id, answers.map((a) => a ?? -1))
@@ -155,21 +150,50 @@ export default function Reader() {
 
       {!quiz ? (
         <>
-          <div ref={bookRef} className="select-text">
+          <div ref={bookRef} className="select-text"
+            onClick={(e) => {
+              // tap a sentence to put the reading cursor there (but not while selecting text for a note)
+              const el = (e.target as HTMLElement).closest<HTMLElement>('[data-say]')
+              if (!el || window.getSelection()?.toString()) return
+              const reading = read.status !== 'idle'
+              if (reading) read.stop()
+              read.setCursor(el.dataset.sayId ?? null)
+              if (reading) window.setTimeout(read.start, 60)
+            }}>
             <Book faces={faces} coverLeft={coverLeft} end={endPage} spread={spread} position={pos} onPosition={turn} height={bookHeight} />
           </div>
           {!selection && !saved && (
             <div className="mx-auto flex w-full max-w-xl items-center gap-2">
               <button className="btn-ghost px-3" onClick={() => turn(pos - 1)} disabled={pos === 0} aria-label="Previous page"><ChevronLeft /></button>
-              <button className="btn-ghost px-3" onClick={readAloud} disabled={atEnd} aria-label={reading ? 'Stop reading' : 'Read aloud'}>
-                {reading ? <VolumeX /> : <Volume2 />}
-              </button>
               <p className="label flex-1 text-center text-muted">
                 {atEnd ? 'End' : spread ? `pp. ${visible.map((n) => n + 1).join('–')} of ${pages.length}` : `p. ${current + 1} of ${pages.length}`}
               </p>
               {atEnd
                 ? <button className="btn-primary px-4" onClick={() => setQuiz(true)}>Quick check</button>
                 : <button className="btn-primary px-3" onClick={() => turn(pos + 1)} aria-label="Next page"><ChevronRight /></button>}
+            </div>
+          )}
+          {!atEnd && (
+            <div className="mx-auto flex w-full max-w-xl flex-wrap items-center gap-2 border-2 border-ink bg-white p-2 shadow-[3px_3px_0_var(--ink)]">
+              {read.status === 'idle' ? (
+                <button className="btn bg-read px-3 py-2 text-white" onClick={read.start}>
+                  <Play size={16} /> {read.cursor ? 'Read from cursor' : 'Start reading'}
+                </button>
+              ) : (
+                <button className="btn bg-talk px-3 py-2 text-white" onClick={read.stop}>
+                  {read.status === 'loading' ? <Loader2 size={16} className="animate-spin" /> : <Square size={16} fill="currentColor" />} Stop reading
+                </button>
+              )}
+              <label className="flex min-w-[9rem] flex-1 items-center gap-2">
+                <span className="sr-only">Volume</span>
+                {volume === 0 ? <VolumeX size={18} /> : volume < 0.5 ? <Volume1 size={18} /> : <Volume2 size={18} />}
+                <input type="range" min={0} max={1} step={0.05} value={volume} aria-label="Reading volume"
+                  onChange={(e) => { const v = Number(e.target.value); setVol(v); setVolume(v) }}
+                  className="h-2 flex-1 accent-[var(--read)]" />
+              </label>
+              <p className="label w-full text-muted">
+                {read.status === 'idle' ? 'Tap any sentence to start reading from there' : read.status === 'loading' ? 'Getting the voice ready…' : 'Reading · tap another sentence to jump'}
+              </p>
             </div>
           )}
           <p className="label flex items-center justify-center gap-1.5 text-muted">

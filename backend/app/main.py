@@ -595,6 +595,7 @@ def tts(body: TTSBody):
         audio, media = voices.synthesize(text, body.voice)
     except Exception as e:  # noqa: BLE001
         sentry_sdk.capture_exception(e)
+        print(f"TTS failed ({body.voice}): {e!r}", flush=True)
         raise HTTPException(502, "TTS failed")
     return Response(audio, media_type=media, headers={"Cache-Control": "private, max-age=86400"})
 

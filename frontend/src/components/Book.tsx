@@ -73,8 +73,8 @@ export default function Book({ faces, coverLeft, end, spread, position, onPositi
     const right = spread ? (faces[2 * position] ?? end) : (faces[position] ?? end)
     return (
       <div className={`mx-auto flex ${spread ? 'spread' : 'single'}`} style={style} {...swipe}>
-        {spread && <div key={`l${position}`} className="face fade-in relative" style={{ width: '50%' }}>{left}</div>}
-        <div key={`r${position}`} className="face fade-in relative" style={{ width: spread ? '50%' : '100%' }}>{right}</div>
+        {spread && <div key={`l${position}`} data-page-visible="true" className="face fade-in relative" style={{ width: '50%' }}>{left}</div>}
+        <div key={`r${position}`} data-page-visible="true" className="face fade-in relative" style={{ width: spread ? '50%' : '100%' }}>{right}</div>
       </div>
     )
   }
@@ -93,14 +93,14 @@ export default function Book({ faces, coverLeft, end, spread, position, onPositi
         return (
           <div key={k} className={`leaf ${flipped ? 'flipped' : ''}`} aria-hidden={!visible}
             style={{ zIndex: z, left: spread ? '50%' : 0, width: spread ? '50%' : '100%' }}>
-            <div className="face front">
+            <div className="face front" data-page-visible={k === position ? 'true' : 'false'}>
               {visible || Math.abs(k - position) < 2 ? front : null}
               {k === position && <button className="corner right" aria-label="Next page" onClick={() => go(position + 1)} />}
               {!spread && k === position && position > 0 && (
                 <button className="corner left" aria-label="Previous page" onClick={() => go(position - 1)} />
               )}
             </div>
-            <div className="face back">
+            <div className="face back" data-page-visible={spread && k === position - 1 ? 'true' : 'false'}>
               {spread && (visible || Math.abs(k - position) < 2) ? back : null}
               {spread && k === position - 1 && <button className="corner left" aria-label="Previous page" onClick={() => go(position - 1)} />}
             </div>

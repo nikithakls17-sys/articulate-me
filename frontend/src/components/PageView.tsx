@@ -7,11 +7,23 @@ function cite(c: Citation) {
   return `${book}, “${c.chapter.replace(/^Chapter \d+:\s*/, '')}”${where}.`
 }
 
+/** A unit the read-aloud can speak, highlight and start from. */
+function Say({ id, children, className = '' }: { id: string; children: React.ReactNode; className?: string }) {
+  return <span data-say="" data-say-id={id} className={`say ${className}`}>{children}</span>
+}
+
+/** A paragraph split into sentences, each one readable on its own. */
+function Sentences({ id, text }: { id: string; text: string }) {
+  const parts = (text || '').match(/[^.!?]+[.!?]+["”’)]*\s*|[^.!?]+$/g) ?? [text]
+  return <>{parts.map((s, i) => <Say key={i} id={`${id}-${i}`}>{s}</Say>)}</>
+}
+
 /** One printed textbook page: running head, body, figure captions, footnote citation, folio. */
 export default function PageView({ page, chapter, chapterTitle, technique, pageNo, figureNo }:
   { page: Page; chapter: number; chapterTitle: string; technique: string; pageNo: number; figureNo: number }) {
   const even = pageNo % 2 === 0
   const c = 'cite' in page ? page.cite : null
+  const pid = `p${pageNo}`
   return (
     <div className="flex h-full flex-col px-6 pb-3 pt-4 sm:px-8">
       <header className={`running-head flex justify-between pb-1 ${even ? '' : 'flex-row-reverse'}`}>
@@ -21,10 +33,10 @@ export default function PageView({ page, chapter, chapterTitle, technique, pageN
 
       <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-1 [scrollbar-width:thin]">
         <h2 className="text-[1.45rem] font-bold leading-tight">
-          {page.title}{c && <sup className="ml-0.5 font-label text-xs text-coral">1</sup>}
+          <Say id={`${pid}-title`}>{page.title}</Say>{c && <sup className="ml-0.5 font-label text-xs text-coral">1</sup>}
         </h2>
         <div className="mt-3 text-[1.08rem] leading-relaxed">
-          <Body page={page} chapter={chapter} technique={technique} figureNo={figureNo} />
+          <Body page={page} chapter={chapter} technique={technique} figureNo={figureNo} pid={pid} />
         </div>
       </div>
 
@@ -44,15 +56,15 @@ function Caption({ n, chapter, children }: { n: number; chapter: number; childre
   return <p className="figure-caption mt-2"><b>Figure {chapter}.{n}</b> &nbsp;{children}</p>
 }
 
-function Body({ page, chapter, technique, figureNo }: { page: Page; chapter: number; technique: string; figureNo: number }) {
+function Body({ page, chapter, technique, figureNo, pid }: { page: Page; chapter: number; technique: string; figureNo: number; pid: string }) {
   switch (page.kind) {
     case 'intro':
       return (
         <>
-          <p className="drop-cap">{page.body}</p>
+          <p className="drop-cap"><Sentences id={`${pid}-b`} text={page.body} /></p>
           <aside className="margin-note mt-5 pl-3">
             <p className="label text-coral">In this chapter</p>
-            <p className="mt-1 font-semibold">{page.learn}</p>
+            <p className="mt-1 font-semibold"><Sentences id={`${pid}-l`} text={page.learn} /></p>
           </aside>
         </>
       )
@@ -65,8 +77,8 @@ function Body({ page, chapter, technique, figureNo }: { page: Page; chapter: num
                 <div className="flex w-full items-stretch border-2 border-ink bg-white">
                   <span className="grid w-11 shrink-0 place-items-center border-r-2 border-ink bg-coral font-heading text-lg font-bold text-white">{i + 1}</span>
                   <div className="min-w-0 px-3 py-2">
-                    <p className="label">{s.label}</p>
-                    <p className="text-[0.98rem] leading-snug">{s.text}</p>
+                    <p className="label"><Say id={`${pid}-s${i}l`}>{s.label}.</Say></p>
+                    <p className="text-[0.98rem] leading-snug"><Sentences id={`${pid}-s${i}t`} text={s.text} /></p>
                   </div>
                 </div>
                 {i < page.steps.length - 1 && <ArrowDown className="my-0.5" size={20} strokeWidth={2.5} aria-hidden />}
@@ -79,12 +91,14 @@ function Body({ page, chapter, technique, figureNo }: { page: Page; chapter: num
     case 'terms':
       return (
         <dl className="flex flex-col gap-3">
-          {page.terms.map((t) => (
+          {page.terms.map((t, i) => (
             <div key={t.term} className="keyterm px-3 py-2">
               <dt className="label">Key term</dt>
               <dd>
-                <span className="font-heading text-lg font-bold">{t.term}.</span>{' '}
-                <span className="leading-snug">{t.meaning}</span>
+                <Say id={`${pid}-k${i}`}>
+                  <span className="font-heading text-lg font-bold">{t.term}.</span>{' '}
+                  <span className="leading-snug">{t.meaning}</span>
+                </Say>
               </dd>
             </div>
           ))}
@@ -100,7 +114,11 @@ function Body({ page, chapter, technique, figureNo }: { page: Page; chapter: num
             <tbody>
               {page.rows.map((r, i) => (
                 <tr key={i} className="border-t-2 border-ink align-top">
-                  {r.map((cell, j) => <td key={j} className={`p-2 leading-snug [overflow-wrap:anywhere] ${j === 0 ? 'font-semibold' : ''}`}>{cell}</td>)}
+                  {r.map((cell, j) => (
+                    <td key={j} className={`p-2 leading-snug [overflow-wrap:anywhere] ${j === 0 ? 'font-semibold' : ''}`}>
+                      <Say id={`${pid}-r${i}c${j}`}>{cell}</Say>
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
@@ -111,26 +129,26 @@ function Body({ page, chapter, technique, figureNo }: { page: Page; chapter: num
     case 'before_after':
       return (
         <figure>
-          {page.situation && <p className="italic text-muted">{page.situation}</p>}
+          {page.situation && <p className="italic text-muted"><Sentences id={`${pid}-sit`} text={page.situation} /></p>}
           <div className="mt-3 grid gap-3">
             <div className="border-2 border-ink bg-orange-50 p-3">
               <p className="label text-coral-dark">Before</p>
-              <p className="mt-1 italic">“{page.before}”</p>
+              <p className="mt-1 italic">“<Say id={`${pid}-before`}>{page.before}</Say>”</p>
             </div>
             <div className="border-2 border-ink bg-leaf-soft p-3 shadow-[4px_4px_0_var(--ink)]">
               <p className="label text-leaf">After</p>
-              <p className="mt-1 italic">“{page.after}”</p>
+              <p className="mt-1 italic">“<Say id={`${pid}-after`}>{page.after}</Say>”</p>
             </div>
           </div>
-          <Caption n={figureNo} chapter={chapter}>{page.why}</Caption>
+          <Caption n={figureNo} chapter={chapter}><Say id={`${pid}-why`}>{page.why}</Say></Caption>
         </figure>
       )
     case 'why':
-      return <p className="drop-cap">{page.body}</p>
+      return <p className="drop-cap"><Sentences id={`${pid}-b`} text={page.body} /></p>
     case 'example':
       return (
         <figure>
-          <blockquote className="border-l-4 border-coral pl-4 text-[1.15rem] italic leading-relaxed">{page.body}</blockquote>
+          <blockquote className="border-l-4 border-coral pl-4 text-[1.15rem] italic leading-relaxed"><Sentences id={`${pid}-ex`} text={page.body} /></blockquote>
           <Caption n={figureNo} chapter={chapter}>An example from your world.</Caption>
         </figure>
       )
