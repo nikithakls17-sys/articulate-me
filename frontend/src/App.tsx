@@ -16,6 +16,7 @@ import Talk from './pages/Talk'
 import Study from './pages/Study'
 import ProgressPage from './pages/Progress'
 import Sources from './pages/Sources'
+import Blobs from './pages/Blobs'
 
 const TABS = [
   { to: '/', icon: Map, label: 'Course' },
@@ -140,6 +141,7 @@ export default function App() {
         <Routes>
           <Route path="/welcome" element={user ? <Navigate to="/" /> : <Welcome />} />
           <Route path="/sources" element={<Sources />} />
+          <Route path="/blobs" element={<Blobs />} />
           {user ? (
             <>
               <Route path="/" element={<CoursePage />} />

@@ -4,6 +4,7 @@ import { BookOpen, Clock, Lock, MessageCircle, Target } from 'lucide-react'
 import { api, WORLD_LABELS, type Course } from '../api'
 import { useSession } from '../session'
 import BadgeIcon from '../components/BadgeIcon'
+import { BlobSays } from '../components/Blob'
 
 export default function Overview() {
   const { user } = useSession()
@@ -25,6 +26,10 @@ export default function Overview() {
           {user.goals.length > 0 && <> · focused on {user.goals.join(', ').toLowerCase()}</>}.
         </p>
       </header>
+
+      <BlobSays mood="calm" accessory="specs" size={64}>
+        {user.name}, here's the plan I put together for you. Short chapters, then we practise out loud together.
+      </BlobSays>
 
       <div className="grid grid-cols-3 gap-2 text-center">
         {[

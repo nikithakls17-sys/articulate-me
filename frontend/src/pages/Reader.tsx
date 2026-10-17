@@ -7,6 +7,7 @@ import PageView from '../components/PageView'
 import Book, { useMedia } from '../components/Book'
 import { speak, stopSpeaking } from '../voice'
 import { useStudy } from '../study'
+import Blob, { BlobSays } from '../components/Blob'
 
 function pageText(p: Page): string {
   switch (p.kind) {
@@ -122,15 +123,19 @@ export default function Reader() {
         <h1 className="text-3xl font-bold leading-tight">{lesson.title}</h1>
         <p className="mt-3 text-lg italic text-muted">{lesson.learn}</p>
       </div>
-      <p className="label text-muted">{pages.length} pages · quick check at the end</p>
+      <div className="flex items-end justify-between">
+        <p className="label text-muted">{pages.length} pages · quick check at the end</p>
+        <Blob mood="calm" accessory="specs" size={64} />
+      </div>
     </div>
   )
   const endPage = (
     <div className="flex h-full flex-col items-start justify-center gap-4 p-8">
-      <p className="label text-coral">End of chapter {day}</p>
-      <h2 className="text-3xl font-bold">Quick check</h2>
+      <Blob mood="proud" accessory="cap" size={80} />
+      <p className="label text-check">End of chapter {day}</p>
+      <h2 className="text-3xl font-bold">Nice reading, {user.name}.</h2>
       <p className="text-lg text-muted">Three questions to make sure {lesson.technique} clicked.</p>
-      <button className="btn-primary" onClick={() => setQuiz(true)}>Start the quick check <ArrowRight size={18} /></button>
+      <button className="btn bg-check" onClick={() => setQuiz(true)}>Start the quick check <ArrowRight size={18} /></button>
     </div>
   )
 
@@ -173,9 +178,9 @@ export default function Reader() {
         </>
       ) : (
         <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
-          <div className="card">
-            <p className="label text-coral">End of chapter {day}</p>
-            <h1 className="mt-1 text-3xl font-bold">Quick check</h1>
+          <div className="card border-l-[10px] border-l-check">
+            <p className="label text-check">End of chapter {day} · quick check</p>
+            <div className="mt-2"><BlobSays mood="thinking" size={56}>Three quick ones, {user.name}. No trick questions, promise.</BlobSays></div>
           </div>
           {lesson.quiz.map((q, qi) => (
             <fieldset key={qi} className="card flex flex-col gap-2">
@@ -205,9 +210,14 @@ export default function Reader() {
             </div>
           ) : (
             <>
-              <div className="card text-center">
-                <p className="font-heading text-5xl font-bold">{result.correct}/{result.total}</p>
-                <p className="label mt-1 text-muted">+{result.xp} XP · chapter complete</p>
+              <div className="card flex items-center gap-4">
+                <Blob mood={result.correct === result.total ? 'excited' : result.correct > 0 ? 'happy' : 'nervous'}
+                  accessory={result.correct === result.total ? 'cap' : 'none'} size={80} />
+                <div>
+                  <p className="font-heading text-4xl font-bold">{result.correct}/{result.total}</p>
+                  <p className="text-lg">{result.correct === result.total ? `Perfect, ${user.name}!` : result.correct > 0 ? `Good work, ${user.name}. Check the ones I marked.` : `That's okay, ${user.name}. Have a look at the explanations.`}</p>
+                  <p className="label mt-1 text-muted">+{result.xp} XP · chapter complete</p>
+                </div>
               </div>
               <button className="btn-primary" onClick={() => nav(nextStep.to)}>{nextStep.label}</button>
               <button className="btn-ghost" onClick={() => nav('/')}>Back to course</button>

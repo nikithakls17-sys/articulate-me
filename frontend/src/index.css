@@ -5,20 +5,29 @@
    (Tailwind colours, borders, shadows) reads from them.
    ------------------------------------------------------------------ */
 :root {
-  --paper: #fbede6;        /* page background */
-  --paper-deep: #f3dccf;   /* inset areas, progress tracks */
-  --surface: #fffaf6;      /* cards, book pages */
-  --ink: #141110;          /* text, borders, hard shadows */
-  --ink-soft: #5c4f47;     /* secondary text */
-  --accent: #d6402b;       /* primary action, chapter numbers */
-  --accent-deep: #8f2416;
-  --highlight: #ffd23f;    /* key terms, highlighter */
-  --good: #1f7a4d;
-  --good-soft: #dcefe2;
-  --info: #1d4ed8;
-  --info-soft: #dfe7fb;
-  --warn-soft: #fde7c8;
-  --grid-line: rgba(20, 17, 16, 0.06);
+  /* Soft risograph palette from Niki's references: grainy pastel orbs on warm light-grey paper.
+     Each colour has ONE meaning across the app (colour coding), with a soft fill and a stronger edge. */
+  --paper: #ebe8e2;        /* warm light grey, like the speech-bubble poster */
+  --paper-deep: #dedad2;
+  --surface: #faf8f4;      /* cards, book pages */
+  --ink: #171615;          /* text, borders, hard shadows */
+  --ink-soft: #57534d;
+
+  --read: #3f7be8;   --read-soft: #d9e5fa;     /* textbook, chapters, the partner's voice */
+  --talk: #e5533d;   --talk-soft: #f8d8d0;     /* practice, record, primary action */
+  --check: #f0b429;  --check-soft: #fcecc4;    /* quick checks, key terms, highlights */
+  --good: #2f9a6a;   --good-soft: #d5eee1;     /* done, used it, progress */
+  --notes: #d4499a;  --notes-soft: #f6d6e8;    /* notes, highlights you saved */
+  --timer: #ef8a2a;  --timer-soft: #fde0c4;    /* study time */
+  --target: #1f978d; --target-soft: #d0ece8;   /* targets, badges */
+
+  --accent: var(--talk);
+  --accent-deep: #a8321f;
+  --highlight: var(--check);
+  --info: var(--read);
+  --info-soft: var(--read-soft);
+  --warn-soft: var(--talk-soft);
+  --grid-line: rgba(23, 22, 21, 0.045);
 
   --border: 2px;
   --border-heavy: 3px;
@@ -45,9 +54,21 @@
   --color-line: var(--ink);
   --color-white: var(--surface);
   --color-orange-50: var(--warn-soft);
-  --color-amber-50: #fff3c4;
+  --color-amber-50: var(--check-soft);
   --color-blue-50: var(--info-soft);
   --color-paper-deep: var(--paper-deep);
+  --color-read: var(--read);
+  --color-read-soft: var(--read-soft);
+  --color-talk: var(--talk);
+  --color-talk-soft: var(--talk-soft);
+  --color-check: var(--check);
+  --color-check-soft: var(--check-soft);
+  --color-notes: var(--notes);
+  --color-notes-soft: var(--notes-soft);
+  --color-timer: var(--timer);
+  --color-timer-soft: var(--timer-soft);
+  --color-target: var(--target);
+  --color-target-soft: var(--target-soft);
 
   /* brutalism: square corners everywhere (rounded-full stays round for dots and the mic) */
   --radius-xs: 0px;
@@ -62,6 +83,20 @@
 html, body, #root { min-height: 100%; }
 html { -webkit-text-size-adjust: 100%; font-size: 17px; }
 @media (min-width: 1024px) { html { font-size: 18px; } }
+/* soft blurred orbs + film grain behind everything, like the reference posters */
+body::before {
+  content: ""; position: fixed; inset: -10%; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(38vmax 38vmax at 88% 6%, color-mix(in srgb, var(--read) 30%, transparent), transparent 70%),
+    radial-gradient(34vmax 34vmax at 4% 42%, color-mix(in srgb, var(--talk) 24%, transparent), transparent 70%),
+    radial-gradient(36vmax 36vmax at 70% 100%, color-mix(in srgb, var(--timer) 26%, transparent), transparent 70%),
+    radial-gradient(26vmax 26vmax at 20% 100%, color-mix(in srgb, var(--good) 18%, transparent), transparent 70%);
+  filter: blur(8px);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.35; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 body {
   overflow-x: hidden;
   overscroll-behavior-y: none;
@@ -176,3 +211,9 @@ h1, h2, h3, legend { font-family: var(--font-heading); letter-spacing: -0.01em; 
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .animate-pulse, .animate-bounce { animation: none !important; }
 }
+
+/* ---------- Blob ---------- */
+@keyframes blob-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+@keyframes blob-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.15); } }
+.blob { overflow: visible; }
+.blob .blob-body { animation: blob-bob 3.2s ease-in-out infinite; transform-origin: 51px 80px; }

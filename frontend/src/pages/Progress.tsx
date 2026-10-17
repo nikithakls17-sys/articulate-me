@@ -4,6 +4,7 @@ import { BookOpen, Check, ChevronRight, Flame, MessageCircle, Shield, Target } f
 import { api, type AttemptSummary, type Progress } from '../api'
 import { useSession } from '../session'
 import BadgeIcon from '../components/BadgeIcon'
+import { BlobSays } from '../components/Blob'
 
 export default function ProgressPage() {
   const { user } = useSession()
@@ -15,6 +16,9 @@ export default function ProgressPage() {
   return (
     <div className="flex flex-col gap-5">
       <h1 className="text-3xl font-black">Progress</h1>
+      <BlobSays mood="proud" accessory="cap" size={64}>
+        {p.lessons_done ? `${user?.name}, look how far you've come. ${p.lessons_done} conversation${p.lessons_done > 1 ? 's' : ''} down.` : `${user?.name}, this is where your progress will show up. Let's fill it in together.`}
+      </BlobSays>
 
       <div className="grid grid-cols-3 gap-2 text-center">
         {[

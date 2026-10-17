@@ -7,11 +7,12 @@ import { mmss, useStudy, type StudyTab } from '../study'
 import CitationChip from './CitationChip'
 import BadgeIcon from './BadgeIcon'
 import Hourglass from './Hourglass'
+import Blob, { BlobSays } from './Blob'
 
-const TABS: { id: StudyTab; label: string }[] = [
-  { id: 'notes', label: 'Notes' },
-  { id: 'targets', label: 'Targets' },
-  { id: 'timer', label: 'Timer' },
+const TABS: { id: StudyTab; label: string; on: string }[] = [
+  { id: 'notes', label: 'Notes', on: 'bg-notes-soft' },
+  { id: 'targets', label: 'Targets', on: 'bg-target-soft' },
+  { id: 'timer', label: 'Timer', on: 'bg-timer-soft' },
 ]
 
 export default function StudyPanel({ compact = false }: { compact?: boolean }) {
@@ -21,7 +22,7 @@ export default function StudyPanel({ compact = false }: { compact?: boolean }) {
       <div role="tablist" aria-label="Study tools" className="grid grid-cols-3 border-b-2 border-ink">
         {TABS.map((t, i) => (
           <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
-            className={`label py-2.5 ${i > 0 ? 'border-l-2 border-ink' : ''} ${tab === t.id ? 'bg-ink text-white' : 'bg-white hover:bg-cream'}`}>
+            className={`label py-2.5 ${i > 0 ? 'border-l-2 border-ink' : ''} ${tab === t.id ? `${t.on} border-b-4 border-b-ink font-bold` : 'bg-white hover:bg-cream'}`}>
             {t.label}
           </button>
         ))}
@@ -49,7 +50,7 @@ export function NoteCard({ note, onDelete }: { note: Note; onDelete: () => void 
   return (
     <li className="flex flex-col gap-2 border-2 border-ink bg-white p-3">
       {note.page_title && <p className="label text-muted">{note.page_title}</p>}
-      <blockquote className="border-l-4 border-ink bg-sun/60 px-2.5 py-1.5 leading-snug">{note.text}</blockquote>
+      <blockquote className="border-l-4 border-notes bg-notes-soft px-2.5 py-1.5 leading-snug">{note.text}</blockquote>
       {note.citation && <div><CitationChip c={note.citation} /></div>}
       <label className="label text-muted">
         My note
@@ -76,7 +77,8 @@ function NotesTab() {
   if (!notes.length) {
     return (
       <div className="flex flex-col items-start gap-2">
-        <p className="font-heading text-lg font-bold">No notes yet.</p>
+        <Blob mood="sleepy" accessory="nightcap" size={72} />
+        <p className="font-heading text-lg font-bold">No notes yet, {user?.name}.</p>
         <p className="flex items-center gap-1.5 text-muted"><Highlighter size={16} /> Select any text in a chapter and tap “Save highlight”.</p>
         <Link to="/textbook" className="btn-ghost mt-2">Open the textbook</Link>
       </div>
@@ -117,11 +119,13 @@ function TargetsTab() {
   useEffect(() => { if (user) api.progress(user.id).then(setP) }, [user?.id, targetsVersion]) // eslint-disable-line react-hooks/exhaustive-deps
   if (!p) return <p className="text-muted">Loading…</p>
   const goalDone = seconds >= goalMin * 60
+  const name = user?.name
   const locked = p.badges.filter((b) => !b.earned)
   return (
     <div className="flex flex-col gap-5">
+      <BlobSays mood="listening" size={52}>{name}, here's what we're aiming for.</BlobSays>
       <section>
-        <p className="label">Today</p>
+        <p className="label text-timer">Today</p>
         <div className="mt-1 flex items-baseline justify-between">
           <span className="font-heading text-lg font-bold">Study {goalMin} minutes</span>
           <span className="label text-muted">{mmss(seconds)} / {goalMin}:00</span>
@@ -129,7 +133,7 @@ function TargetsTab() {
         <Bar value={seconds / (goalMin * 60)} done={goalDone} />
       </section>
       <section>
-        <p className="label">Course</p>
+        <p className="label text-read">Course</p>
         <div className="mt-1 flex items-baseline justify-between">
           <span className="font-heading text-lg font-bold">{p.lessons_total - p.lessons_done} lessons left</span>
           <span className="label text-muted">{p.lessons_done}/{p.lessons_total}</span>
@@ -137,7 +141,7 @@ function TargetsTab() {
         <Bar value={p.lessons_done / p.lessons_total} />
       </section>
       <section className="flex flex-col gap-2">
-        <p className="label">Targets</p>
+        <p className="label text-target">Targets</p>
         {p.targets.map((t) => (
           <div key={t.id} className="flex items-center gap-2">
             {t.done ? <Check size={18} className="shrink-0 text-leaf" strokeWidth={3} /> : <Target size={18} className="shrink-0 text-coral" />}
@@ -147,7 +151,7 @@ function TargetsTab() {
         ))}
       </section>
       <section>
-        <p className="label">Badges to reach</p>
+        <p className="label text-target">Badges to reach</p>
         <ul className="mt-2 flex flex-col gap-2">
           {locked.slice(0, 4).map((b) => (
             <li key={b.id} className="flex items-center gap-3">
@@ -163,12 +167,17 @@ function TargetsTab() {
 }
 
 function TimerTab() {
+  const { user } = useSession()
   const { seconds, goalMin, setGoalMin } = useStudy()
   const goal = goalMin * 60
   const left = Math.max(0, goal - seconds)
   return (
     <div className="flex flex-col items-center gap-4 text-center">
-      <Hourglass progress={seconds / goal} size={120} />
+      <div className="flex items-end gap-3">
+        <Hourglass progress={seconds / goal} size={120} />
+        <Blob mood={left ? 'calm' : 'proud'} accessory={left ? 'coffee' : 'cap'} size={64} />
+      </div>
+      <p className="text-lg">{left ? `Keep going, ${user?.name}. ${Math.ceil(left / 60)} minutes to today's goal.` : `Goal met, ${user?.name}. Proud of you.`}</p>
       <div>
         <p className="font-heading text-4xl font-bold tabular-nums">{mmss(seconds)}</p>
         <p className="label text-muted">studied today</p>

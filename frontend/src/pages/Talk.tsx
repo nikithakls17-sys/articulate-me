@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Ear, Mic, Square, Volume2, X } from 'lucide-react'
+import { Mic, Square, Volume2, X } from 'lucide-react'
 import { api, WORLD_LABELS, type Attempt, type Conversation, type Lesson, type Turn } from '../api'
 import { useSession } from '../session'
 import { speak, stopSpeaking, unlockAudio, useRecorder } from '../voice'
 import FeedbackView from '../components/FeedbackView'
 import { WORLD_ICONS } from '../icons'
+import Blob, { BlobSays } from '../components/Blob'
 
 type Stage = 'intro' | 'partner' | 'your-turn' | 'sending' | 'grading' | 'feedback'
 const GRADING_LINES = ['Reading the transcript…', 'Counting filler words…', 'Checking the technique…', 'Finding your best line…', 'Writing one fix…']
@@ -143,6 +144,11 @@ export default function Talk() {
             </div>
             <p className="text-lg">{sc.setup}</p>
           </div>
+          <BlobSays mood={day === 0 ? 'listening' : 'excited'} accessory={day === 0 ? 'headphones' : 'none'} size={60}>
+            {day === 0
+              ? <>No pressure, {user.name}. Just talk the way you normally would. I'll be listening.</>
+              : <>You've got this, {user.name}. Try <b>{lesson.technique}</b> on {sc.partner.split(' ')[0]}. I'll listen and tell you what I heard.</>}
+          </BlobSays>
           {day > 0 ? (
             <div className="card">
               <p className="text-xs font-extrabold uppercase tracking-wide text-coral">Your goal</p>
@@ -197,7 +203,7 @@ export default function Talk() {
 
           {stage === 'grading' ? (
             <div className="flex flex-col items-center gap-3 py-8 text-center">
-              <Ear className="animate-bounce text-coral" size={56} aria-hidden />
+              <Blob mood="thinking" accessory="specs" size={96} />
               <p className="text-xl font-black">{GRADING_LINES[line]}</p>
               <p className="text-sm text-muted">This can take up to a minute on a laptop.</p>
             </div>

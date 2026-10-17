@@ -3,6 +3,8 @@ import { ArrowRight, CheckCircle2, CircleDashed, CircleHelp, CircleMinus, Rotate
 import type { LucideIcon } from 'lucide-react'
 import type { Attempt, AttemptSummary, Status } from '../api'
 import { speak, stopSpeaking } from '../voice'
+import { useSession } from '../session'
+import { BlobSays } from './Blob'
 
 const STATUS: Record<Status, { icon: LucideIcon; label: string; cls: string; ic: string }> = {
   used: { icon: CheckCircle2, label: 'Used it', cls: 'border-leaf/40 bg-leaf-soft', ic: 'text-leaf' },
@@ -14,6 +16,8 @@ const STATUS: Record<Status, { icon: LucideIcon; label: string; cls: string; ic:
 export default function FeedbackView({ attempt, technique, onRetry, onDone }:
   { attempt: Attempt; technique: string | null; onRetry: () => void; onDone: () => void }) {
   const [playing, setPlaying] = useState(false)
+  const name = useSession().user?.name ?? 'friend'
+  const score = attempt.rubric_score ?? 0
   const m = attempt.metrics
   const prev = attempt.previous
 
@@ -47,6 +51,14 @@ export default function FeedbackView({ attempt, technique, onRetry, onDone }:
           Fillers: {Object.entries(m.fillers).map(([w, n]) => `“${w}” ×${n}`).join(', ')}
         </p>
       )}
+
+      <BlobSays size={64} mood={!technique ? 'calm' : score >= 75 ? 'excited' : score >= 40 ? 'happy' : 'calm'}
+        accessory={technique && score >= 75 ? 'cap' : 'specs'}>
+        {!technique ? <>Thanks, {name}. Now I know where you're starting. Every lesson from here, we'll beat these numbers.</>
+          : score >= 75 ? <>{name}, you really used {technique}! Read what I heard below.</>
+          : score >= 40 ? <>Good start, {name}. One fix and you're there.</>
+          : <>That's a start, {name}. Let's try one change together.</>}
+      </BlobSays>
 
       {attempt.feedback && (
         <section className="card"><p className="text-lg font-bold leading-relaxed">{attempt.feedback}</p></section>

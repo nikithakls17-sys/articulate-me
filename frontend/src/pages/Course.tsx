@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { BookOpen, Check, Flag, Flame, Info, Lock, MessageCircle, Zap } from 'lucide-react'
 import { api, type Course, type NextStep } from '../api'
 import { useSession } from '../session'
-import { Logo } from '../icons'
+import Blob, { BlobSays, greeting, timeAccessory } from '../components/Blob'
 
 export function stepLink(s: NextStep) {
   return s.kind === 'read' ? `/read/${s.day}` : `/talk/${s.day}`
@@ -29,15 +29,15 @@ export default function CoursePage() {
   return (
     <div className="flex flex-col gap-5">
       <header className="flex items-center gap-3">
-        <Logo size={36} />
-        <span className="min-w-0 flex-1 truncate text-lg font-black">Hi, {user.name}</span>
+        <Blob mood="happy" accessory={timeAccessory()} size={44} />
+        <span className="min-w-0 flex-1 truncate font-heading text-xl font-bold">{greeting(user.name)}</span>
         <span className="chip" title="Day streak"><Flame size={16} className="text-coral" /> <b className="text-ink">{user.streak}</b></span>
         <span className="chip" title="XP"><Zap size={16} className="text-sun" /> <b className="text-ink">{user.xp}</b></span>
       </header>
 
       {next && nextDay && S ? (
-        <Link to={stepLink(next)} className="card block border-coral shadow-[0_6px_0_var(--color-line)]">
-          <p className="flex items-center gap-1.5 text-sm font-extrabold uppercase tracking-wide text-coral">
+        <Link to={stepLink(next)} className={`card block border-l-[10px] ${next.kind === 'read' ? 'border-l-read' : 'border-l-talk'}`}>
+          <p className={`flex items-center gap-1.5 text-sm font-extrabold uppercase tracking-wide ${next.kind === 'read' ? 'text-read' : 'text-talk'}`}>
             <S.icon size={16} /> {next.kind === 'baseline' ? 'Before we go on' : `Day ${next.day} · ${S.label}`}
           </p>
           <h1 className="mt-1 text-2xl font-black leading-tight">
@@ -48,12 +48,20 @@ export default function CoursePage() {
             {next.kind === 'baseline' && 'A quick two-question chat. No technique needed, just talk like you normally would.'}
             {next.kind === 'practice' && `Use ${nextDay.technique} in a short spoken conversation.`}
           </p>
-          <span className="btn-primary mt-4 w-full">{next.kind === 'read' ? 'Open chapter' : 'Start talking'}</span>
+          <div className="mt-3">
+            <BlobSays mood={next.kind === 'read' ? 'calm' : next.kind === 'baseline' ? 'listening' : 'excited'}
+              accessory={next.kind === 'read' ? 'specs' : next.kind === 'baseline' ? 'headphones' : 'none'} size={56}>
+              {next.kind === 'read' && <>{user.name}, today we learn <b>{nextDay.technique}</b>. Grab a seat, it's a short one.</>}
+              {next.kind === 'baseline' && <>Before we go further, {user.name}, I want to hear how you talk right now. No pressure.</>}
+              {next.kind === 'practice' && <>You've read it, {user.name}. Now let's hear {nextDay.technique} out loud.</>}
+            </BlobSays>
+          </div>
+          <span className={`btn mt-3 w-full text-white ${next.kind === 'read' ? 'bg-read' : 'bg-talk'}`}>{next.kind === 'read' ? 'Open chapter' : 'Start talking'}</span>
         </Link>
       ) : (
-        <div className="card text-center">
-          <Check className="mx-auto text-leaf" size={40} />
-          <h1 className="mt-2 text-2xl font-black">You're all caught up</h1>
+        <div className="card flex flex-col items-center text-center">
+          <Blob mood="proud" accessory="cap" size={72} />
+          <h1 className="mt-2 text-2xl font-black">You're all caught up, {user.name}</h1>
           <p className="text-muted">Replay any conversation in Practice to beat your score.</p>
         </div>
       )}
@@ -62,7 +70,7 @@ export default function CoursePage() {
 
       {course.weeks.map((w) => (
         <section key={w.week} className={w.locked ? 'opacity-60' : ''}>
-          <div className={`rounded-2xl px-4 py-3 text-white ${w.locked ? 'bg-muted' : 'bg-sky'}`}>
+          <div className={`border-2 border-ink px-4 py-3 ${w.locked ? 'bg-paper-deep text-muted' : 'bg-read-soft text-ink'}`}>
             <p className="text-xs font-extrabold uppercase tracking-widest opacity-80">Week {w.week}</p>
             <p className="flex items-center gap-2 text-xl font-black">{w.title} {w.locked && <Lock size={18} />}</p>
           </div>
@@ -86,12 +94,12 @@ export default function CoursePage() {
                       {open && (
                         <div className="flex shrink-0 gap-1.5">
                           <Link to={`/read/${d.day}`} aria-label={`Read day ${d.day}`}
-                            className={`grid h-10 w-10 place-items-center rounded-xl border-2 ${st?.read ? 'border-leaf bg-leaf-soft text-leaf' : 'border-line bg-white text-ink'}`}>
+                            className={`grid h-10 w-10 place-items-center border-2 border-ink ${st?.read ? 'bg-leaf-soft text-leaf' : 'bg-read-soft text-read'}`}>
                             <BookOpen size={18} />
                           </Link>
                           {st?.read ? (
                             <Link to={`/talk/${d.day}`} aria-label={`Talk day ${d.day}`}
-                              className={`grid h-10 w-10 place-items-center rounded-xl border-2 ${st?.practiced ? 'border-leaf bg-leaf-soft text-leaf' : 'border-coral bg-coral text-white'}`}>
+                              className={`grid h-10 w-10 place-items-center border-2 border-ink ${st?.practiced ? 'bg-leaf-soft text-leaf' : 'bg-talk text-white'}`}>
                               <MessageCircle size={18} />
                             </Link>
                           ) : (

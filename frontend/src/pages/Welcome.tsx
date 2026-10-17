@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Check } from 'lucide-react'
 import { api, WORLD_LABELS, type World } from '../api'
 import { useSession } from '../session'
-import { Logo, WORLD_ICONS } from '../icons'
+import { WORLD_ICONS } from '../icons'
+import Blob, { BlobSays } from '../components/Blob'
 
 export const GOALS = ['Stop rambling', 'Sound more confident', 'Fewer "um"s', 'Nail an interview', 'Speak up in class or meetings', 'Tell better stories']
 
@@ -54,8 +55,9 @@ export default function Welcome() {
   if (step === 0) {
     return (
       <div className="flex min-h-[88dvh] flex-col justify-center gap-6 text-center">
-        <div className="mx-auto"><Logo size={72} /></div>
+        <div className="mx-auto"><Blob mood="happy" size={120} label="Blob, the Articulate Me mascot, waving" /></div>
         <h1 className="text-4xl font-black leading-tight">Articulate Me</h1>
+        <p className="label -mt-3 text-talk">Hi, I'm Blob. I'll be your speaking coach.</p>
         <p className="text-lg text-muted">
           Everyone says “get to the point.” Nobody teaches how. Learn one real technique from a public speaking
           textbook, then practice it in a short conversation and see if you actually used it.
@@ -76,6 +78,7 @@ export default function Welcome() {
       <Steps n={step} />
       {step === 1 && (
         <>
+          <BlobSays mood="excited" size={56}>Nice to meet you{name ? `, ${name}` : ''}! Tell me where you talk, and I'll build your lessons around it.</BlobSays>
           <h2 className="text-3xl font-black">Where do you need to talk?</h2>
           <p className="text-muted">Pick all that fit. Your examples and conversation partners come from these.</p>
           {(Object.keys(WORLD_LABELS) as World[]).map((w) => {
@@ -97,6 +100,7 @@ export default function Welcome() {
       )}
       {step === 2 && (
         <>
+          <BlobSays mood="calm" accessory="specs" size={56}>Got it. And what should we work on together{name ? `, ${name}` : ''}?</BlobSays>
           <h2 className="text-3xl font-black">What do you want to get better at?</h2>
           <p className="text-muted">Pick as many as you like.</p>
           <div className="flex flex-col gap-2">
