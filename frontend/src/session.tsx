@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 import { api, type User } from './api'
 
-const KEY = 'ityl.user_id'
+const KEY = 'articulate.user_id'
 
 const read = () => { try { return localStorage.getItem(KEY) } catch { return null } }
 const write = (id: string | null) => {

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { BookOpen, ChevronLeft } from 'lucide-react'
 import { api, type Health } from '../api'
 import { useSession } from '../session'
 
@@ -25,6 +27,7 @@ export default function Sources() {
 
   return (
     <div className="flex flex-col gap-5">
+      <Link to="/progress" className="chip self-start"><ChevronLeft size={16} /> Back</Link>
       <h1 className="text-3xl font-black">Sources & privacy</h1>
 
       <section className="flex flex-col gap-3">
@@ -35,7 +38,7 @@ export default function Sources() {
         </p>
         {BOOKS.map((b) => (
           <a key={b.url} href={b.url} target="_blank" rel="noreferrer" className="card block">
-            <p className="font-extrabold">📖 {b.title}</p>
+            <p className="flex items-start gap-2 font-extrabold"><BookOpen size={18} className="mt-0.5 shrink-0 text-coral" /> {b.title}</p>
             <p className="text-sm text-muted">{b.note}</p>
             <p className="mt-1 text-sm font-bold text-sky">
               Licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer" className="underline">{b.license}</a>
@@ -56,7 +59,7 @@ export default function Sources() {
           <tbody>
             {[
               ['Transcription', 'Whisper on your laptop', 'ElevenLabs'],
-              ['Coaching', 'Gemma on your laptop (Ollama)', 'Gemma on DigitalOcean'],
+              ['Coaching + partner', 'Gemma on your laptop (Ollama)', 'Gemma on DigitalOcean'],
               ['Voice playback', 'Your browser', 'ElevenLabs'],
               ['Recordings', 'Never saved', 'Never saved'],
               ['Transcripts + scores', 'On your laptop', 'Our database'],

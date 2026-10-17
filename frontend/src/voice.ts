@@ -2,47 +2,61 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 let ttsAvailable: boolean | null = null
 let current: HTMLAudioElement | null = null
+let pendingEnd: (() => void) | null = null
 
-/** ElevenLabs via the backend when hosted; the browser's own voice otherwise (local mode never leaves the machine). */
-export async function speak(text: string, onEnd?: () => void) {
+/** iOS only lets audio play after a tap. Call this inside a tap handler before any async speech. */
+export function unlockAudio() {
+  try {
+    const a = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=')
+    a.play().catch(() => {})
+    if ('speechSynthesis' in window) window.speechSynthesis.speak(new SpeechSynthesisUtterance(''))
+  } catch { /* ignore */ }
+}
+
+/** ElevenLabs via the backend in hosted mode; the browser's own voice otherwise (local mode never leaves the machine).
+ *  Resolves when speech ends (or right away if nothing can speak). */
+export function speak(text: string): Promise<void> {
   stopSpeaking()
-  if (ttsAvailable !== false) {
-    try {
-      const r = await fetch('/api/tts', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }),
-      })
-      if (r.ok) {
+  return new Promise((resolve) => {
+    pendingEnd = resolve
+    const done = () => { if (pendingEnd === resolve) pendingEnd = null; resolve() }
+    const browserVoice = () => {
+      if (!('speechSynthesis' in window)) return done()
+      const u = new SpeechSynthesisUtterance(text)
+      u.rate = 1
+      u.onend = done
+      u.onerror = done
+      window.speechSynthesis.speak(u)
+    }
+    if (ttsAvailable === false) return browserVoice()
+    fetch('/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+      .then(async (r) => {
+        if (!r.ok) { ttsAvailable = false; return browserVoice() }
         ttsAvailable = true
         const url = URL.createObjectURL(await r.blob())
         current = new Audio(url)
-        current.onended = () => { URL.revokeObjectURL(url); onEnd?.() }
-        await current.play()
-        return
-      }
-      ttsAvailable = false
-    } catch {
-      ttsAvailable = false
-    }
-  }
-  if ('speechSynthesis' in window) {
-    const u = new SpeechSynthesisUtterance(text)
-    u.rate = 0.98
-    u.onend = () => onEnd?.()
-    window.speechSynthesis.speak(u)
-  } else {
-    onEnd?.()
-  }
+        current.onended = () => { URL.revokeObjectURL(url); done() }
+        current.onerror = done
+        await current.play().catch(browserVoice)
+      })
+      .catch(() => { ttsAvailable = false; browserVoice() })
+  })
 }
 
 export function stopSpeaking() {
   current?.pause()
   current = null
   if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+  const end = pendingEnd
+  pendingEnd = null
+  end?.()
 }
 
+/** Pick what this browser can record: Chrome/Android/Firefox give webm/opus, iPhone Safari gives mp4/aac. */
 function pickMime() {
-  const options = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4']
-  return options.find((m) => typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(m)) ?? ''
+  const options = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4;codecs=mp4a.40.2', 'audio/mp4', 'audio/aac']
+  if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) return ''
+  return options.find((m) => MediaRecorder.isTypeSupported(m)) ?? ''
 }
 
 export function useRecorder(maxSec: number) {
@@ -66,6 +80,10 @@ export function useRecorder(maxSec: number) {
   /** Resolves with the recording when stopped (by the user or the time cap). */
   const start = useCallback(async (): Promise<Blob | null> => {
     setError(null)
+    if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+      setError("This browser can't record audio. Try Chrome, or Safari on iOS 14.3+.")
+      return null
+    }
     let stream: MediaStream
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } })
@@ -76,12 +94,13 @@ export function useRecorder(maxSec: number) {
     const mime = pickMime()
     const r = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined)
     const parts: Blob[] = []
-    r.ondataavailable = (e) => e.data.size && parts.push(e.data)
+    r.ondataavailable = (e) => { if (e.data.size) parts.push(e.data) }
     const done = new Promise<Blob | null>((res) => { resolver.current = res })
     r.onstop = () => {
       cleanup()
       setRecording(false)
-      resolver.current?.(parts.length ? new Blob(parts, { type: r.mimeType || mime || 'audio/webm' }) : null)
+      const type = r.mimeType || mime || parts[0]?.type || 'audio/webm'
+      resolver.current?.(parts.length ? new Blob(parts, { type }) : null)
     }
     rec.current = r
     r.start(250)

@@ -1,38 +1,64 @@
 export type World = 'student' | 'job_seeker' | 'customer_facing' | 'creator' | 'everyday'
 
+export interface DayState { read: boolean; practiced: boolean; best_score: number | null; unlocked: boolean }
+export interface NextStep { kind: 'read' | 'baseline' | 'practice'; day: number }
+
 export interface User {
   id: string
   name: string
-  world: World
-  goal: string
+  worlds: World[]
+  goals: string[]
   xp: number
   streak: number
-  completed_days: number[]
-  next_day: number | null
+  days: Record<string, DayState>
+  next_step: NextStep | null
   done_today: boolean
 }
 
-export interface CourseDay { day: number; title: string; technique: string; available: boolean; pro: boolean }
-export interface Course { weeks: { week: number; title: string; locked: boolean }[]; days: CourseDay[]; worlds: Record<World, string> }
+export interface CourseDay {
+  day: number; title: string; technique: string; learn: string; available: boolean; pro: boolean; minutes: number; pages: number
+}
+export interface BadgeDef { id: string; title: string; desc: string }
+export interface Target { id: string; title: string; goal: number; unit: string; lower?: boolean }
+export interface Course {
+  weeks: { week: number; title: string; locked: boolean; summary: string }[]
+  days: CourseDay[]
+  worlds: Record<World, string>
+  badges: BadgeDef[]
+  targets: Target[]
+  overview: { lessons: number; minutes_total: number; minutes_per_lesson: number }
+}
 
 export interface Citation { book: string; chapter: string; section?: string; page: number; url?: string }
+export type Page =
+  | { kind: 'intro'; title: string; body: string; learn: string }
+  | { kind: 'steps'; title: string; steps: { label: string; text: string }[]; cite?: Citation | null }
+  | { kind: 'terms'; title: string; terms: { term: string; meaning: string }[]; cite?: Citation | null }
+  | { kind: 'table'; title: string; columns: string[]; rows: string[][]; cite?: Citation | null }
+  | { kind: 'before_after'; title: string; situation: string; before: string; after: string; why: string }
+  | { kind: 'why'; title: string; body: string; cite?: Citation | null }
+  | { kind: 'example'; title: string; body: string }
+
+export interface Scenario { partner: string; role: string; setup: string; opening: string }
 export interface RubricItem { id: string; check: string }
 export interface Lesson {
   day: number
   technique: string
   title: string
-  teach: string[]
-  why_it_works: string
-  example: string
-  drill: { prompt: string; time_limit_sec: number }
+  learn: string
+  pages: Page[]
+  quiz: { q: string; options: string[] }[]
+  scenario: Scenario | null
+  world: World
+  worlds: World[]
   rubric: RubricItem[]
   citations: Citation[]
 }
 
+export interface QuizResult { results: { correct: boolean; answer: number; explain: string }[]; correct: number; total: number; xp: number }
+
 export interface Metrics {
   duration_sec: number
-  time_limit_sec: number
-  over_time: boolean
   word_count: number
   wpm: number
   filler_count: number
@@ -40,7 +66,6 @@ export interface Metrics {
   fillers: Record<string, number>
   pauses_over_0_7s: number
   longest_pause_sec: number
-  words_to_first_sentence_end: number
 }
 
 export type Status = 'used' | 'partly' | 'missing' | 'unverified'
@@ -58,14 +83,26 @@ export interface AttemptSummary {
   rubric?: Graded[]
 }
 
+export interface Turn { speaker: 'partner' | 'user'; text: string }
+
 export interface Attempt extends AttemptSummary {
   rubric: Graded[]
   feedback: string
   fix: string
   rewrite: string
   xp: number
+  turns: Turn[]
+  scenario: Scenario
   previous: AttemptSummary | null
-  validator: { first_pass: string[]; final: string[]; retried: boolean }
+}
+
+export interface Conversation {
+  id: string; day: number; world: World; scenario: Scenario; status: string; turns: Turn[]; max_user_turns: number; user_turns: number
+}
+export interface TurnResult { user_text: string; partner_text: string; done: boolean; user_turns: number; max_user_turns: number }
+
+export interface Note {
+  id: string; day: number; lesson_title: string; page_title: string; text: string; citation: Citation | null; comment: string; created_at: string
 }
 
 export interface Progress {
@@ -73,9 +110,16 @@ export interface Progress {
   latest: AttemptSummary | null
   by_day: AttemptSummary[]
   history: AttemptSummary[]
+  lessons_done: number
+  lessons_total: number
+  chapters_read: number
+  streak: number
+  longest_streak: number
+  badges: (BadgeDef & { earned: boolean })[]
+  targets: (Target & { current: number | null; done: boolean })[]
 }
 
-export interface Health { mode: string; llm: string; model: string; stt: string; tts: boolean; max_recording_sec: number }
+export interface Health { mode: string; llm: string; model: string; grader: string; stt: string; tts: boolean; max_recording_sec: number }
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
   const r = await fetch(path, init)
@@ -90,8 +134,8 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
   return r.json()
 }
 
-const json = (body: unknown): RequestInit => ({
-  method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+const send = (method: string, body: unknown): RequestInit => ({
+  method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
 })
 
 export const localDate = () => {
@@ -99,27 +143,38 @@ export const localDate = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
+const audioName = (b: Blob) => (b.type.includes('mp4') || b.type.includes('m4a') || b.type.includes('aac') ? 'answer.mp4' : 'answer.webm')
+
 export const api = {
   health: () => req<Health>('/api/health'),
   course: () => req<Course>('/api/course'),
-  lesson: (day: number, world: World) => req<Lesson>(`/api/lessons/${day}?world=${world}`),
-  createUser: (name: string, world: World, goal: string) => req<User>('/api/users', json({ name, world, goal })),
+  lesson: (day: number, userId: string, world?: string) =>
+    req<Lesson>(`/api/lessons/${day}?user_id=${userId}${world ? `&world=${world}` : ''}`),
+  createUser: (name: string, worlds: World[], goals: string[]) => req<User>('/api/users', send('POST', { name, worlds, goals })),
+  updateUser: (id: string, patch: { worlds?: World[]; goals?: string[] }) => req<User>(`/api/users/${id}`, send('PATCH', patch)),
   user: (id: string) => req<User>(`/api/users/${id}?today=${localDate()}`),
-  progress: (id: string) => req<Progress>(`/api/users/${id}/progress`),
-  attempt: (userId: string, day: number, audio: Blob) => {
+  progress: (id: string) => req<Progress>(`/api/users/${id}/progress?today=${localDate()}`),
+  quiz: (day: number, userId: string, answers: number[]) =>
+    req<QuizResult>(`/api/lessons/${day}/quiz`, send('POST', { user_id: userId, answers, local_date: localDate() })),
+  notes: (userId: string) => req<Note[]>(`/api/users/${userId}/notes`),
+  addNote: (n: { user_id: string; day: number; page_title: string; text: string; citation: Citation | null | undefined }) =>
+    req<Note>('/api/notes', send('POST', n)),
+  editNote: (id: string, comment: string) => req<Note>(`/api/notes/${id}`, send('PATCH', { comment })),
+  deleteNote: (id: string) => req<{ ok: boolean }>(`/api/notes/${id}`, { method: 'DELETE' }),
+  startConversation: (userId: string, day: number, world?: string) =>
+    req<Conversation>('/api/conversations', send('POST', { user_id: userId, day, world })),
+  sendTurn: (convId: string, audio: Blob) => {
     const f = new FormData()
-    f.append('user_id', userId)
-    f.append('day', String(day))
-    f.append('local_date', localDate())
-    f.append('audio', audio, audio.type.includes('mp4') ? 'answer.mp4' : 'answer.webm')
-    return req<Attempt>('/api/attempts', { method: 'POST', body: f })
+    f.append('audio', audio, audioName(audio))
+    return req<TurnResult>(`/api/conversations/${convId}/turns`, { method: 'POST', body: f })
   },
+  finishConversation: (convId: string) => req<Attempt>(`/api/conversations/${convId}/finish`, send('POST', { local_date: localDate() })),
 }
 
-export const WORLD_LABELS: Record<World, { label: string; emoji: string; blurb: string }> = {
-  student: { label: 'Student', emoji: '🎓', blurb: 'Presentations, group projects, office hours' },
-  job_seeker: { label: 'Job seeker', emoji: '💼', blurb: '"Tell me about yourself", interviews, networking' },
-  customer_facing: { label: 'Customer-facing', emoji: '🤝', blurb: 'Patients, customers, sales pitches' },
-  creator: { label: 'Creator / performer', emoji: '🎬', blurb: 'Video intros, storytelling, auditions' },
-  everyday: { label: 'Everyday', emoji: '☕', blurb: 'Small talk, saying no, a toast' },
+export const WORLD_LABELS: Record<World, { label: string; blurb: string }> = {
+  student: { label: 'Student', blurb: 'Presentations, group projects, office hours' },
+  job_seeker: { label: 'Job seeker', blurb: '"Tell me about yourself", interviews, networking' },
+  customer_facing: { label: 'Customer-facing', blurb: 'Patients, customers, sales pitches' },
+  creator: { label: 'Creator / performer', blurb: 'Video intros, storytelling, auditions' },
+  everyday: { label: 'Everyday', blurb: 'Small talk, saying no, a toast' },
 }

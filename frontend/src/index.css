@@ -15,6 +15,9 @@
 }
 
 html, body, #root { min-height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; overscroll-behavior-y: none; }
+button, a { touch-action: manipulation; }
 body { background: var(--color-cream); color: var(--color-ink); -webkit-tap-highlight-color: transparent; }
 
 @utility btn {
