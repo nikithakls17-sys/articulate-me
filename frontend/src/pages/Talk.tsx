@@ -6,7 +6,7 @@ import { useSession } from '../session'
 import { speak, stopSpeaking, unlockAudio, useRecorder } from '../voice'
 import FeedbackView from '../components/FeedbackView'
 import { WORLD_ICONS } from '../icons'
-import Blob, { BlobSays } from '../components/Blob'
+import Blob, { BlobSays, blobFor } from '../components/Blob'
 
 type Stage = 'intro' | 'partner' | 'your-turn' | 'sending' | 'grading' | 'feedback'
 const GRADING_LINES = ['Reading the transcript…', 'Counting filler words…', 'Checking the technique…', 'Finding your best line…', 'Writing one fix…']
@@ -146,7 +146,7 @@ export default function Talk() {
             </div>
             <p className="text-lg">{sc.setup}</p>
           </div>
-          <BlobSays mood={day === 0 ? 'listening' : 'excited'} accessory={day === 0 ? 'headphones' : 'none'} size={60}>
+          <BlobSays who={blobFor(lesson.technique).id} size={60}>
             {day === 0
               ? <>No pressure, {user.name}. Just talk the way you normally would. I'll be listening.</>
               : <>You've got this, {user.name}. Try <b>{lesson.technique}</b> on {sc.partner.split(' ')[0]}. I'll listen and tell you what I heard.</>}

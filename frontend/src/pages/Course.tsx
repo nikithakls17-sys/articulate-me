@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { BookOpen, Check, Flag, Flame, Globe, Info, Lock, MessageCircle, Zap } from 'lucide-react'
 import { api, type Course, type NextStep } from '../api'
 import { useSession } from '../session'
-import Blob, { BlobSays, greeting, timeAccessory } from '../components/Blob'
+import Blob, { BlobSays, blobFor, greeting, timeAccessory } from '../components/Blob'
 
 export function stepLink(s: NextStep) {
   return s.kind === 'read' ? `/read/${s.day}` : `/talk/${s.day}`
@@ -49,8 +49,7 @@ export default function CoursePage() {
             {next.kind === 'practice' && `Use ${nextDay.technique} in a short spoken conversation.`}
           </p>
           <div className="mt-3">
-            <BlobSays mood={next.kind === 'read' ? 'calm' : next.kind === 'baseline' ? 'listening' : 'excited'}
-              accessory={next.kind === 'read' ? 'specs' : next.kind === 'baseline' ? 'headphones' : 'none'} size={56}>
+            <BlobSays who={blobFor(next.kind === 'baseline' ? 'Baseline' : nextDay.technique).id} size={56}>
               {next.kind === 'read' && <>{user.name}, today we learn <b>{nextDay.technique}</b>. Grab a seat, it's a short one.</>}
               {next.kind === 'baseline' && <>Before we go further, {user.name}, I want to hear how you talk right now. No pressure.</>}
               {next.kind === 'practice' && <>You've read it, {user.name}. Now let's hear {nextDay.technique} out loud.</>}
@@ -116,10 +115,16 @@ export default function CoursePage() {
                 return (
                   <li key={d.day}>
                     <div className={`card flex items-center gap-3 p-3 ${!open ? 'opacity-60' : ''}`}>
-                      <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-full text-lg font-black
-                        ${st?.practiced ? 'bg-leaf text-white' : open ? 'bg-coral text-white' : 'bg-cream text-muted'}`}>
-                        {st?.practiced ? <Check size={22} strokeWidth={3} /> : open ? d.day : <Lock size={18} />}
-                      </span>
+                      {open ? (
+                        <span className="relative shrink-0" title={`${blobFor(d.technique).name}: ${blobFor(d.technique).skill}`}>
+                          <Blob who={blobFor(d.technique).id} size={52} />
+                          <span className={`label absolute -bottom-1 -right-1 grid h-5 min-w-5 place-items-center border-2 border-ink px-0.5 ${st?.practiced ? 'bg-leaf text-white' : 'bg-white'}`}>
+                            {st?.practiced ? <Check size={12} strokeWidth={3} /> : d.day}
+                          </span>
+                        </span>
+                      ) : (
+                        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-cream text-muted"><Lock size={18} /></span>
+                      )}
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-extrabold">{d.title}{d.pro && <span className="ml-1.5 rounded bg-sun px-1 text-[10px] font-black">PRO</span>}</p>
                         <p className="truncate text-xs text-muted">{d.technique}{st?.best_score != null && ` · best ${st.best_score}%`}</p>

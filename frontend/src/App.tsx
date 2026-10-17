@@ -1,4 +1,4 @@
-import { BookOpen, Library, Map, MessageCircle, PanelRightClose, PanelRightOpen, Pause, Play, TrendingUp } from 'lucide-react'
+import { BookOpen, Info, Library, Map, MessageCircle, PanelRightClose, PanelRightOpen, Pause, Play, TrendingUp } from 'lucide-react'
 import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useSession } from './session'
 import { Logo } from './icons'
@@ -6,6 +6,7 @@ import { mmss, StudyProvider, useStudy } from './study'
 import { useMedia } from './components/Book'
 import Hourglass from './components/Hourglass'
 import StudyPanel from './components/StudyPanel'
+import ThemeToggle from './components/ThemeToggle'
 import Welcome from './pages/Welcome'
 import Overview from './pages/Overview'
 import CoursePage from './pages/Course'
@@ -16,7 +17,7 @@ import Talk from './pages/Talk'
 import Study from './pages/Study'
 import ProgressPage from './pages/Progress'
 import Sources from './pages/Sources'
-import Blobs from './pages/Blobs'
+import About from './pages/About'
 
 const TABS = [
   { to: '/', icon: Map, label: 'Course' },
@@ -24,6 +25,7 @@ const TABS = [
   { to: '/practice', icon: MessageCircle, label: 'Practice' },
   { to: '/study', icon: Library, label: 'Study', phoneOnly: true },
   { to: '/progress', icon: TrendingUp, label: 'Progress' },
+  { to: '/about', icon: Info, label: 'About', wideOnly: true },
 ]
 
 function HourglassButton() {
@@ -74,6 +76,7 @@ function TopBar({ showTabs }: { showTabs: boolean }) {
         )}
         <div className="ml-auto flex items-center gap-2">
           <HourglassButton />
+          <ThemeToggle />
           {!laptop && (
             <button onClick={() => setDrawer(!drawer)} className="hidden border-2 border-ink bg-white p-1.5 md:block"
               aria-label={drawer ? 'Close study panel' : 'Open study panel'} aria-expanded={drawer}>
@@ -97,7 +100,12 @@ function Shell({ children }: { children: React.ReactNode }) {
   const wide = pathname.startsWith('/read/')
 
   if (onboarding) {
-    return <div className="mx-auto min-h-dvh w-full max-w-xl overflow-x-hidden px-4 py-6">{children}</div>
+    return (
+      <div className="mx-auto min-h-dvh w-full max-w-xl overflow-x-hidden px-4 py-6">
+        <div className="mb-2 flex justify-end"><ThemeToggle /></div>
+        {children}
+      </div>
+    )
   }
 
   return (
@@ -125,7 +133,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       {!tablet && !immersive && (
         <nav className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-ink bg-cream pb-[env(safe-area-inset-bottom)]" aria-label="Main">
           <div className="grid grid-cols-5">
-            {TABS.map(({ to, icon: Icon, label }, i) => (
+            {TABS.filter((t) => !t.wideOnly).map(({ to, icon: Icon, label }, i) => (
               <NavLink key={to} to={to} end={to === '/'}
                 className={({ isActive }) => `label flex flex-col items-center gap-1 py-2 text-[0.6rem] ${i ? 'border-l-2 border-ink' : ''} ${isActive ? 'bg-ink text-white' : ''}`}>
                 <Icon size={22} strokeWidth={2.2} aria-hidden />{label}
@@ -147,7 +155,8 @@ export default function App() {
         <Routes>
           <Route path="/welcome" element={user ? <Navigate to="/" /> : <Welcome />} />
           <Route path="/sources" element={<Sources />} />
-          <Route path="/blobs" element={<Blobs />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blobs" element={<Navigate to="/about#squad" />} />
           {user ? (
             <>
               <Route path="/" element={<CoursePage />} />

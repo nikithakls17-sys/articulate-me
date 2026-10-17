@@ -77,6 +77,7 @@ export default function Welcome() {
             className="mt-2 w-full rounded-2xl border-2 border-line bg-white px-4 py-4 text-lg font-bold outline-none focus:border-coral" />
         </label>
         <button className="btn-primary" onClick={() => setStep(1)}>Get started</button>
+        <a href="/about#squad" className="label text-muted underline">Meet the Blob squad first</a>
       </div>
     )
   }

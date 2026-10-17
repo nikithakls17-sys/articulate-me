@@ -8,7 +8,7 @@ import Book, { useMedia } from '../components/Book'
 import { getVolume, setVolume, stopSpeaking } from '../voice'
 import { useReadAloud } from '../reading'
 import { useStudy } from '../study'
-import Blob, { BlobSays } from '../components/Blob'
+import Blob, { BlobSays, blobFor } from '../components/Blob'
 
 const FIGURE_KINDS = new Set(['steps', 'table', 'before_after', 'example'])
 
@@ -118,9 +118,12 @@ export default function Reader() {
         <h1 className="text-3xl font-bold leading-tight">{lesson.title}</h1>
         <p className="mt-3 text-lg italic text-muted">{lesson.learn}</p>
       </div>
-      <div className="flex items-end justify-between">
-        <p className="label text-muted">{pages.length} pages · quick check at the end</p>
-        <Blob mood="calm" accessory="specs" size={64} />
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <p className="label text-muted">{pages.length} pages · quick check at the end</p>
+          <p className="mt-1 text-sm italic text-muted">Taught by {blobFor(lesson.technique).name}, the {blobFor(lesson.technique).skill.toLowerCase()} Blob.</p>
+        </div>
+        <Blob who={blobFor(lesson.technique).id} size={72} />
       </div>
     </div>
   )

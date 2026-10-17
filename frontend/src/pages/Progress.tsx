@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, Check, ChevronRight, Flame, MessageCircle, Shield, Target } from 'lucide-react'
+import { BookOpen, Check, ChevronRight, Flame, Info, MessageCircle, Shield, Target } from 'lucide-react'
 import { api, type AttemptSummary, type Progress } from '../api'
 import { useSession } from '../session'
 import BadgeIcon from '../components/BadgeIcon'
@@ -104,6 +104,11 @@ export default function ProgressPage() {
         </section>
       )}
 
+      <Link to="/about" className="card flex items-center gap-3">
+        <Info className="text-talk" size={22} />
+        <span className="flex-1 font-bold">About Articulate Me & the Blob squad</span>
+        <ChevronRight className="text-muted" />
+      </Link>
       <Link to="/sources" className="card flex items-center gap-3">
         <Shield className="text-sky" size={22} />
         <span className="flex-1 font-bold">Sources & privacy</span>
