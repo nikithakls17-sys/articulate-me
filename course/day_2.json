@@ -1,0 +1,227 @@
+{
+  "day": 2,
+  "technique": "Rule of three",
+  "title": "Three reasons",
+  "learn": "Make a case with exactly three clear reasons.",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "Three reasons",
+      "body": "Using the rule of three helps your audience remember your message better. It makes your points clear and easy to follow.",
+      "learn": "Make a case with exactly three clear reasons."
+    },
+    {
+      "kind": "steps",
+      "title": "How Rule of three works",
+      "steps": [
+        {
+          "label": "State the number",
+          "text": "Tell your audience exactly how many reasons you have coming."
+        },
+        {
+          "label": "Give reason one",
+          "text": "Present your first main point clearly and simply."
+        },
+        {
+          "label": "Give reason two",
+          "text": "Present your second main point clearly and simply."
+        },
+        {
+          "label": "Give reason three",
+          "text": "Present your third main point clearly and simply."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 209,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0205"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Main Points",
+          "meaning": "Key ideas that help your speech meet its specific purpose."
+        },
+        {
+          "term": "Parallelism",
+          "meaning": "Repeating sentence structures for better audience memory."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 207,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0204"
+      }
+    },
+    {
+      "kind": "table",
+      "title": "Point Count",
+      "columns": [
+        "Speech Length",
+        "Recommended Points"
+      ],
+      "rows": [
+        [
+          "Less than three minutes",
+          "Two main points"
+        ],
+        [
+          "Three to ten minutes",
+          "Three main points"
+        ]
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 209,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0205"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "Explaining why a new policy is good.",
+      "before": "This policy is good because it helps people. It is also good for the city. And it helps the environment.",
+      "after": "This policy is good for three reasons. First, it helps the people. Second, it helps the city. And finally, it helps the environment.",
+      "why": "Stating the number first helps organize the information for listeners."
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Listeners are more likely to remember information that is organized and simple. Three points are easier to recall than many.",
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 209,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0205"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your world"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "What is the primary benefit of using the rule of three in speaking?",
+      "options": [
+        "It allows the speaker to use complex vocabulary.",
+        "It helps the audience remember the message more easily.",
+        "It ensures the speech is longer and more detailed."
+      ],
+      "answer": 1,
+      "explain": "The rule of three makes points clear and easier for the audience to recall."
+    },
+    {
+      "q": "According to the steps, what should the speaker do immediately after stating the number of reasons?",
+      "options": [
+        "Introduce the key terms of the speech.",
+        "Present the first main point clearly and simply.",
+        "Use parallelism to connect all ideas."
+      ],
+      "answer": 1,
+      "explain": "The second step is to present the first main point clearly and simply."
+    },
+    {
+      "q": "What does the concept of 'Parallelism' relate to when using this technique?",
+      "options": [
+        "Stating the exact number of points upfront.",
+        "Repeating sentence structures for better memory.",
+        "Ensuring the main points are highly complex."
+      ],
+      "answer": 1,
+      "explain": "Parallelism involves repeating sentence structures to aid audience memory."
+    }
+  ],
+  "examples": {
+    "student": "I think we should use the new software for the presentation. Firstly, it makes the data visualization much clearer. Secondly, it integrates perfectly with our existing cloud storage. And finally, it has a very intuitive interface, so everyone can learn it quickly.",
+    "job_seeker": "I believe I am the best fit for this marketing role. First, I have five years of experience in digital campaign management. Second, I am highly skilled in SEO optimization, which you mentioned is crucial. And third, I thrive in fast-paced, collaborative team environments.",
+    "customer_facing": "I understand you're frustrated with the wait time. Let me explain why we are experiencing a delay. First, we have an unexpected system upgrade happening right now. Second, we have a backlog of urgent service calls that need immediate attention. And third, our lead technician is currently unavailable, but I can give you an update in 20 minutes.",
+    "creator": "I think this short film needs a specific tone. I have three main ideas for the mood. Firstly, it needs a sense of quiet isolation to build tension. Secondly, the color grading should be very desaturated to reflect the character's mood. And third, the soundtrack must be minimalist to let the dialogue breathe.",
+    "everyday": "I really don't think we should go to that new restaurant tonight. There are three things I'm worried about. First, the reviews online were surprisingly mixed. Second, it's quite far out of the way for me to drive to. And third, I'm just really craving something simple, like pizza."
+  },
+  "scenarios": {
+    "student": {
+      "partner": "Professor",
+      "role": "Course Professor",
+      "setup": "You are proposing a new tool for a major class project.",
+      "opening": "You want to use this new software for our project, but I'm hesitant. Can you tell me exactly why this is better than the old system?"
+    },
+    "job_seeker": {
+      "partner": "Interviewer",
+      "role": "Hiring Manager",
+      "setup": "You are in the final interview round for a competitive position.",
+      "opening": "Your resume looks good, but frankly, many candidates are qualified. Convince me—what are the three main reasons I should hire you over someone else?"
+    },
+    "customer_facing": {
+      "partner": "Customer",
+      "role": "Upset Client",
+      "setup": "A customer is angry because their service has been delayed significantly.",
+      "opening": "This wait is ridiculous! You need to tell me, right now, exactly why I have to wait this long."
+    },
+    "creator": {
+      "partner": "Casting Director",
+      "role": "Director/Casting Director",
+      "setup": "You are pitching your vision for a new creative project to a director.",
+      "opening": "Your concept is interesting, but I need more concrete direction. Give me three solid reasons why this vision will actually work on screen."
+    },
+    "everyday": {
+      "partner": "Friend",
+      "role": "Friend",
+      "setup": "Your friend is insisting you go to a new, trendy place for dinner.",
+      "opening": "Come on, you have to try this new spot! Why are you being so resistant to going out tonight?"
+    }
+  },
+  "rubric": [
+    {
+      "id": "three_reasons",
+      "check": "Gives exactly three distinct reasons or points (not two, not four or more)"
+    },
+    {
+      "id": "clearly_separated",
+      "check": "The three reasons are clearly separated so a listener could count them"
+    },
+    {
+      "id": "tied_to_case",
+      "check": "Each reason clearly supports the one case they are making"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Basis for Strong Public Speaking",
+      "section": "Building and Organizing Your Speech",
+      "page": 209,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0205"
+    },
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Basis for Strong Public Speaking",
+      "section": "Building and Organizing Your Speech",
+      "page": 207,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0204"
+    }
+  ],
+  "generated": {
+    "model": "gemma4:e4b",
+    "prompt_version": "v1",
+    "input_tokens": 3430,
+    "output_tokens": 1625,
+    "latency_ms": 321321
+  }
+}

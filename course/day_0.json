@@ -1,46 +1,47 @@
 {
   "day": 0,
   "technique": "Baseline",
-  "title": "Your starting line",
-  "teach": [],
-  "why_it_works": "",
+  "title": "Where you're starting",
+  "learn": "A short conversation so we can measure your starting point.",
+  "pages": [],
+  "quiz": [],
   "examples": {},
-  "drills": {
-    "student": [
-      {
-        "prompt": "Introduce yourself to a new class as if it's the first day of a seminar.",
-        "time_limit_sec": 60
-      }
-    ],
-    "job_seeker": [
-      {
-        "prompt": "An interviewer says: \"So, tell me about yourself.\" Answer.",
-        "time_limit_sec": 60
-      }
-    ],
-    "customer_facing": [
-      {
-        "prompt": "Introduce yourself to a new customer or patient and say how you'll help them today.",
-        "time_limit_sec": 60
-      }
-    ],
-    "creator": [
-      {
-        "prompt": "Record the opening of a video where you introduce yourself to new viewers.",
-        "time_limit_sec": 60
-      }
-    ],
-    "everyday": [
-      {
-        "prompt": "You're at a friend's party and meet someone new. Introduce yourself.",
-        "time_limit_sec": 60
-      }
-    ]
+  "scenarios": {
+    "student": {
+      "partner": "Professor Lee",
+      "role": "your new seminar professor",
+      "setup": "First day of a seminar. The professor goes around the room.",
+      "opening": "Welcome! Before we start, tell me a bit about yourself and why you took this class."
+    },
+    "job_seeker": {
+      "partner": "Sam",
+      "role": "a hiring manager",
+      "setup": "The first minute of a job interview.",
+      "opening": "Thanks for coming in. So, tell me about yourself."
+    },
+    "customer_facing": {
+      "partner": "Mrs. Patel",
+      "role": "a new customer",
+      "setup": "A customer walks up to you for the first time.",
+      "opening": "Hi, I haven't been here before. Who are you, and can you help me?"
+    },
+    "creator": {
+      "partner": "Jordan",
+      "role": "a podcast host",
+      "setup": "You're a guest on a small podcast.",
+      "opening": "Welcome to the show! For listeners who don't know you yet, who are you and what do you make?"
+    },
+    "everyday": {
+      "partner": "Alex",
+      "role": "someone you just met at a party",
+      "setup": "A friend's party. Someone new says hi.",
+      "opening": "Hey! I don't think we've met. How do you know everyone here?"
+    }
   },
   "rubric": [
     {
       "id": "who_you_are",
-      "check": "Says who they are or what they do in the first two sentences"
+      "check": "Says who they are or what they do early in their first answer"
     },
     {
       "id": "concrete_detail",

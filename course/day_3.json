@@ -1,0 +1,231 @@
+{
+  "day": 3,
+  "technique": "Open strong",
+  "title": "Open strong",
+  "learn": "Start with a hook: a question, a short story or a surprising fact.",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "Open strong",
+      "body": "Ever wonder how to grab someone's attention right away? Great openings make people want to listen to what you have to say.",
+      "learn": "Start with a hook: a question, a short story or a surprising fact."
+    },
+    {
+      "kind": "steps",
+      "title": "How Open strong works",
+      "steps": [
+        {
+          "label": "Start with hook",
+          "text": "Open with a question, a short story, or a surprising fact to capture interest."
+        },
+        {
+          "label": "Keep it relevant",
+          "text": "Your attention-getter must connect to your speech topic and purpose."
+        },
+        {
+          "label": "Be concrete/novel",
+          "text": "The best attention getters are real, new, or familiar to the audience."
+        },
+        {
+          "label": "Establish trust",
+          "text": "Let the audience know why you are a knowledgeable source on the topic."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Effective Introductions and Powerful Conclusions",
+        "page": 244,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0241"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Attention-getter",
+          "meaning": "A device used at the beginning to capture the audience's interest."
+        },
+        {
+          "term": "Rhetorical Question",
+          "meaning": "A question asked where no actual reply is expected from the audience."
+        },
+        {
+          "term": "Anecdote",
+          "meaning": "A brief account or story of an interesting or humorous event."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Effective Introductions and Powerful Conclusions",
+        "page": 244,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0241"
+      }
+    },
+    {
+      "kind": "table",
+      "title": "Attention Getter Types",
+      "columns": [
+        "Type",
+        "What it does"
+      ],
+      "rows": [
+        [
+          "Story/Narrative",
+          "Makes audience feel connected to the speech."
+        ],
+        [
+          "Direct Statement",
+          "Clearly tells the audience the subject of the speech."
+        ]
+      ],
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 8: Introductions and Conclusions",
+        "section": "",
+        "page": 311,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0255"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "Introducing a speech on saving money.",
+      "before": "Hi, my name is Alex, and today I want to talk to you about saving money.",
+      "after": "What if I told you that small daily changes could change your future? I'm here to share how to save money.",
+      "why": "The new version uses a question to immediately capture attention."
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Starting with a hook, like a question, makes the audience interested in your topic right away, instead of just stating your name.",
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Effective Introductions and Powerful Conclusions",
+        "page": 244,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0241"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your world"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "If you are using a short story to grab attention, what is the most important rule to follow?",
+      "options": [
+        "It must be very long to be convincing.",
+        "It needs to connect directly to your speech topic.",
+        "It should be completely unrelated to the topic for surprise."
+      ],
+      "answer": 1,
+      "explain": "The attention-getter must connect to your speech topic."
+    },
+    {
+      "q": "Which of the following best describes a 'Rhetorical Question' as an attention-getter?",
+      "options": [
+        "A question that requires the audience to give a detailed answer.",
+        "A question asked to make the audience think, but not expecting a reply.",
+        "A question that only relates to the speaker's personal life."
+      ],
+      "answer": 1,
+      "explain": "A rhetorical question is asked where no actual reply is expected."
+    },
+    {
+      "q": "When choosing an attention-getter, what quality makes it most effective?",
+      "options": [
+        "It must be extremely formal and academic.",
+        "It should be real, new, or familiar to the audience.",
+        "It must always be a surprising fact, no matter what."
+      ],
+      "answer": 1,
+      "explain": "The best attention getters are real, new, or familiar to the audience."
+    }
+  ],
+  "examples": {
+    "student": "Did you know that 80% of students struggle with procrastination? I’ve spent the last semester researching productivity hacks, and I found three surprisingly effective techniques that actually work for real people.",
+    "job_seeker": "Imagine a moment where a critical deadline was looming, and everything seemed to be going wrong. That's exactly the kind of high-pressure situation I thrive in, and I've prepared examples to show you how I handle it.",
+    "customer_facing": "Have you ever felt completely overwhelmed by a confusing piece of technology? I remember when my own system crashed right before a big presentation, and I learned exactly how to turn chaos into calm for my customers.",
+    "creator": "What if I told you that the secret to viral content isn't luck, but a specific pattern of emotional vulnerability? I've analyzed thousands of successful videos, and I want to show you the formula I discovered.",
+    "everyday": "You know how sometimes you meet someone new and you just want to skip the small talk? Well, I actually have a story about a time I navigated a truly awkward social situation, and I think it relates to what we're discussing."
+  },
+  "scenarios": {
+    "student": {
+      "partner": "Professor Davies",
+      "role": "Professor overseeing a major project",
+      "setup": "You are presenting your research proposal for a final course project.",
+      "opening": "Before you dive into the details, can you tell me what makes your approach to this topic stand out from everyone else's?"
+    },
+    "job_seeker": {
+      "partner": "Ms. Chen",
+      "role": "Hiring Manager for a tech firm",
+      "setup": "You are in the final interview round for a challenging role.",
+      "opening": "We've heard many strong resumes today; what unique perspective are you bringing to this role that sets you apart?"
+    },
+    "customer_facing": {
+      "partner": "Mr. Harris",
+      "role": "a frustrated customer on their third call",
+      "setup": "A customer has already explained their problem to two people today. Now it's your turn.",
+      "opening": "I've already explained this twice today. Before I go through it again, why should I believe you're the one who can fix it?"
+    },
+    "creator": {
+      "partner": "Alex",
+      "role": "Casting Director for a new series",
+      "setup": "You are pitching your unique concept for a new series to a director.",
+      "opening": "So many people are pitching ideas. What is the one surprising element in your concept that you think will grab the audience immediately?"
+    },
+    "everyday": {
+      "partner": "Sarah",
+      "role": "New acquaintance at a party",
+      "setup": "You are trying to start a meaningful conversation with someone you just met.",
+      "opening": "Everyone here seems to know each other. What's one thing about yourself that you think would make people want to keep talking to you?"
+    }
+  },
+  "rubric": [
+    {
+      "id": "hook_first",
+      "check": "Their first sentence is a hook: a question, a short story, or a surprising fact (not 'Hi, my name is')"
+    },
+    {
+      "id": "hook_connects",
+      "check": "The hook connects to what they say next"
+    },
+    {
+      "id": "who_you_are",
+      "check": "Still makes clear who they are or what their idea is"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Basis for Strong Public Speaking",
+      "section": "Effective Introductions and Powerful Conclusions",
+      "page": 244,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0241"
+    },
+    {
+      "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+      "chapter": "Chapter 8: Introductions and Conclusions",
+      "section": "",
+      "page": 311,
+      "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+      "chunk_id": "exploring-0255"
+    }
+  ],
+  "generated": {
+    "model": "gemma4:e4b",
+    "prompt_version": "v1",
+    "input_tokens": 3932,
+    "output_tokens": 1657,
+    "latency_ms": 331445
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "day": 1,
+  "technique": "PREP",
+  "title": "Get to the point",
+  "learn": "Answer any question with Point, Reason, Example, Point.",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "Get to the point",
+      "body": "This chapter shows how to structure your speaking points clearly. We use the PREP method to answer questions directly and effectively.",
+      "learn": "Answer any question with Point, Reason, Example, Point."
+    },
+    {
+      "kind": "steps",
+      "title": "How PREP works",
+      "steps": [
+        {
+          "label": "State Point",
+          "text": "Say your main answer in one clear sentence to get straight to the point."
+        },
+        {
+          "label": "Give Reason",
+          "text": "Explain why your point is true because of a specific cause."
+        },
+        {
+          "label": "Offer Example",
+          "text": "Provide one specific story or number to support your reason."
+        },
+        {
+          "label": "Restate Point",
+          "text": "Repeat your main answer to finish and reinforce your message."
+        }
+      ],
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 4: Developing Topics for Your Speech",
+        "section": "",
+        "page": 166,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0135"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Central Idea",
+          "meaning": "A statement summarizing the speech's main points or focus."
+        },
+        {
+          "term": "Claim",
+          "meaning": "The initial statement you want the audience to agree with."
+        }
+      ],
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 4: Developing Topics for Your Speech",
+        "section": "",
+        "page": 166,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0135"
+      }
+    },
+    {
+      "kind": "table",
+      "title": "PREP, one line at a time",
+      "columns": [
+        "Step",
+        "What it sounds like"
+      ],
+      "rows": [
+        [
+          "Point",
+          "\"I'd choose the evening class.\""
+        ],
+        [
+          "Reason",
+          "\"Because I focus better after work.\""
+        ],
+        [
+          "Example",
+          "\"Last term my evening grades were a full letter higher.\""
+        ],
+        [
+          "Point",
+          "\"So the evening class is my pick.\""
+        ]
+      ],
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 4: Developing Topics for Your Speech",
+        "section": "",
+        "page": 166,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0135"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "Answering a question about why students should read more.",
+      "before": "I think students should read more books. It is important for learning, and I guess it helps them learn things.",
+      "after": "Students should read more books. This is because reading builds knowledge. For example, reading a novel helps connect with human experiences. So, students should read more books.",
+      "why": "The 'Point, Reason, Example, Point' structure keeps the answer focused."
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Using the PREP technique ensures your audience knows your main point immediately. This direct approach avoids sounding awkward or repetitive.",
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 4: Developing Topics for Your Speech",
+        "section": "",
+        "page": 166,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0135"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your world"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "What is the primary purpose of the 'State Point' step in the PREP method?",
+      "options": [
+        "To offer a specific story that supports your argument.",
+        "To immediately give your main answer in one clear sentence.",
+        "To repeat your main answer at the end of the speech."
+      ],
+      "answer": 1,
+      "explain": "This step ensures you get straight to the point immediately."
+    },
+    {
+      "q": "If you are using the PREP method, what function does the 'Give Reason' step serve?",
+      "options": [
+        "It provides a specific number or story to back up your claim.",
+        "It summarizes the entire speech's focus for the audience.",
+        "It explains *why* your initial point is true due to a specific cause."
+      ],
+      "answer": 2,
+      "explain": "The Reason explains the cause behind your stated point."
+    },
+    {
+      "q": "Which part of the PREP structure is most effective for reinforcing your message to the listener?",
+      "options": [
+        "The Reason, because it provides deep justification.",
+        "The Example, because stories are always memorable.",
+        "Restating the Point, which concludes and reinforces the main message."
+      ],
+      "answer": 2,
+      "explain": "Restating the Point is used at the end to reinforce the initial message."
+    }
+  ],
+  "examples": {
+    "student": "I believe the group presentation should focus heavily on the economic impact. This is because the core of the module is market analysis, so that’s where the most depth is needed. For instance, we could use the Q3 sales data from the case study to illustrate the trends. Ultimately, focusing on the economic impact will make our presentation strongest.",
+    "job_seeker": "I am highly skilled in project management, which is what I bring to this role. I excel at keeping complex timelines on track because I thrive in high-pressure, deadline-driven environments. For example, in my last role, I successfully managed three simultaneous software rollouts under tight deadlines. So, my core strength is definitely effective project management.",
+    "customer_facing": "I can certainly help you resolve that billing issue right now. The reason I can do this immediately is that I have access to the updated system logs on my terminal. Just to show you, I see the incorrect charge here from last Tuesday's service. So, to confirm, I will fix this billing error for you right away.",
+    "creator": "This video needs to have a really fast-paced, energetic opening. I think this is crucial because viewer retention drops sharply in the first 15 seconds online. For instance, my competitor's videos that use quick cuts and high energy see 30% higher initial engagement. Therefore, a high-energy start is the key to making this content successful.",
+    "everyday": "No, I actually can't come to the party on Friday night. The reason is that I have a mandatory commitment with my family that weekend. For example, my sister is having a small celebration that I promised to attend. So, to be clear, I won't be able to make it this Friday."
+  },
+  "scenarios": {
+    "student": {
+      "partner": "Professor Okafor",
+      "role": "Course Professor",
+      "setup": "You need to explain your proposal for the final project topic to the professor.",
+      "opening": "I'm a little unsure about the direction of the final project. What do you think we should focus on for the main argument?"
+    },
+    "job_seeker": {
+      "partner": "Dana",
+      "role": "Hiring Manager",
+      "setup": "You are in the final interview stage for a management position.",
+      "opening": "Your resume is impressive, but tell me, what is the single most valuable skill you bring to this specific team?"
+    },
+    "customer_facing": {
+      "partner": "Mr. Reyes",
+      "role": "Upset Client",
+      "setup": "A customer is very frustrated about a service charge on their recent bill.",
+      "opening": "I'm extremely upset about this charge! Can you explain exactly how we can fix this problem for me right now?"
+    },
+    "creator": {
+      "partner": "Priya",
+      "role": "Show Producer",
+      "setup": "You are pitching your new video concept to the production team.",
+      "opening": "Your concept is interesting, but what is the main takeaway you want the audience to have from the very beginning?"
+    },
+    "everyday": {
+      "partner": "Sam",
+      "role": "Social Friend",
+      "setup": "A friend has invited you to an event, but you have a prior commitment.",
+      "opening": "You seem hesitant about going to the party. Why don't you just say yes and come with us?"
+    }
+  },
+  "rubric": [
+    {
+      "id": "point_first",
+      "check": "States their main point or answer in the first 1-2 sentences of an answer"
+    },
+    {
+      "id": "reason",
+      "check": "Gives a reason for the point (often signalled by 'because' or 'the reason is')"
+    },
+    {
+      "id": "example",
+      "check": "Gives a specific example, story or piece of evidence that supports the reason"
+    },
+    {
+      "id": "point_again",
+      "check": "Ends an answer by restating the main point"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+      "chapter": "Chapter 4: Developing Topics for Your Speech",
+      "section": "",
+      "page": 166,
+      "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+      "chunk_id": "exploring-0135"
+    },
+    {
+      "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+      "chapter": "Chapter 13: Persuasive Speaking",
+      "section": "",
+      "page": 591,
+      "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+      "chunk_id": "exploring-0486"
+    }
+  ],
+  "generated": {
+    "model": "gemma4:e4b",
+    "prompt_version": "v1",
+    "input_tokens": 3920,
+    "output_tokens": 1681,
+    "latency_ms": 342756
+  }
+}
