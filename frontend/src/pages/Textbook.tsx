@@ -37,6 +37,19 @@ export default function Textbook() {
           ? <Link key={d.day} to={`/read/${d.day}`} className="card flex items-center gap-4">{inner}</Link>
           : <div key={d.day} className="card flex items-center gap-4 opacity-60">{inner}</div>
       })}
+      {course.tracks.filter((t) => user.worlds.includes(t.id)).flatMap((t) => t.days).map((d) => {
+        const st = user.days[String(d.day)]
+        const open = d.available && st?.unlocked
+        return open ? (
+          <Link key={d.day} to={`/read/${d.day}`} className="card flex items-center gap-4 border-l-[10px] border-l-target">
+            <span className="min-w-0 flex-1">
+              <span className="label text-target">New here</span>
+              <span className="block truncate text-lg font-extrabold">{d.title}</span>
+              <span className="block text-sm text-muted">{d.learn}</span>
+            </span>
+          </Link>
+        ) : null
+      })}
       <Link to="/sources" className="text-center text-sm font-bold text-sky underline md:col-span-2">About the textbooks and licenses</Link>
     </div>
   )

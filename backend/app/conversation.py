@@ -3,7 +3,7 @@ steering the learner toward the lesson's technique. Replies are kept to 1-2 shor
 import re
 
 from . import llm
-from .course_plan import plan_for
+from .course_plan import NEW_HERE_TONE, plan_for
 
 MAX_USER_TURNS = 3
 BASELINE_USER_TURNS = 2
@@ -37,6 +37,9 @@ def partner_reply(scenario: dict, day: int, turns: list[dict], closing: bool) ->
     plan = plan_for(day)
     system = PARTNER_SYSTEM.format(partner=scenario["partner"], role=scenario["role"], setup=scenario["setup"],
                                    push=plan["partner_push"])
+    if scenario.get("country_name"):
+        system += (f"\n- You live in {scenario['country_name']}. Talk like a friendly local: use one or two everyday "
+                   f"expressions common in {scenario['country_name']} naturally. {NEW_HERE_TONE}")
     msgs = [{"role": "system", "content": system}]
     for t in turns:
         msgs.append({"role": "assistant" if t["speaker"] == "partner" else "user", "content": t["text"]})

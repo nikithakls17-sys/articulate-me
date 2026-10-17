@@ -3,7 +3,8 @@ import type { Citation, Page } from '../api'
 
 function cite(c: Citation) {
   const book = c.book.replace(/\s*\(.*\)$/, '')
-  return `${book}, “${c.chapter.replace(/^Chapter \d+:\s*/, '')},” p. ${c.page}.`
+  const where = c.page ? `, p. ${c.page}` : c.section ? `, ${c.section}` : ''
+  return `${book}, “${c.chapter.replace(/^Chapter \d+:\s*/, '')}”${where}.`
 }
 
 /** One printed textbook page: running head, body, figure captions, footnote citation, folio. */
@@ -31,7 +32,7 @@ export default function PageView({ page, chapter, chapterTitle, technique, pageN
         <p className="footnotes mt-3 pt-1.5">
           <sup className="font-label text-coral">1</sup>{' '}
           {c.url ? <a href={c.url} target="_blank" rel="noreferrer" className="underline decoration-dotted">{cite(c)}</a> : cite(c)}
-          {' '}CC BY-NC-SA 4.0.
+          {' '}{c.license ?? 'CC BY-NC-SA 4.0'}.
         </p>
       )}
       <footer className={`folio mt-2 flex ${even ? 'justify-start' : 'justify-end'}`}>{pageNo}</footer>

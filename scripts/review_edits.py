@@ -41,5 +41,28 @@ def day3(l):
     })
 
 
+def day101(l):
+    # generated comparison table had one row and the before/after were descriptions, not spoken lines
+    table = next(pg for pg in l["pages"] if pg["kind"] == "table")
+    table.update({"title": "A greeting, not a real question", "columns": ["You hear", "A good short answer"],
+                  "rows": [["How's it going?", "Good, thanks! How about you?"],
+                           ["Busy week?", "A bit! First week of classes. You?"],
+                           ["Nice weather today.", "So nice. Perfect for a walk."]]})
+    ba = next(pg for pg in l["pages"] if pg["kind"] == "before_after")
+    ba.update({"situation": "A neighbour asks how you're settling in.", "before": "Fine.",
+               "after": "Pretty good, thanks! Still unpacking. Have you lived here long?",
+               "why": "A short answer, one small detail and a question back keeps it going."})
+    # Wiktionary definitions: trim to the everyday sense, fix "how are you?." punctuation
+    trims = {"no worries": "A general reassurance not to be concerned further.", "reckon": "To think; to suppose.",
+             "how are you going": "How are you doing? (A greeting.)", "how's it going": "How are you? (A greeting.)"}
+    for t in l["country_tables"].values():
+        for row in t["rows"]:
+            term = row[0].strip("“”")
+            if term in trims:
+                row[1] = trims[term]
+            row[1] = row[1][0].upper() + row[1][1:]
+
+
 edit(1, day1)
 edit(3, day3)
+edit(101, day101)

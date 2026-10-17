@@ -160,7 +160,7 @@ def _first_sentences(text: str, n: int) -> str:
     """Keep the first n real sentences, dropping chatter lines like 'Here are some options:' and markdown."""
     lines = [l for l in re.split(r"\n+", text or "") if l.strip() and not CHATTER.search(l)]
     text = re.sub(r"[*“”]|-{2,}", "", " ".join(lines))
-    text = re.sub(r"^.{0,160}?\bhere (are|is)\b[^:]{0,120}:\s*", "", text, flags=re.I)  # "Okay, here are two...:"
+    text = re.sub(r"^.{0,160}?\bhere(?: are| is|'s|’s)[^:]{0,120}:\s*", "", text, flags=re.I)  # "Okay, here are two...:"
     sents = [x for x in _split_sentences(text) if not x.rstrip().endswith("?")]
     return " ".join(sents[:n]).strip().strip('"\u201c\u201d ')
 

@@ -1,4 +1,5 @@
 import asyncio
+import re
 import mimetypes
 import threading
 import json
@@ -13,7 +14,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from . import config, conversation, feedback, llm, metrics, stt, voices
-from .course_plan import BADGES, MINUTES_PER_LESSON, PLAN, WEEKS, WORLDS
+from .course_plan import (BADGES, COUNTRIES, EXPRESSIONS, MINUTES_PER_LESSON, NEW_HERE_PLAN, NEW_HERE_WORLD, PLAN, SETTINGS, WEEKS,
+                          WORLDS, all_plans)
+from . import wiktionary
 from .observability import init_sentry
 from .store import now_iso, store
 
@@ -82,7 +85,12 @@ def course():
              "pro": p["day"] > FREE_DAYS, "minutes": MINUTES_PER_LESSON if p["day"] else 3,
              "pages": len(lessons.get(p["day"], {}).get("pages", []))} for p in PLAN]
     lesson_days = [d for d in days if d["day"] > 0]
+    new_here = [{"day": p["day"], "title": p["title"], "technique": p["technique"], "learn": p["learn"],
+                 "available": p["day"] in lessons, "pro": False, "minutes": MINUTES_PER_LESSON,
+                 "pages": len(lessons.get(p["day"], {}).get("pages", []))} for p in NEW_HERE_PLAN]
     return {
+        "tracks": [{"id": NEW_HERE_WORLD, "title": "New here", "summary": "Small talk, slang and making friends in a new place.",
+                    "days": new_here, "countries": COUNTRIES, "settings": SETTINGS}],
         "weeks": WEEKS, "days": days, "worlds": WORLDS, "badges": BADGES, "targets": TARGETS,
         "overview": {"lessons": len(lesson_days), "minutes_total": sum(d["minutes"] for d in lesson_days) + 3,
                      "minutes_per_lesson": MINUTES_PER_LESSON},
@@ -92,8 +100,20 @@ def course():
 @app.get("/api/lessons/{day}")
 def lesson(day: int, user_id: str | None = None, world: str | None = None):
     l = _lesson(day)
-    user = store().get_user(user_id) if user_id else None
-    w = _pick_world(_normalize(user), l, world) if user else (world if world in l.get("scenarios", {}) else "everyday")
+    user = _normalize(store().get_user(user_id)) if user_id else None
+    if l.get("track") == NEW_HERE_WORLD:
+        country, setting = _new_here(user)
+        pages = [l["country_tables"][country] if pg["kind"] == "expressions"
+                 else dict(pg, body=l["examples"].get(setting, "")) if pg["kind"] == "example" else pg
+                 for pg in l.get("pages", [])]
+        return {
+            "day": l["day"], "technique": l["technique"], "title": l["title"], "learn": l.get("learn", ""),
+            "pages": pages, "quiz": [{"q": q["q"], "options": q["options"]} for q in l.get("quiz", [])],
+            "scenario": _local_scenario(l, country, setting), "world": NEW_HERE_WORLD, "worlds": [],
+            "rubric": l["rubric"], "citations": l.get("citations", []), "track": NEW_HERE_WORLD,
+            "country": country, "setting": setting,
+        }
+    w = _pick_world(user, l, world) if user else (world if world in l.get("scenarios", {}) else "everyday")
     pages = [dict(pg, body=l["examples"].get(w, "")) if pg["kind"] == "example" else pg for pg in l.get("pages", [])]
     return {
         "day": l["day"], "technique": l["technique"], "title": l["title"], "learn": l.get("learn", ""),
@@ -105,15 +125,37 @@ def lesson(day: int, user_id: str | None = None, world: str | None = None):
 
 # ---------- users ----------
 
+class NewHere(BaseModel):
+    country: str = "US"
+    setting: str = "social"
+
+
 class NewUser(BaseModel):
     name: str
     worlds: list[str]
     goals: list[str] = []
+    new_here: NewHere | None = None
 
 
 class UserPatch(BaseModel):
     worlds: list[str] | None = None
     goals: list[str] | None = None
+    new_here: NewHere | None = None
+
+
+def _clean_new_here(nh: NewHere | None) -> dict:
+    nh = nh or NewHere()
+    return {"country": nh.country if nh.country in COUNTRIES else "US",
+            "setting": nh.setting if nh.setting in SETTINGS else "social"}
+
+
+def _new_here(user: dict | None) -> tuple[str, str]:
+    nh = (user or {}).get("new_here") or {}
+    return nh.get("country", "US"), nh.get("setting", "social")
+
+
+def _local_scenario(lesson: dict, country: str, setting: str) -> dict:
+    return {**lesson["scenarios"][setting], "country": country, "country_name": COUNTRIES[country]}
 
 
 def _normalize(user: dict | None) -> dict | None:
@@ -136,6 +178,8 @@ def create_user(body: NewUser):
         raise HTTPException(400, "pick at least one world")
     user = {"id": uuid.uuid4().hex, "name": body.name.strip()[:40] or "friend", "worlds": worlds,
             "goals": [g.strip()[:60] for g in body.goals][:6], "created_at": now_iso()}
+    if NEW_HERE_WORLD in worlds:
+        user["new_here"] = _clean_new_here(body.new_here)
     store().upsert_user(user)
     return user
 
@@ -150,6 +194,8 @@ def update_user(user_id: str, body: UserPatch):
         u["worlds"] = worlds
     if body.goals is not None:
         u["goals"] = [g.strip()[:60] for g in body.goals][:6]
+    if body.new_here is not None:
+        u["new_here"] = _clean_new_here(body.new_here)
     u.pop("world", None)
     u.pop("goal", None)
     store().upsert_user(u)
@@ -183,6 +229,7 @@ def _streaks(dates: set[str], today: str) -> tuple[int, int]:
 
 
 def _state(user_id: str, today: str) -> dict:
+    user = _normalize(store().get_user(user_id)) or {}
     attempts = store().list_attempts(user_id)
     quizzes = store().find("quiz_results", user_id=user_id)
     notes = store().find("notes", user_id=user_id)
@@ -207,11 +254,15 @@ def _state(user_id: str, today: str) -> dict:
             break
 
     days = {}
-    for p in PLAN:
+    for p in all_plans():
         d = p["day"]
-        prev_done = d <= 1 or (d - 1) in best
-        days[d] = {"read": d in read, "practiced": d in best, "best_score": best[d].get("rubric_score") if d in best else None,
-                   "unlocked": d in built and (d == 0 and 1 in read or d > 0 and prev_done)}
+        if p.get("track"):
+            unlocked = d in built and p["track"] in user.get("worlds", [])
+        else:
+            prev_done = d <= 1 or (d - 1) in best
+            unlocked = d in built and (d == 0 and 1 in read or d > 0 and prev_done)
+        days[d] = {"read": d in read, "practiced": d in best, "unlocked": unlocked,
+                   "best_score": best[d].get("rubric_score") if d in best else None}
     return {"attempts": attempts, "quizzes": quizzes, "notes": notes, "best": best, "days": days,
             "streak": cur, "longest_streak": longest, "next_step": next_step}
 
@@ -279,7 +330,7 @@ def progress(user_id: str, today: str | None = None):
         "latest": _summary(latest) if latest else None,
         "by_day": [_summary(best[d]) for d in sorted(best)],
         "history": [_summary(a) for a in attempts],
-        "lessons_done": len([d for d in best if d > 0]), "lessons_total": len(PLAN) - 1,
+        "lessons_done": len([d for d in best if 0 < d < 100]), "lessons_total": len(PLAN) - 1,
         "chapters_read": len({q["day"] for q in s["quizzes"]}),
         "streak": s["streak"], "longest_streak": s["longest_streak"],
         "badges": _badges(s), "targets": _targets(s),
@@ -374,8 +425,11 @@ def _public_convo(c: dict) -> dict:
 def start_conversation(body: NewConversation):
     user = _user(body.user_id)
     l = _lesson(body.day)
-    world = _pick_world(user, l, body.world)
-    scenario = l["scenarios"][world]
+    if l.get("track") == NEW_HERE_WORLD:
+        world, scenario = NEW_HERE_WORLD, _local_scenario(l, *_new_here(user))
+    else:
+        world = _pick_world(user, l, body.world)
+        scenario = l["scenarios"][world]
     c = {"id": uuid.uuid4().hex, "user_id": user["id"], "day": body.day, "world": world, "scenario": scenario,
          "voice": voices.persona_for(scenario, world),
          "status": "active", "max_user_turns": conversation.max_turns(body.day), "created_at": now_iso(),
@@ -471,6 +525,54 @@ async def finish_conversation(conv_id: str, body: FinishBody):
         raise HTTPException(503, "The coach is busy with other learners. Try again in a few seconds.")
     async with _sessions:
         return await run_in_threadpool(_finish, c, local_date)
+
+
+class ExplainBody(BaseModel):
+    turn: int
+
+
+EXPLAIN_SKIP = {"hey", "hi", "hello", "wow", "oh", "okay", "ok", "yeah", "yes", "no", "so", "well", "um", "uh"}
+
+
+@app.post("/api/conversations/{conv_id}/explain")
+def explain(conv_id: str, body: ExplainBody):
+    """'Explain that': slang, idioms and references in one of the partner's lines, grounded in Wiktionary
+    where possible. Doesn't touch the conversation itself."""
+    c = store().get("conversations", conv_id)
+    if not c or not 0 <= body.turn < len(c["turns"]) or c["turns"][body.turn]["speaker"] != "partner":
+        raise HTTPException(404, "line not found")
+    line = c["turns"][body.turn]["text"]
+    country = c["scenario"].get("country", "US")
+    place = COUNTRIES.get(country, "this country")
+    raw = llm.chat([{"role": "user", "content":
+                     f'Sentence: "{line}"\n\nList any slang, idioms, informal expressions or cultural references in '
+                     f"this sentence that someone new to {place} might not know. Copy each one exactly from the sentence, "
+                     "one per line, nothing else. If there are none, write NONE."}],
+                   temperature=0.1, max_tokens=60, operation="explain_find")["text"]
+    low = line.lower()
+    # 1) known local expressions, matched in code (reliable even with a 1B model)
+    phrases = list(dict.fromkeys(t for items in EXPRESSIONS.values() for t, _ in items if re.search(r"\b" + re.escape(t) + r"\b", low)))
+    # 2) whatever else the model flagged: short phrases that really are in the line, minus filler words
+    for p in raw.splitlines():
+        p = p.strip(" -*•\"'“”.,!?").strip()
+        if (p and p.upper() != "NONE" and 1 <= len(p.split()) <= 4 and p.lower() in low
+                and p.lower() not in EXPLAIN_SKIP and p.lower() not in [x.lower() for x in phrases]):
+            phrases.append(p)
+    known = {t for items_ in EXPRESSIONS.values() for t, _ in items_}
+    items = []
+    for p in phrases:
+        if len(items) == 3:
+            break
+        e = wiktionary.lookup(p, country)
+        # model-picked phrases must be real idioms/slang: a Wiktionary entry that is multi-word or marked informal
+        if e and (p in known or len(p.split()) > 1 or e.get("informal")):
+            items.append({"phrase": p, "meaning": e["meaning"], "source": "Wiktionary", "url": e["url"], "license": e["license"]})
+    plain = None
+    if not items:
+        plain = llm.chat([{"role": "user", "content": f'Say this in simpler everyday English, one sentence: "{line}"'}],
+                         temperature=0.2, max_tokens=60, operation="explain_plain")["text"]
+        plain = feedback._first_sentences(plain, 2)
+    return {"items": items, "plain": plain}
 
 
 # ---------- voice ----------

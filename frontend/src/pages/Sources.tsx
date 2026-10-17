@@ -45,6 +45,17 @@ export default function Sources() {
             </p>
           </a>
         ))}
+        <div className="card">
+          <p className="flex items-start gap-2 font-extrabold"><BookOpen size={18} className="mt-0.5 shrink-0 text-target" /> New here: Wikipedia and Wiktionary</p>
+          <p className="text-sm text-muted">
+            The “New here” chapter is written from the Wikipedia article{' '}
+            <a className="underline" href="https://en.wikipedia.org/wiki/Small_talk" target="_blank" rel="noreferrer">Small talk</a>,
+            and everyday expressions and the “Explain that” button use definitions from{' '}
+            <a className="underline" href="https://en.wiktionary.org/" target="_blank" rel="noreferrer">Wiktionary</a>.
+            Both are licensed <a className="underline" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a>;
+            each definition links to its entry. Only the expression is sent to Wiktionary, never what you said.
+          </p>
+        </div>
         <p className="text-sm text-muted">
           Because the books are NonCommercial-licensed, the lesson text here is shared under the same CC BY-NC-SA 4.0
           license and is free. A paid tier would need original lessons.

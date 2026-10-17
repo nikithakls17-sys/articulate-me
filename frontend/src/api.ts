@@ -1,4 +1,7 @@
-export type World = 'student' | 'job_seeker' | 'customer_facing' | 'creator' | 'everyday'
+export type World = 'student' | 'job_seeker' | 'customer_facing' | 'creator' | 'everyday' | 'new_here'
+export type Country = 'US' | 'UK' | 'Canada' | 'Australia'
+export type Setting = 'campus' | 'workplace' | 'neighbourhood' | 'social'
+export interface NewHere { country: Country; setting: Setting }
 
 export interface DayState { read: boolean; practiced: boolean; best_score: number | null; unlocked: boolean }
 export interface NextStep { kind: 'read' | 'baseline' | 'practice'; day: number }
@@ -8,6 +11,7 @@ export interface User {
   name: string
   worlds: World[]
   goals: string[]
+  new_here?: NewHere
   xp: number
   streak: number
   days: Record<string, DayState>
@@ -20,7 +24,11 @@ export interface CourseDay {
 }
 export interface BadgeDef { id: string; title: string; desc: string }
 export interface Target { id: string; title: string; goal: number; unit: string; lower?: boolean }
+export interface Track {
+  id: World; title: string; summary: string; days: CourseDay[]; countries: Record<Country, string>; settings: Record<Setting, string>
+}
 export interface Course {
+  tracks: Track[]
   weeks: { week: number; title: string; locked: boolean; summary: string }[]
   days: CourseDay[]
   worlds: Record<World, string>
@@ -29,7 +37,7 @@ export interface Course {
   overview: { lessons: number; minutes_total: number; minutes_per_lesson: number }
 }
 
-export interface Citation { book: string; chapter: string; section?: string; page: number; url?: string }
+export interface Citation { book: string; chapter: string; section?: string; page: number; url?: string; license?: string }
 export type Page =
   | { kind: 'intro'; title: string; body: string; learn: string }
   | { kind: 'steps'; title: string; steps: { label: string; text: string }[]; cite?: Citation | null }
@@ -53,7 +61,12 @@ export interface Lesson {
   worlds: World[]
   rubric: RubricItem[]
   citations: Citation[]
+  track?: World
+  country?: Country
+  setting?: Setting
 }
+
+export interface Explanation { items: { phrase: string; meaning: string; source: string; url: string | null }[]; plain: string | null }
 
 export interface QuizResult { results: { correct: boolean; answer: number; explain: string }[]; correct: number; total: number; xp: number }
 
@@ -151,8 +164,10 @@ export const api = {
   course: () => req<Course>('/api/course'),
   lesson: (day: number, userId: string, world?: string) =>
     req<Lesson>(`/api/lessons/${day}?user_id=${userId}${world ? `&world=${world}` : ''}`),
-  createUser: (name: string, worlds: World[], goals: string[]) => req<User>('/api/users', send('POST', { name, worlds, goals })),
-  updateUser: (id: string, patch: { worlds?: World[]; goals?: string[] }) => req<User>(`/api/users/${id}`, send('PATCH', patch)),
+  createUser: (name: string, worlds: World[], goals: string[], newHere?: NewHere) =>
+    req<User>('/api/users', send('POST', { name, worlds, goals, new_here: newHere })),
+  explain: (convId: string, turn: number) => req<Explanation>(`/api/conversations/${convId}/explain`, send('POST', { turn })),
+  updateUser: (id: string, patch: { worlds?: World[]; goals?: string[]; new_here?: NewHere }) => req<User>(`/api/users/${id}`, send('PATCH', patch)),
   user: (id: string) => req<User>(`/api/users/${id}?today=${localDate()}`),
   progress: (id: string) => req<Progress>(`/api/users/${id}/progress?today=${localDate()}`),
   quiz: (day: number, userId: string, answers: number[]) =>
@@ -178,4 +193,5 @@ export const WORLD_LABELS: Record<World, { label: string; blurb: string }> = {
   customer_facing: { label: 'Customer-facing', blurb: 'Patients, customers, sales pitches' },
   creator: { label: 'Creator / performer', blurb: 'Video intros, storytelling, auditions' },
   everyday: { label: 'Everyday', blurb: 'Small talk, saying no, a toast' },
+  new_here: { label: 'New here', blurb: 'Just moved? Small talk, slang and making friends' },
 }

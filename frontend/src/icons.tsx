@@ -1,4 +1,4 @@
-import { Briefcase, Clapperboard, Coffee, GraduationCap, Handshake, type LucideIcon } from 'lucide-react'
+import { Briefcase, Clapperboard, Coffee, Globe, GraduationCap, Handshake, type LucideIcon } from 'lucide-react'
 import type { World } from './api'
 
 export const WORLD_ICONS: Record<World, LucideIcon> = {
@@ -7,6 +7,7 @@ export const WORLD_ICONS: Record<World, LucideIcon> = {
   customer_facing: Handshake,
   creator: Clapperboard,
   everyday: Coffee,
+  new_here: Globe,
 }
 
 /** App mark: a speech bubble with sound waves, drawn inline so it works offline and in both themes. */

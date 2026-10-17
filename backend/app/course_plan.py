@@ -164,3 +164,68 @@ BADGES = [
 
 def plan_for(day: int) -> dict | None:
     return next((p for p in PLAN if p["day"] == day), None)
+
+
+# ---------------- New here: fitting into a new place ----------------
+# A separate track for international students, immigrants and anyone who just moved. Chapters are grounded in
+# Wikipedia (CC BY-SA) and expressions in Wiktionary (CC BY-SA). Tone: describe common habits, never stereotypes;
+# "many people here", not "Americans always"; respect the learner's own culture.
+
+NEW_HERE_WORLD = "new_here"
+WORLDS[NEW_HERE_WORLD] = "someone new to the country (international student, immigrant or recently moved)"
+PARTNERS[NEW_HERE_WORLD] = "a classmate, coworker, neighbour or someone at a social event"
+
+COUNTRIES = {"US": "the United States", "UK": "the United Kingdom", "Canada": "Canada", "Australia": "Australia"}
+SETTINGS = {"campus": "on campus", "workplace": "at work", "neighbourhood": "in the neighbourhood", "social": "at social events"}
+
+# (expression, Wiktionary sense hint) per country; meanings are fetched from Wiktionary at build time
+EXPRESSIONS = {
+    "US": [("how's it going", "greet"), ("what's up", "greet"), ("hang out", "spend time"), ("catch up", "news"), ("no worries", None)],
+    "UK": [("cheers", "thank"), ("fancy", "want|desire|like"), ("cuppa", None), ("knackered", None), ("mate", "friend")],
+    "Canada": [("how's it going", "greet"), ("eh", "question|confirm|agree"), ("toque", None), ("loonie", None), ("no worries", None)],
+    "Australia": [("how are you going", "greet"), ("arvo", None), ("heaps", "lot|great"), ("reckon", "think|believe"), ("no worries", None)],
+}
+
+NEW_HERE_TONE = ("Describe common habits, never stereotypes. Say 'many people here' or 'it's common to', never "
+                 "'Americans always' or 'British people never'. Don't generalise about genders or groups. "
+                 "Treat the learner's own culture with respect: these are differences, not better or worse ways.")
+
+NEW_HERE_PLAN = [
+    {
+        "day": 101, "track": NEW_HERE_WORLD, "technique": "Small talk", "title": "How small talk works here",
+        "learn": "Open, keep and close a light conversation the way many people here do.",
+        "outline": "Greeting: a light 'how's it going?' is a hello, not a real question. Conversation: pick a safe "
+                   "shared topic, answer briefly, then ask something back. Closing: end warmly with a reason and a "
+                   "see-you ('I'd better grab a coffee, good to meet you').",
+        "partner_push": "Make light small talk. Use one or two everyday local expressions naturally. Answer briefly and "
+                        "leave room for them; notice if they ask you something back.",
+        "rubric": [
+            {"id": "asks_back", "check": "Asks the other person at least one question back"},
+            {"id": "builds_on", "check": "Picks up something the other person said and responds to it"},
+            {"id": "shares_detail", "check": "Shares one small, friendly detail about themselves"},
+        ],
+    },
+]
+
+NEW_HERE_SCENARIOS = {
+    "campus": {"partner": "Jordan", "role": "a classmate at a welcome party",
+               "setup": "It's the first week of term. You're at a welcome party and a classmate comes over with two drinks.",
+               "opening": "Hey, how's it going? I think we're in the same seminar. Are you settling in okay?"},
+    "workplace": {"partner": "Sam", "role": "a coworker at lunch",
+                  "setup": "It's your second week at a new job. A coworker sits down next to you in the break room.",
+                  "opening": "Mind if I sit here? I don't think we've properly met yet. How are you finding it so far?"},
+    "neighbourhood": {"partner": "Alex", "role": "your next-door neighbour",
+                      "setup": "You're carrying groceries in and your neighbour is watering their plants.",
+                      "opening": "Oh hi, you must be the new neighbour! How are you settling in? Lots of boxes?"},
+    "social": {"partner": "Riley", "role": "a friend of a friend at a barbecue",
+               "setup": "A friend brought you to a weekend barbecue. Someone you don't know comes over to say hi.",
+               "opening": "Hey! I'm Riley, I know Chris from uni. How do you know everyone here?"},
+}
+
+
+def all_plans() -> list[dict]:
+    return PLAN + NEW_HERE_PLAN
+
+
+def plan_for(day: int) -> dict | None:  # noqa: F811  (redefined to include the New here track)
+    return next((p for p in all_plans() if p["day"] == day), None)

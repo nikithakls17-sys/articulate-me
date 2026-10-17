@@ -1,0 +1,500 @@
+{
+  "day": 101,
+  "track": "new_here",
+  "technique": "Small talk",
+  "title": "How small talk works here",
+  "learn": "Open, keep and close a light conversation the way many people here do.",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "How small talk works here",
+      "body": "Small talk is a polite way to build connections in a new environment. It helps create a social atmosphere that feels safe for everyone.",
+      "learn": "Open, keep and close a light conversation the way many people here do."
+    },
+    {
+      "kind": "steps",
+      "title": "Greeting, conversation, closing",
+      "steps": [
+        {
+          "label": "Greeting",
+          "text": "A light 'how's it going?' functions as a greeting, not necessarily a question needing a detailed answer."
+        },
+        {
+          "label": "Conversation",
+          "text": "Choose a safe, shared topic, answer briefly, and then ask something back to continue the exchange."
+        },
+        {
+          "label": "Closing",
+          "text": "End warmly by stating a reason for leaving and saying goodbye, like 'good to meet you'."
+        }
+      ],
+      "cite": {
+        "book": "Wikipedia",
+        "chapter": "Small talk",
+        "section": "revision 1365180312",
+        "page": 0,
+        "url": "https://en.wikipedia.org/w/index.php?title=Small_talk&oldid=1365180312",
+        "license": "CC BY-SA 4.0"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Phatic communication",
+          "meaning": "Small talk used to build and maintain relationships, not exchange important information."
+        },
+        {
+          "term": "Safe topics",
+          "meaning": "Topics like the weather or sports are often considered safe in most situations."
+        }
+      ],
+      "cite": {
+        "book": "Wikipedia",
+        "chapter": "Small talk",
+        "section": "revision 1365180312",
+        "page": 0,
+        "url": "https://en.wikipedia.org/w/index.php?title=Small_talk&oldid=1365180312",
+        "license": "CC BY-SA 4.0"
+      }
+    },
+    {
+      "kind": "expressions",
+      "title": "Everyday expressions"
+    },
+    {
+      "kind": "table",
+      "title": "A greeting, not a real question",
+      "columns": [
+        "You hear",
+        "A good short answer"
+      ],
+      "rows": [
+        [
+          "How's it going?",
+          "Good, thanks! How about you?"
+        ],
+        [
+          "Busy week?",
+          "A bit! First week of classes. You?"
+        ],
+        [
+          "Nice weather today.",
+          "So nice. Perfect for a walk."
+        ]
+      ],
+      "cite": {
+        "book": "Wikipedia",
+        "chapter": "Small talk",
+        "section": "revision 1365180312",
+        "page": 0,
+        "url": "https://en.wikipedia.org/w/index.php?title=Small_talk&oldid=1365180312",
+        "license": "CC BY-SA 4.0"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "A neighbour asks how you're settling in.",
+      "before": "Fine.",
+      "after": "Pretty good, thanks! Still unpacking. Have you lived here long?",
+      "why": "A short answer, one small detail and a question back keeps it going."
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Small talk is a bonding ritual that helps define relationships and allows new acquaintances to explore each other's social position.",
+      "cite": {
+        "book": "Wikipedia",
+        "chapter": "Small talk",
+        "section": "revision 1365180312",
+        "page": 0,
+        "url": "https://en.wikipedia.org/w/index.php?title=Small_talk&oldid=1365180312",
+        "license": "CC BY-SA 4.0"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your setting"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "When using a greeting like 'how's it going?' in small talk, what is the expected response?",
+      "options": [
+        "A detailed explanation of your current situation.",
+        "A brief acknowledgment, as it functions more as a social greeting.",
+        "A complex discussion about your plans for the day."
+      ],
+      "answer": 1,
+      "explain": "It's a light greeting, not a question requiring a detailed answer."
+    },
+    {
+      "q": "To keep a small talk exchange going after answering a question, what should you do next?",
+      "options": [
+        "Immediately change the topic to something serious or personal.",
+        "Answer briefly and then ask the other person a related question.",
+        "Wait for the other person to initiate the next topic."
+      ],
+      "answer": 1,
+      "explain": "You must answer briefly and then ask something back to continue the exchange."
+    },
+    {
+      "q": "What is the primary function of small talk, according to the lesson?",
+      "options": [
+        "To quickly exchange important professional information.",
+        "To build and maintain social connections through light conversation.",
+        "To test how well you know the other person's background."
+      ],
+      "answer": 1,
+      "explain": "It is a bonding ritual used to build connections, not exchange important data."
+    }
+  ],
+  "country_tables": {
+    "US": {
+      "kind": "table",
+      "title": "Everyday expressions you'll hear in the United States",
+      "columns": [
+        "Expression",
+        "What it usually means"
+      ],
+      "rows": [
+        [
+          "“how's it going”",
+          "How are you? (A greeting.)"
+        ],
+        [
+          "“what's up”",
+          "A casual greeting with a meaning similar to hi or nice to meet you."
+        ],
+        [
+          "“hang out”",
+          "To spend time with somebody; to regularly meet with somebody."
+        ],
+        [
+          "“catch up”",
+          "To be brought up to date with news."
+        ],
+        [
+          "“no worries”",
+          "A general reassurance not to be concerned further."
+        ]
+      ],
+      "cite": {
+        "book": "Wiktionary",
+        "chapter": "how's it going, what's up, hang out, catch up, no worries",
+        "section": "",
+        "page": 0,
+        "url": "https://en.wiktionary.org/wiki/how%27s_it_going",
+        "license": "CC BY-SA 4.0"
+      },
+      "links": [
+        {
+          "term": "how's it going",
+          "url": "https://en.wiktionary.org/wiki/how%27s_it_going"
+        },
+        {
+          "term": "what's up",
+          "url": "https://en.wiktionary.org/wiki/what%27s_up"
+        },
+        {
+          "term": "hang out",
+          "url": "https://en.wiktionary.org/wiki/hang_out"
+        },
+        {
+          "term": "catch up",
+          "url": "https://en.wiktionary.org/wiki/catch_up"
+        },
+        {
+          "term": "no worries",
+          "url": "https://en.wiktionary.org/wiki/no_worries"
+        }
+      ]
+    },
+    "UK": {
+      "kind": "table",
+      "title": "Everyday expressions you'll hear in the United Kingdom",
+      "columns": [
+        "Expression",
+        "What it usually means"
+      ],
+      "rows": [
+        [
+          "“cheers”",
+          "Thank you."
+        ],
+        [
+          "“fancy”",
+          "Would like; have a desire for."
+        ],
+        [
+          "“cuppa”",
+          "A cup of tea (or sometimes any hot drink)."
+        ],
+        [
+          "“knackered”",
+          "Tired or exhausted."
+        ],
+        [
+          "“mate”",
+          "A friend, usually of the same sex."
+        ]
+      ],
+      "cite": {
+        "book": "Wiktionary",
+        "chapter": "cheers, fancy, cuppa, knackered, mate",
+        "section": "",
+        "page": 0,
+        "url": "https://en.wiktionary.org/wiki/cheers",
+        "license": "CC BY-SA 4.0"
+      },
+      "links": [
+        {
+          "term": "cheers",
+          "url": "https://en.wiktionary.org/wiki/cheers"
+        },
+        {
+          "term": "fancy",
+          "url": "https://en.wiktionary.org/wiki/fancy"
+        },
+        {
+          "term": "cuppa",
+          "url": "https://en.wiktionary.org/wiki/cuppa"
+        },
+        {
+          "term": "knackered",
+          "url": "https://en.wiktionary.org/wiki/knackered"
+        },
+        {
+          "term": "mate",
+          "url": "https://en.wiktionary.org/wiki/mate"
+        }
+      ]
+    },
+    "Canada": {
+      "kind": "table",
+      "title": "Everyday expressions you'll hear in Canada",
+      "columns": [
+        "Expression",
+        "What it usually means"
+      ],
+      "rows": [
+        [
+          "“how's it going”",
+          "How are you? (A greeting.)"
+        ],
+        [
+          "“eh”",
+          "Used as a tag question, to emphasise what goes before or to request that the listener express an opinion about what has been said."
+        ],
+        [
+          "“toque”",
+          "A type of hat with no brim."
+        ],
+        [
+          "“loonie”",
+          "The Canadian dollar coin in common circulation since 1987."
+        ],
+        [
+          "“no worries”",
+          "A general reassurance not to be concerned further."
+        ]
+      ],
+      "cite": {
+        "book": "Wiktionary",
+        "chapter": "how's it going, eh, toque, loonie, no worries",
+        "section": "",
+        "page": 0,
+        "url": "https://en.wiktionary.org/wiki/how%27s_it_going",
+        "license": "CC BY-SA 4.0"
+      },
+      "links": [
+        {
+          "term": "how's it going",
+          "url": "https://en.wiktionary.org/wiki/how%27s_it_going"
+        },
+        {
+          "term": "eh",
+          "url": "https://en.wiktionary.org/wiki/eh"
+        },
+        {
+          "term": "toque",
+          "url": "https://en.wiktionary.org/wiki/toque"
+        },
+        {
+          "term": "loonie",
+          "url": "https://en.wiktionary.org/wiki/loonie"
+        },
+        {
+          "term": "no worries",
+          "url": "https://en.wiktionary.org/wiki/no_worries"
+        }
+      ]
+    },
+    "Australia": {
+      "kind": "table",
+      "title": "Everyday expressions you'll hear in Australia",
+      "columns": [
+        "Expression",
+        "What it usually means"
+      ],
+      "rows": [
+        [
+          "“how are you going”",
+          "How are you doing? (A greeting.)"
+        ],
+        [
+          "“arvo”",
+          "Afternoon."
+        ],
+        [
+          "“heaps”",
+          "Very much, a lot."
+        ],
+        [
+          "“reckon”",
+          "To think; to suppose."
+        ],
+        [
+          "“no worries”",
+          "A general reassurance not to be concerned further."
+        ]
+      ],
+      "cite": {
+        "book": "Wiktionary",
+        "chapter": "how are you going, arvo, heaps, reckon, no worries",
+        "section": "",
+        "page": 0,
+        "url": "https://en.wiktionary.org/wiki/how_are_you_going",
+        "license": "CC BY-SA 4.0"
+      },
+      "links": [
+        {
+          "term": "how are you going",
+          "url": "https://en.wiktionary.org/wiki/how_are_you_going"
+        },
+        {
+          "term": "arvo",
+          "url": "https://en.wiktionary.org/wiki/arvo"
+        },
+        {
+          "term": "heaps",
+          "url": "https://en.wiktionary.org/wiki/heaps"
+        },
+        {
+          "term": "reckon",
+          "url": "https://en.wiktionary.org/wiki/reckon"
+        },
+        {
+          "term": "no worries",
+          "url": "https://en.wiktionary.org/wiki/no_worries"
+        }
+      ]
+    }
+  },
+  "examples": {
+    "campus": "Hi there! I'm still getting used to the campus layout; it feels pretty big. Many people here seem to walk between buildings a lot, which I'm trying to get into the rhythm of. Are you familiar with the best spots to grab a quick coffee around here?",
+    "workplace": "Good morning! I'm still finding my feet with the workflow here. I've noticed it's common to have quick check-ins before the main meetings start. What's one thing you find most helpful when you're getting started on a new project?",
+    "neighbourhood": "Hello! I'm new to this part of town, and I'm trying to figure out the best local spots. It seems many people in the area walk to the small shops. Do you have a favorite place nearby for a quiet afternoon walk?",
+    "social": "It’s great to finally meet everyone! I'm still learning the local customs of gatherings like this. I've noticed it's common to bring a small dish to share at these events. What brought you to this event tonight?"
+  },
+  "scenarios": {
+    "campus": {
+      "partner": "Jordan",
+      "role": "a classmate at a welcome party",
+      "setup": "It's the first week of term. You're at a welcome party and a classmate comes over with two drinks.",
+      "opening": "Hey, how's it going? I think we're in the same seminar. Are you settling in okay?"
+    },
+    "workplace": {
+      "partner": "Sam",
+      "role": "a coworker at lunch",
+      "setup": "It's your second week at a new job. A coworker sits down next to you in the break room.",
+      "opening": "Mind if I sit here? I don't think we've properly met yet. How are you finding it so far?"
+    },
+    "neighbourhood": {
+      "partner": "Alex",
+      "role": "your next-door neighbour",
+      "setup": "You're carrying groceries in and your neighbour is watering their plants.",
+      "opening": "Oh hi, you must be the new neighbour! How are you settling in? Lots of boxes?"
+    },
+    "social": {
+      "partner": "Riley",
+      "role": "a friend of a friend at a barbecue",
+      "setup": "A friend brought you to a weekend barbecue. Someone you don't know comes over to say hi.",
+      "opening": "Hey! I'm Riley, I know Chris from uni. How do you know everyone here?"
+    }
+  },
+  "rubric": [
+    {
+      "id": "asks_back",
+      "check": "Asks the other person at least one question back"
+    },
+    {
+      "id": "builds_on",
+      "check": "Picks up something the other person said and responds to it"
+    },
+    {
+      "id": "shares_detail",
+      "check": "Shares one small, friendly detail about themselves"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Wikipedia",
+      "chapter": "Small talk",
+      "section": "revision 1365180312",
+      "page": 0,
+      "url": "https://en.wikipedia.org/w/index.php?title=Small_talk&oldid=1365180312",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "book": "Wiktionary",
+      "chapter": "how's it going, what's up, hang out, catch up, no worries",
+      "section": "",
+      "page": 0,
+      "url": "https://en.wiktionary.org/wiki/how%27s_it_going",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "book": "Wiktionary",
+      "chapter": "cheers, fancy, cuppa, knackered, mate",
+      "section": "",
+      "page": 0,
+      "url": "https://en.wiktionary.org/wiki/cheers",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "book": "Wiktionary",
+      "chapter": "how's it going, eh, toque, loonie, no worries",
+      "section": "",
+      "page": 0,
+      "url": "https://en.wiktionary.org/wiki/how%27s_it_going",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "book": "Wiktionary",
+      "chapter": "how are you going, arvo, heaps, reckon, no worries",
+      "section": "",
+      "page": 0,
+      "url": "https://en.wiktionary.org/wiki/how_are_you_going",
+      "license": "CC BY-SA 4.0"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Wikipedia: Small talk",
+      "url": "https://en.wikipedia.org/w/index.php?title=Small_talk&oldid=1365180312",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "name": "Wiktionary",
+      "url": "https://en.wiktionary.org/",
+      "license": "CC BY-SA 4.0"
+    }
+  ],
+  "generated": {
+    "model": "gemma4:e4b",
+    "prompt_version": "v1"
+  }
+}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Mic, Square, Volume2, X } from 'lucide-react'
-import { api, WORLD_LABELS, type Attempt, type Conversation, type Lesson, type Turn } from '../api'
+import { HelpCircle, Mic, Square, Volume2, X } from 'lucide-react'
+import { api, WORLD_LABELS, type Attempt, type Conversation, type Explanation, type Lesson, type Turn } from '../api'
 import { useSession } from '../session'
 import { speak, stopSpeaking, unlockAudio, useRecorder } from '../voice'
 import FeedbackView from '../components/FeedbackView'
@@ -25,6 +25,7 @@ export default function Talk() {
   const [attempt, setAttempt] = useState<Attempt | null>(null)
   const [error, setError] = useState('')
   const [line, setLine] = useState(0)
+  const [explained, setExplained] = useState<Record<number, Explanation | 'loading' | 'error'>>({})
   const rec = useRecorder(MAX_SEC)
   const bottom = useRef<HTMLDivElement>(null)
 
@@ -108,6 +109,7 @@ export default function Talk() {
     stopSpeaking()
     setConvo(null)
     setTurns([])
+    setExplained({})
     setAttempt(null)
     setStage('intro')
   }
@@ -192,6 +194,15 @@ export default function Talk() {
                   ? 'rounded-br-md bg-coral text-white' : 'rounded-bl-md border-2 border-line bg-white'}`}>
                   {t.speaker === 'partner' && <p className="label text-read">{sc.partner}{convo?.voice && ` · ${convo.voice.label}`}</p>}
                   {t.text}
+                  {t.speaker === 'partner' && convo && (
+                    <ExplainThat state={explained[n]} onAsk={async () => {
+                      setExplained((e) => ({ ...e, [n]: 'loading' }))
+                      try {
+                        const r = await api.explain(convo.id, n)
+                        setExplained((e) => ({ ...e, [n]: r }))
+                      } catch { setExplained((e) => ({ ...e, [n]: 'error' })) }
+                    }} />
+                  )}
                 </div>
               </li>
             ))}
@@ -231,6 +242,31 @@ export default function Talk() {
       {stage === 'feedback' && attempt && (
         <FeedbackView attempt={attempt} technique={day === 0 ? null : lesson.technique} onRetry={retry} onDone={() => nav('/')} />
       )}
+    </div>
+  )
+}
+
+/** "Explain that": slang, idioms and references in the partner's line, without stopping the conversation. */
+function ExplainThat({ state, onAsk }: { state: Explanation | 'loading' | 'error' | undefined; onAsk: () => void }) {
+  if (!state) {
+    return (
+      <button onClick={onAsk} className="label mt-2 flex items-center gap-1 text-target underline decoration-dotted">
+        <HelpCircle size={13} /> Explain that
+      </button>
+    )
+  }
+  if (state === 'loading') return <p className="label mt-2 text-muted">Looking it up…</p>
+  if (state === 'error') return <p className="label mt-2 text-coral-dark">Couldn't explain that one.</p>
+  return (
+    <div className="mt-2 border-2 border-ink bg-target-soft p-2 text-[0.95rem]">
+      {state.items.length ? state.items.map((it) => (
+        <p key={it.phrase} className="leading-snug">
+          <b>“{it.phrase}”</b> {it.meaning}{' '}
+          <span className="label text-muted">
+            {it.url ? <a href={it.url} target="_blank" rel="noreferrer" className="underline">{it.source}</a> : it.source}
+          </span>
+        </p>
+      )) : <p className="leading-snug"><span className="label text-muted">In other words: </span>{state.plain}</p>}
     </div>
   )
 }

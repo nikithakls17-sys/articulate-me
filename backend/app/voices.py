@@ -27,6 +27,11 @@ PERSONAS = {
     "curious":    ("Xb7hH8MSUJpSbSDYk0k2", "[curious]", "bf_emma", 0.98, "curious professor"),
     "excited":    ("FGY2WhTYpPnrIDTdsKH5", "[excited]", "af_nicole", 1.06, "excited creator"),
     "casual":     ("TX3LPaxmHKxFdv7VOQHJ", "[relaxed, friendly]", "am_puck", 1.0, "easygoing friend"),
+    # New here: locals with the accent of the learner's new country
+    "local_uk":   ("JBFqnCBsd6RMkjVDRZzb", "[warm, chatty]", "bm_george", 1.0, "friendly local (British)"),
+    "local_au":   ("IKne3meq5aSn9XLyUdCD", "[relaxed, cheerful]", "am_puck", 1.02, "friendly local (Australian)"),
+    "local_ca":   ("cgSgspJ2msm6clMCkdW9", "[warm, cheerful]", "af_bella", 1.0, "friendly local (Canadian)"),
+    "local_us":   ("TX3LPaxmHKxFdv7VOQHJ", "[relaxed, friendly]", "am_puck", 1.02, "friendly local (American)"),
 }
 # Voice ids are ElevenLabs default library voices; override any of them with ELEVENLABS_VOICES='{"strict": "<id>"}'
 _overrides = json.loads(os.getenv("ELEVENLABS_VOICES", "{}") or "{}")
@@ -38,6 +43,8 @@ def persona_for(scenario: dict | None, world: str = "") -> str:
     """Pick a persona from who the partner is."""
     if not scenario:
         return "narrator"
+    if scenario.get("country"):
+        return {"UK": "local_uk", "Australia": "local_au", "Canada": "local_ca"}.get(scenario["country"], "local_us")
     who = f"{scenario.get('role', '')} {scenario.get('setup', '')}".lower()
     if re.search(r"upset|frustrat|angry|annoyed|complain|third call|wait", who):
         return "upset"

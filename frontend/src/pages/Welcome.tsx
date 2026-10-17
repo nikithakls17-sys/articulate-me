@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Check } from 'lucide-react'
-import { api, WORLD_LABELS, type World } from '../api'
+import { api, WORLD_LABELS, type Country, type Setting, type World } from '../api'
 import { useSession } from '../session'
 import { WORLD_ICONS } from '../icons'
 import Blob, { BlobSays } from '../components/Blob'
 
 export const GOALS = ['Stop rambling', 'Sound more confident', 'Fewer "um"s', 'Nail an interview', 'Speak up in class or meetings', 'Tell better stories']
 
-function Steps({ n }: { n: number }) {
+const COUNTRIES: Record<Country, string> = { US: 'United States', UK: 'United Kingdom', Canada: 'Canada', Australia: 'Australia' }
+const SETTINGS: Record<Setting, string> = { campus: 'On campus', workplace: 'At work', neighbourhood: 'In my neighbourhood', social: 'At social events' }
+
+function Steps({ n, total }: { n: number; total: number }) {
   return (
-    <div className="flex gap-1.5" aria-label={`Step ${n + 1} of 3`}>
-      {[0, 1, 2].map((i) => <span key={i} className={`h-1.5 flex-1 rounded-full ${i <= n ? 'bg-coral' : 'bg-line'}`} />)}
+    <div className="flex gap-1.5" aria-label={`Step ${n + 1} of ${total}`}>
+      {Array.from({ length: total }, (_, i) => <span key={i} className={`h-2 flex-1 border-2 border-ink ${i <= n ? 'bg-coral' : 'bg-white'}`} />)}
     </div>
   )
 }
@@ -35,6 +38,11 @@ export default function Welcome() {
   const [name, setName] = useState('')
   const [worlds, setWorlds] = useState<World[]>([])
   const [goals, setGoals] = useState<string[]>([])
+  const [country, setCountry] = useState<Country>('US')
+  const [setting, setSetting] = useState<Setting>('campus')
+  const newHere = worlds.includes('new_here')
+  // steps: 0 name, 1 worlds, 2 new-here environment (only if picked), 3 goals
+  const order = newHere ? [0, 1, 2, 3] : [0, 1, 3]
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -43,7 +51,7 @@ export default function Welcome() {
   const finish = async () => {
     setBusy(true)
     try {
-      const u = await api.createUser(name || 'friend', worlds, goals)
+      const u = await api.createUser(name || 'friend', worlds, goals, newHere ? { country, setting } : undefined)
       signIn(u.id)
       nav('/overview?new=1')
     } catch (e) {
@@ -75,7 +83,7 @@ export default function Welcome() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Steps n={step} />
+      <Steps n={order.indexOf(step) - 1} total={order.length - 1} />
       {step === 1 && (
         <>
           <BlobSays mood="excited" size={56}>Nice to meet you{name ? `, ${name}` : ''}! Tell me where you talk, and I'll build your lessons around it.</BlobSays>
@@ -93,12 +101,37 @@ export default function Welcome() {
               </Toggle>
             )
           })}
-          <button className="btn-primary mt-2" disabled={!worlds.length} onClick={() => setStep(2)}>
+          <button className="btn-primary mt-2" disabled={!worlds.length} onClick={() => setStep(newHere ? 2 : 3)}>
             Continue{worlds.length > 1 ? ` with ${worlds.length}` : ''}
           </button>
         </>
       )}
       {step === 2 && (
+        <>
+          <BlobSays mood="listening" accessory="headphones" size={56}>
+            Moving somewhere new is a lot{name ? `, ${name}` : ''}. Where are you now? I'll teach you how people talk there.
+          </BlobSays>
+          <h2 className="text-3xl font-black">Where did you move to?</h2>
+          <div className="grid grid-cols-2 gap-2">
+            {(Object.keys(COUNTRIES) as Country[]).map((c) => (
+              <button key={c} onClick={() => setCountry(c)} aria-pressed={country === c}
+                className={`border-2 border-ink p-3 text-left font-bold ${country === c ? 'bg-target-soft shadow-[4px_4px_0_var(--ink)]' : 'bg-white'}`}>{COUNTRIES[c]}</button>
+            ))}
+          </div>
+          <h2 className="mt-2 text-2xl font-black">Where do you want to fit in first?</h2>
+          <div className="grid grid-cols-2 gap-2">
+            {(Object.keys(SETTINGS) as Setting[]).map((s) => (
+              <button key={s} onClick={() => setSetting(s)} aria-pressed={setting === s}
+                className={`border-2 border-ink p-3 text-left font-bold ${setting === s ? 'bg-target-soft shadow-[4px_4px_0_var(--ink)]' : 'bg-white'}`}>{SETTINGS[s]}</button>
+            ))}
+          </div>
+          <div className="grid grid-cols-[auto_1fr] gap-3">
+            <button className="btn-ghost" onClick={() => setStep(1)}>Back</button>
+            <button className="btn-primary" onClick={() => setStep(3)}>Continue</button>
+          </div>
+        </>
+      )}
+      {step === 3 && (
         <>
           <BlobSays mood="calm" accessory="specs" size={56}>Got it. And what should we work on together{name ? `, ${name}` : ''}?</BlobSays>
           <h2 className="text-3xl font-black">What do you want to get better at?</h2>
@@ -112,7 +145,7 @@ export default function Welcome() {
           </div>
           {error && <p className="font-bold text-coral-dark">{error}</p>}
           <div className="grid grid-cols-[auto_1fr] gap-3">
-            <button className="btn-ghost" onClick={() => setStep(1)}>Back</button>
+            <button className="btn-ghost" onClick={() => setStep(newHere ? 2 : 1)}>Back</button>
             <button className="btn-primary" disabled={busy} onClick={finish}>{busy ? 'Building your course…' : 'See my course'}</button>
           </div>
         </>

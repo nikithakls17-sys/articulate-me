@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, Check, Flag, Flame, Info, Lock, MessageCircle, Zap } from 'lucide-react'
+import { BookOpen, Check, Flag, Flame, Globe, Info, Lock, MessageCircle, Zap } from 'lucide-react'
 import { api, type Course, type NextStep } from '../api'
 import { useSession } from '../session'
 import Blob, { BlobSays, greeting, timeAccessory } from '../components/Blob'
@@ -67,6 +67,39 @@ export default function CoursePage() {
       )}
 
       <Link to="/overview" className="chip self-start"><Info size={16} /> Course overview, targets and badges</Link>
+
+      {course.tracks.filter((t) => user.worlds.includes(t.id)).map((t) => (
+        <section key={t.id}>
+          <div className="border-2 border-ink bg-target-soft px-4 py-3">
+            <p className="label">Track</p>
+            <p className="text-xl font-black">{t.title}{user.new_here && ` · ${t.countries[user.new_here.country]}`}</p>
+            <p className="text-sm text-muted">{t.summary}</p>
+          </div>
+          <ol className="mt-3 grid gap-3 md:grid-cols-2">
+            {t.days.map((d) => {
+              const st = user.days[String(d.day)]
+              const open = d.available && st?.unlocked
+              return (
+                <li key={d.day} className={`card flex items-center gap-3 p-3 ${!open ? 'opacity-60' : ''}`}>
+                  <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-full ${st?.practiced ? 'bg-leaf text-white' : 'bg-target text-white'}`}>
+                    {st?.practiced ? <Check size={22} strokeWidth={3} /> : <Globe size={20} />}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-extrabold">{d.title}</p>
+                    <p className="truncate text-xs text-muted">{d.available ? d.technique : 'Being written'}{st?.best_score != null && ` · best ${st.best_score}%`}</p>
+                  </div>
+                  {open && (
+                    <div className="flex shrink-0 gap-1.5">
+                      <Link to={`/read/${d.day}`} aria-label={`Read ${d.title}`} className={`grid h-10 w-10 place-items-center border-2 border-ink ${st?.read ? 'bg-leaf-soft text-leaf' : 'bg-read-soft text-read'}`}><BookOpen size={18} /></Link>
+                      <Link to={`/talk/${d.day}`} aria-label={`Talk ${d.title}`} className="grid h-10 w-10 place-items-center border-2 border-ink bg-talk text-white"><MessageCircle size={18} /></Link>
+                    </div>
+                  )}
+                </li>
+              )
+            })}
+          </ol>
+        </section>
+      ))}
 
       {course.weeks.map((w) => (
         <section key={w.week} className={w.locked ? 'opacity-60' : ''}>
