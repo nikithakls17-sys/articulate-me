@@ -12,7 +12,8 @@ def _model():
 
 
 def embed(texts: list[str]) -> list[list[float]]:
-    return [v.tolist() for v in _model().embed(texts)]
+    # small batches: embedding all 1,138 book chunks at once peaked at ~5 GB RAM
+    return [v.tolist() for v in _model().embed(texts, batch_size=16)]
 
 
 def embed_query(text: str) -> list[float]:

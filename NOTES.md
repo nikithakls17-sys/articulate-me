@@ -20,3 +20,28 @@ Running log of decisions, bugs and fixes. Feeds the "How I Built It" section of 
 
 ## Numbers (local, laptop CPU)
 - Day 0 attempt end to end: 22.0 s (Whisper tiny.en 4.5 s + Gemma grading ~17 s, 410 in / 217 out tokens, 1 LLM call, 0 validator problems).
+
+## Oct 17 evening: first real mic test, low-RAM fixes
+
+- **"It didn't give me anything" was a frontend bug, not grading.** Both of Niki's recordings were transcribed and graded on the server (26.5 s and 59.6 s clips, score 100, 0 validator problems, 46.6 s and 25.4 s end to end on gemma4:e4b). Right after grading, the app refreshed the user's XP; the lesson screen depended on the user object, so it reloaded the Day 0 lesson and jumped back to the record screen, wiping the feedback. Fixed in the redesign (lesson only reloads when the day changes).
+- **Disk full.** Pulling `gemma4:e2b` filled the last 3.3 GB of a 176 GB disk (partial download), which also broke the textbook embedding model download. Deleted the partial file. e2b can't fit on this laptop anyway.
+- **Ingestion RAM.** `ingest_books.py` peaked at ~5 GB because fastembed embedded all 1,138 chunks in one go. Now `batch_size=16`.
+- **Ingestion numbers:** Exploring Public Speaking 788 pages → 619 chunks (239.6 s); Stand up, Speak out 515 pages → 519 chunks (100.4 s). 1,138 chunks, 384-dim bge-small.
+
+### Local model: gemma4:e4b → gemma3:1b (target: fits in ~2 GB)
+
+| | gemma4:e4b | gemma3:1b |
+|---|---|---|
+| Disk | 6.6 GB | 806 MB |
+| RAM while loaded | ~5 GB (free RAM fell 5.8 → 0.7 GB) | 944 MB (llama-server working set) |
+| One-call JSON grading | works (Day 0 sample: 2/2 grounded quotes, 1 call, 17-28 s) | **fails**: echoes the template back (`"id": "<rubric id>"`), or no JSON at all on 2 of 3 runs |
+| Stepwise grading (plain-text questions) | n/a | works: 6-8 calls, 11-21 s |
+| Grading accuracy (3 hand cases) | strong / vague / partial all sensible | strong case right; **vague and partial over-scored** (said "I do a lot of things" shows who you are; "I work in a hospital" counted as a concrete detail) |
+
+- **New `GRADER=stepwise` mode** for tiny models: one plain-text question per call ("YES, PARTLY or NO?", "copy the one sentence that shows it"), JSON assembled in code. Tiny models can't fill JSON templates but can answer one question.
+- Feedback cleanup for 1b: strips "Okay, here are two sentences…:" preambles, markdown, `---` and follow-up questions ("Would you like me to…?"); keeps 2 sentences.
+- **Decision:** local default is now `gemma3:1b` + stepwise (fits the RAM budget). Grading quality is noticeably worse, so hosted mode keeps a bigger Gemma with one-call JSON grading, and `OLLAMA_MODEL=gemma4:e4b GRADER=json` brings the better local grader back on a machine with ~6 GB free.
+
+### Validator holes found by the tiny model
+- **Paraphrased quotes passed.** `partial_ratio` (character-level, best substring) scored "I made a walking journal app for a hackathon *with about 40 people trying it*" ≥ 90 against "…*and, uh, about 40 people tried it*". Switched to **word-level** similarity against same-length windows of the transcript (fillers and apostrophes ignored). Now: paraphrase rejected, quote stitched from two sentences rejected, real quote with "uh" dropped accepted.
+- **Chatty multi-line feedback passed** the 2-sentence rule because line breaks weren't sentence breaks. Newlines now split sentences, and markdown/"here are some options" chatter fails validation.

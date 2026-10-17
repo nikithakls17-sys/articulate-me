@@ -6,14 +6,16 @@ import re
 import time
 
 import sentry_sdk
-from rapidfuzz import fuzz
+from rapidfuzz.distance import Indel
 
 from . import config, llm
 from .course_plan import WORLDS
 from .observability import report_issue
 
 STATUSES = {"used", "partly", "missing"}
+CHATTER = re.compile(r"\*\*|here (are|is) (a|some|the)|option \d|feedback sentences", re.I)
 MATCH_THRESHOLD = 90
+QUOTE_FILLERS = {"um", "umm", "uh", "uhh", "er", "erm", "ah", "hmm"}
 GENERIC = re.compile(r"^\W*(great|good|nice|awesome|amazing|excellent|well done|fantastic)( job| work| effort)?\W*$", re.I)
 
 SYSTEM_V1 = """You are a warm, specific speaking coach. You check whether a learner used today's technique.
@@ -39,12 +41,12 @@ How it works:
 {teach}
 
 Learner's world: {world}
-Drill they answered: {drill}
+Situation: {drill}
 
 Rubric:
 {rubric}
 
-Transcript:
+What was said:
 \"\"\"{transcript}\"\"\"
 
 Return JSON:
@@ -63,14 +65,23 @@ def _norm(s: str) -> str:
 
 
 def quote_in_transcript(quote: str, transcript: str) -> bool:
-    q, t = _norm(quote), _norm(transcript)
-    if not q:
+    """True if the quote matches some same-length run of transcript words at >= 90% similarity.
+    (partial_ratio over the whole transcript was too lenient: it accepted paraphrases.)"""
+    qw = [w for w in _norm(quote).replace("'", "").split() if w not in QUOTE_FILLERS]
+    tw = [w for w in _norm(transcript).replace("'", "").split() if w not in QUOTE_FILLERS]
+    if not qw:
         return False
-    return q in t or fuzz.partial_ratio(q, t) >= MATCH_THRESHOLD
+    # word-level similarity: one changed word in a 10-word quote is ~90%; a paraphrase is not
+    n, best = len(qw), 0.0
+    for size in {max(1, n - 1), n, n + 1}:
+        for i in range(0, max(1, len(tw) - size + 1)):
+            best = max(best, Indel.normalized_similarity(qw, tw[i : i + size]) * 100)
+    return best >= MATCH_THRESHOLD
 
 
 def _split_sentences(s: str) -> list[str]:
-    return [x for x in re.split(r"(?<=[.!?])\s+", s.strip()) if x]
+    # line breaks count as breaks too, so multi-line "Option 1:" style chatter fails the 2-sentence rule
+    return [x for x in re.split(r"(?<=[.!?])\s+|\n+", s.strip()) if x.strip()]
 
 
 def validate(result: dict, rubric: list[dict], transcript: str) -> list[dict]:
@@ -87,7 +98,7 @@ def validate(result: dict, rubric: list[dict], transcript: str) -> list[dict]:
         elif r["status"] in ("used", "partly") and not quote_in_transcript(r.get("evidence", ""), transcript):
             problems.append({"kind": "ungrounded_quote", "rubric_id": item["id"], "detail": r.get("evidence", "")})
     fb = (result.get("feedback") or "").strip()
-    if not fb or len(_split_sentences(fb)) > 2 or GENERIC.match(fb):
+    if not fb or len(_split_sentences(fb)) > 2 or GENERIC.match(fb) or CHATTER.search(fb):
         problems.append({"kind": "feedback_format", "rubric_id": "-", "detail": fb[:200]})
     fix = (result.get("fix") or "").strip()
     if not fix or len(_split_sentences(fix)) > 2 or re.search(r"(^|\n)\s*(\d+[.)]|[-*•])\s", fix):
@@ -138,18 +149,65 @@ def _finalize(result: dict, rubric: list[dict], problems: list[dict]) -> dict:
     }
 
 
-def evaluate(lesson: dict, world: str, drill: str, transcript: str, prompt_version: str | None = None) -> dict:
+def technique_summary(lesson: dict) -> str:
+    steps = next((pg.get("steps") for pg in lesson.get("pages", []) if pg.get("kind") == "steps"), None)
+    if steps:
+        return "\n".join(f"- {s['label']}: {s['text']}" for s in steps)
+    return "- (baseline: no technique taught yet)"
+
+
+def _first_sentences(text: str, n: int) -> str:
+    """Keep the first n real sentences, dropping chatter lines like 'Here are some options:' and markdown."""
+    lines = [l for l in re.split(r"\n+", text or "") if l.strip() and not CHATTER.search(l)]
+    text = re.sub(r"[*“”]|-{2,}", "", " ".join(lines))
+    text = re.sub(r"^.{0,160}?\bhere (are|is)\b[^:]{0,120}:\s*", "", text, flags=re.I)  # "Okay, here are two...:"
+    sents = [x for x in _split_sentences(text) if not x.rstrip().endswith("?")]
+    return " ".join(sents[:n]).strip().strip('"\u201c\u201d ')
+
+
+def _grade_stepwise(rubric: list[dict], said: str, call_text) -> dict:
+    """For small local models (gemma3:1b): one plain-text question per call, JSON assembled here.
+    Tiny models echo JSON templates back but answer YES/NO and 'copy the sentence' reliably."""
+    ctx = f'What the learner said:\n"""{said}"""\n\n'
+    graded = []
+    for r in rubric:
+        a = call_text(ctx + f"Did the learner do this: {r['check']}?\nAnswer NO if they were vague or general. "
+                      "Reply with exactly one word: YES, PARTLY, or NO.", 5).upper()
+        status = "used" if "YES" in a else "partly" if "PART" in a else "missing"
+        evidence = ""
+        if status != "missing":
+            ask = (ctx + f"Copy, word for word, the ONE sentence the learner said that shows this: {r['check']}. "
+                   "Reply with only that sentence.")
+            evidence = call_text(ask, 60).strip('"\u201c\u201d\' ')
+            if not quote_in_transcript(evidence, said):
+                evidence = call_text(ask + " Do not change any words.", 60).strip('"\u201c\u201d\' ')
+        graded.append({"id": r["id"], "status": status, "evidence": evidence})
+    weakest = next((r for r, g in zip(rubric, graded) if g["status"] != "used"), None)
+    target = weakest["check"] if weakest else "sounding even more confident and direct"
+    fix = _first_sentences(call_text(
+        ctx + f"Talking to the learner as 'you', give ONE short sentence starting with a verb on how to improve at: {target}", 50), 1)
+    rewrite = _first_sentences(call_text(
+        ctx + f"Write ONE better sentence the learner could have said that shows: {target}. Reply with only the sentence.", 60), 1)
+    fb = _first_sentences(call_text(
+        ctx + "Talking to the learner as 'you', write 1 or 2 short, kind, specific sentences about what worked. "
+        "Quote a few of their exact words. Do not ask questions.", 80), 2)
+    return {"rubric": graded, "feedback": fb, "fix": fix, "rewrite": rewrite}
+
+
+def evaluate(lesson: dict, world: str, situation: str, transcript: str, conversation: str | None = None,
+             prompt_version: str | None = None) -> dict:
+    """transcript = only the learner's words (what evidence is checked against).
+    conversation = optional full dialogue, so the grader sees what the partner asked."""
     pv = prompt_version or config.PROMPT_VERSION
-    system = PROMPTS.get(pv, SYSTEM_V1)
     rubric = lesson["rubric"]
-    teach = "\n".join(f"- {t}" for t in lesson.get("teach", [])) or "- (baseline: no technique taught yet)"
-    user = USER_TMPL.format(
-        technique=lesson["technique"], title=lesson["title"], teach=teach, world=WORLDS.get(world, world),
-        drill=drill, rubric="\n".join(f'- {r["id"]}: {r["check"]}' for r in rubric), transcript=transcript,
-    )
-    messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     stats = {"llm_calls": 0, "input_tokens": 0, "output_tokens": 0, "llm_latency_ms": 0}
     t0 = time.perf_counter()
+
+    def tally(out):
+        stats["llm_calls"] += 1
+        stats["input_tokens"] += out["input_tokens"]
+        stats["output_tokens"] += out["output_tokens"]
+        stats["llm_latency_ms"] += out["latency_ms"]
 
     def call(msgs):
         try:
@@ -158,25 +216,42 @@ def evaluate(lesson: dict, world: str, drill: str, transcript: str, prompt_versi
             # unparseable output (or an empty reply when the box is out of memory): treat as a failed pass
             report_issue("llm: unparseable grading output", kind="unparseable", day=lesson["day"], error=str(e)[:80])
             data, out = {}, {"text": "", "input_tokens": 0, "output_tokens": 0, "latency_ms": 0}
-        stats["llm_calls"] += 1
-        stats["input_tokens"] += out["input_tokens"]
-        stats["output_tokens"] += out["output_tokens"]
-        stats["llm_latency_ms"] += out["latency_ms"]
+        tally(out)
         return data, out["text"]
+
+    def call_text(prompt, max_tokens):
+        out = llm.chat([{"role": "user", "content": prompt}], temperature=0.1, max_tokens=max_tokens,
+                       operation="grade_step")
+        tally(out)
+        return out["text"].strip()
 
     with sentry_sdk.start_span(op="gen_ai.invoke_agent", name=f"coach day {lesson['day']}") as span:
         span.set_data("gen_ai.agent.name", "speaking-coach")
         span.set_data("prompt_version", pv)
-        result, raw = call(messages)
-        problems = validate(result, rubric, transcript)
-        first_problems = list(problems)
-        if problems:
-            messages += [{"role": "assistant", "content": raw or "{}"},
-                         {"role": "user", "content": _retry_message(problems)}]
-            retry, _ = call(messages)
-            retry_problems = validate(retry, rubric, transcript)
-            if len(retry_problems) <= len(problems):
-                result, problems = retry, retry_problems
+        span.set_data("grader", config.GRADER)
+        if config.GRADER == "stepwise":
+            result = _grade_stepwise(rubric, transcript, call_text)
+            problems = validate(result, rubric, transcript)
+            first_problems = list(problems)
+        else:
+            heard = transcript if not conversation else (
+                f"{conversation}\n\nThe learner's lines only (evidence must be copied from these):\n{transcript}")
+            user = USER_TMPL.format(
+                technique=lesson["technique"], title=lesson["title"], teach=technique_summary(lesson),
+                world=WORLDS.get(world, world), drill=situation,
+                rubric="\n".join(f'- {r["id"]}: {r["check"]}' for r in rubric), transcript=heard,
+            )
+            messages = [{"role": "system", "content": PROMPTS.get(pv, SYSTEM_V1)}, {"role": "user", "content": user}]
+            result, raw = call(messages)
+            problems = validate(result, rubric, transcript)
+            first_problems = list(problems)
+            if problems:
+                messages += [{"role": "assistant", "content": raw or "{}"},
+                             {"role": "user", "content": _retry_message(problems)}]
+                retry, _ = call(messages)
+                retry_problems = validate(retry, rubric, transcript)
+                if len(retry_problems) <= len(problems):
+                    result, problems = retry, retry_problems
         for p in problems:
             report_issue(f"validator: {p['kind']}", rubric_id=p["rubric_id"], day=lesson["day"], kind=p["kind"])
         span.set_data("validator.first_pass_problems", len(first_problems))
@@ -186,7 +261,7 @@ def evaluate(lesson: dict, world: str, drill: str, transcript: str, prompt_versi
         raise GradingFailed("The coach couldn't grade that one. Please try again.")
     final = _finalize(result, rubric, problems)
     final["validator"] = {"first_pass": [p["kind"] for p in first_problems], "final": [p["kind"] for p in problems],
-                          "retried": bool(first_problems)}
+                          "retried": bool(first_problems) and config.GRADER != "stepwise"}
     final["stats"] = {**stats, "total_ms": int((time.perf_counter() - t0) * 1000), "prompt_version": pv,
-                      "model": llm.model_name()}
+                      "model": llm.model_name(), "grader": config.GRADER}
     return final

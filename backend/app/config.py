@@ -16,11 +16,13 @@ HOSTED = MODE == "hosted"
 
 LLM_PROVIDER = _env("LLM_PROVIDER", "digitalocean" if HOSTED else "ollama")
 OLLAMA_BASE_URL = _env("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-OLLAMA_MODEL = _env("OLLAMA_MODEL", "gemma4:e4b")
+OLLAMA_MODEL = _env("OLLAMA_MODEL", "gemma3:1b")
 DO_INFERENCE_BASE_URL = _env("DO_INFERENCE_BASE_URL", "https://inference.do-ai.run/v1")
 DO_MODEL_ACCESS_KEY = _env("DO_MODEL_ACCESS_KEY")
 DO_MODEL = _env("DO_MODEL")
 PROMPT_VERSION = _env("PROMPT_VERSION", "v1")
+# json = one call returns the whole grade (Gemma 4 / hosted); stepwise = one plain-text question per call (tiny models)
+GRADER = _env("GRADER", "json" if HOSTED else "stepwise")
 
 STT_PROVIDER = _env("STT_PROVIDER", "elevenlabs" if HOSTED else "whisper")
 WHISPER_MODEL = _env("WHISPER_MODEL", "base.en")

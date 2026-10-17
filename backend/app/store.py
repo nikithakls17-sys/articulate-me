@@ -19,7 +19,7 @@ class MongoStore:
     def __init__(self, uri: str, db: str):
         from pymongo import MongoClient
 
-        self.db = MongoClient(uri, appname="i-talk-you-listen")[db]
+        self.db = MongoClient(uri, appname="articulate-me")[db]
         self.db.attempts.create_index([("user_id", 1), ("created_at", -1)])
 
     def get_lesson(self, day: int):
@@ -42,6 +42,22 @@ class MongoStore:
 
     def list_attempts(self, user_id: str):
         return list(self.db.attempts.find({"user_id": user_id}, {"_id": 0}).sort("created_at", 1))
+
+    # generic docs (notes, conversations, quiz results), keyed by "id"
+    def insert(self, coll: str, doc: dict):
+        self.db[coll].insert_one(dict(doc))
+
+    def get(self, coll: str, doc_id: str):
+        return self.db[coll].find_one({"id": doc_id}, {"_id": 0})
+
+    def find(self, coll: str, **flt):
+        return list(self.db[coll].find(flt, {"_id": 0}).sort("created_at", 1))
+
+    def update(self, coll: str, doc_id: str, fields: dict):
+        self.db[coll].update_one({"id": doc_id}, {"$set": fields})
+
+    def delete(self, coll: str, doc_id: str):
+        self.db[coll].delete_one({"id": doc_id})
 
     def replace_chunks(self, book: str, chunks: list[dict]):
         self.db.chunks.delete_many({"book": book})
@@ -111,6 +127,29 @@ class LocalStore:
 
     def list_attempts(self, user_id: str):
         return sorted([a for a in self._load("attempts") if a["user_id"] == user_id], key=lambda a: a["created_at"])
+
+    def insert(self, coll: str, doc: dict):
+        with self.lock:
+            self._save(coll, self._load(coll) + [doc])
+
+    def get(self, coll: str, doc_id: str):
+        return next((d for d in self._load(coll) if d.get("id") == doc_id), None)
+
+    def find(self, coll: str, **flt):
+        rows = [d for d in self._load(coll) if all(d.get(k) == v for k, v in flt.items())]
+        return sorted(rows, key=lambda d: d.get("created_at", ""))
+
+    def update(self, coll: str, doc_id: str, fields: dict):
+        with self.lock:
+            rows = self._load(coll)
+            for d in rows:
+                if d.get("id") == doc_id:
+                    d.update(fields)
+            self._save(coll, rows)
+
+    def delete(self, coll: str, doc_id: str):
+        with self.lock:
+            self._save(coll, [d for d in self._load(coll) if d.get("id") != doc_id])
 
     def _chunk_file(self) -> Path:
         return config.DATA_DIR / "chunks.jsonl"
