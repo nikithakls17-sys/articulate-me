@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Check, Highlighter, Target, Trash2 } from 'lucide-react'
+import { Check, Highlighter, Pause, Play, RotateCcw, Target, Trash2 } from 'lucide-react'
 import { api, type Note, type Progress } from '../api'
 import { useSession } from '../session'
 import { mmss, useStudy, type StudyTab } from '../study'
@@ -168,16 +168,16 @@ function TargetsTab() {
 
 function TimerTab() {
   const { user } = useSession()
-  const { seconds, goalMin, setGoalMin } = useStudy()
+  const { seconds, goalMin, setGoalMin, running, startTimer, pauseTimer, resetTimer } = useStudy()
   const goal = goalMin * 60
   const left = Math.max(0, goal - seconds)
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       <div className="flex items-end gap-3">
         <Hourglass progress={seconds / goal} size={120} />
-        <Blob mood={left ? 'calm' : 'proud'} accessory={left ? 'coffee' : 'cap'} size={64} />
+        <Blob mood={!left ? 'proud' : running ? 'calm' : 'sleepy'} accessory={!left ? 'cap' : running ? 'coffee' : 'nightcap'} size={64} />
       </div>
-      <p className="text-lg">{left ? `Keep going, ${user?.name}. ${Math.ceil(left / 60)} minutes to today's goal.` : `Goal met, ${user?.name}. Proud of you.`}</p>
+      <p className="text-lg">{!left ? `Goal met, ${user?.name}. Proud of you.` : running ? `Keep going, ${user?.name}. ${Math.ceil(left / 60)} minutes to today's goal.` : `Ready when you are, ${user?.name}. Press Start when you begin.`}</p>
       <div>
         <p className="font-heading text-4xl font-bold tabular-nums">{mmss(seconds)}</p>
         <p className="label text-muted">studied today</p>
@@ -185,6 +185,12 @@ function TimerTab() {
       <div className="grid w-full grid-cols-2 border-2 border-ink">
         <div className="p-2"><p className="font-heading text-xl font-bold tabular-nums">{goalMin}:00</p><p className="label text-muted">daily goal</p></div>
         <div className="border-l-2 border-ink p-2"><p className="font-heading text-xl font-bold tabular-nums">{mmss(left)}</p><p className="label text-muted">{left ? 'left' : 'goal met'}</p></div>
+      </div>
+      <div className="grid w-full grid-cols-[1fr_auto] gap-2">
+        {running
+          ? <button className="btn bg-timer text-white" onClick={pauseTimer}><Pause size={18} fill="currentColor" /> Pause</button>
+          : <button className="btn bg-timer-soft" onClick={startTimer}><Play size={18} fill="currentColor" /> {seconds ? 'Resume' : 'Start studying'}</button>}
+        <button className="btn-ghost px-3" onClick={resetTimer} disabled={!seconds && !running} aria-label="Reset today's time"><RotateCcw size={18} /></button>
       </div>
       <div className="w-full">
         <p className="label text-left">Daily goal</p>
@@ -195,7 +201,7 @@ function TimerTab() {
           ))}
         </div>
       </div>
-      <p className="text-sm text-muted">Time counts while Articulate Me is open and you're active. It resets at midnight.</p>
+      <p className="text-sm text-muted">Time only counts while the timer is running. Press Start when you sit down to study and Pause when you stop. It resets at midnight.</p>
     </div>
   )
 }

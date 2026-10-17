@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 import { localDate } from './api'
 
 export type StudyTab = 'notes' | 'targets' | 'timer'
@@ -11,6 +11,10 @@ interface Study {
   drawer: boolean
   setDrawer: (open: boolean) => void
   seconds: number            // studied today
+  running: boolean
+  startTimer: () => void
+  pauseTimer: () => void
+  resetTimer: () => void
   goalMin: number
   setGoalMin: (m: number) => void
   notesVersion: number
@@ -21,47 +25,49 @@ interface Study {
 
 const Ctx = createContext<Study>(null as unknown as Study)
 
-function load(): { date: string; seconds: number } {
+/** Saved per day: time banked so far + when the current run started (null = paused). Timestamps, not ticks,
+ *  so the count stays right across reloads, sleeping laptops and background tabs. */
+interface Saved { date: string; banked: number; startedAt: number | null }
+
+function load(): Saved {
   try {
     const v = JSON.parse(localStorage.getItem(KEY) || 'null')
-    if (v && v.date === localDate()) return v
+    if (v && v.date === localDate() && typeof v.banked === 'number') return v
   } catch { /* storage blocked */ }
-  return { date: localDate(), seconds: 0 }
+  return { date: localDate(), banked: 0, startedAt: null }
 }
+function save(v: Saved) {
+  try { localStorage.setItem(KEY, JSON.stringify(v)) } catch { /* ignore */ }
+}
+const elapsed = (v: Saved) => v.banked + (v.startedAt ? (Date.now() - v.startedAt) / 1000 : 0)
 
-/** Study state shared by the side panel, the hourglass and the pages. Time only counts while the
- *  tab is visible and the learner has interacted in the last 2 minutes, so an idle open tab doesn't. */
-export function StudyProvider({ children, active }: { children: ReactNode; active: boolean }) {
+/** Study state shared by the side panel, the hourglass and the pages. The timer only runs when the learner
+ *  presses Start (an open tab isn't the same as studying) and stops on Pause. */
+export function StudyProvider({ children }: { children: ReactNode; active?: boolean }) {
   const [tab, setTab] = useState<StudyTab>('notes')
   const [drawer, setDrawer] = useState(false)
-  const [seconds, setSeconds] = useState(() => load().seconds)
+  const [saved, setSaved] = useState<Saved>(load)
+  const [, tick] = useState(0)
   const [goalMin, setGoal] = useState(() => {
     try { return Number(localStorage.getItem(GOAL_KEY)) || 15 } catch { return 15 }
   })
   const [notesVersion, setNotesVersion] = useState(0)
   const [targetsVersion, setTargetsVersion] = useState(0)
-  const lastInput = useRef(Date.now())
+  const running = saved.startedAt !== null
 
   useEffect(() => {
-    const bump = () => { lastInput.current = Date.now() }
-    const evs = ['pointerdown', 'keydown', 'scroll', 'touchstart']
-    evs.forEach((e) => window.addEventListener(e, bump, { passive: true }))
-    return () => evs.forEach((e) => window.removeEventListener(e, bump))
-  }, [])
-
-  useEffect(() => {
-    if (!active) return
+    if (!running) return
     const t = window.setInterval(() => {
-      if (document.visibilityState !== 'visible' || Date.now() - lastInput.current > 120_000) return
-      setSeconds((s) => {
-        const cur = load()
-        const next = cur.date === localDate() ? Math.max(s, cur.seconds) + 1 : 1
-        try { localStorage.setItem(KEY, JSON.stringify({ date: localDate(), seconds: next })) } catch { /* ignore */ }
-        return next
-      })
+      if (saved.date !== localDate()) { const fresh = { date: localDate(), banked: 0, startedAt: Date.now() }; save(fresh); setSaved(fresh) }
+      tick((n) => n + 1)
     }, 1000)
     return () => window.clearInterval(t)
-  }, [active])
+  }, [running, saved.date])
+
+  const update = (v: Saved) => { save(v); setSaved(v) }
+  const startTimer = () => { if (!running) update({ ...load(), startedAt: Date.now() }) }
+  const pauseTimer = () => { if (running) update({ date: saved.date, banked: elapsed(saved), startedAt: null }) }
+  const resetTimer = () => update({ date: localDate(), banked: 0, startedAt: null })
 
   const setGoalMin = (m: number) => {
     setGoal(m)
@@ -71,7 +77,8 @@ export function StudyProvider({ children, active }: { children: ReactNode; activ
   const refreshTargets = useCallback(() => setTargetsVersion((v) => v + 1), [])
 
   return (
-    <Ctx.Provider value={{ tab, setTab, drawer, setDrawer, seconds, goalMin, setGoalMin, notesVersion, notesChanged, targetsVersion, refreshTargets }}>
+    <Ctx.Provider value={{ tab, setTab, drawer, setDrawer, seconds: Math.floor(elapsed(saved)), running, startTimer, pauseTimer, resetTimer,
+      goalMin, setGoalMin, notesVersion, notesChanged, targetsVersion, refreshTargets }}>
       {children}
     </Ctx.Provider>
   )

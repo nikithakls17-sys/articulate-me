@@ -1,4 +1,4 @@
-import { BookOpen, Library, Map, MessageCircle, PanelRightClose, PanelRightOpen, TrendingUp } from 'lucide-react'
+import { BookOpen, Library, Map, MessageCircle, PanelRightClose, PanelRightOpen, Pause, Play, TrendingUp } from 'lucide-react'
 import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useSession } from './session'
 import { Logo } from './icons'
@@ -27,7 +27,7 @@ const TABS = [
 ]
 
 function HourglassButton() {
-  const { seconds, goalMin, setTab, setDrawer } = useStudy()
+  const { seconds, goalMin, running, startTimer, pauseTimer, setTab, setDrawer } = useStudy()
   const laptop = useMedia('(min-width: 1024px)')
   const tablet = useMedia('(min-width: 768px)')
   const nav = useNavigate()
@@ -38,11 +38,17 @@ function HourglassButton() {
     else nav('/study')
   }
   return (
-    <button onClick={open} className="flex items-center gap-1.5 border-2 border-ink bg-white px-2 py-1 shadow-[3px_3px_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-      aria-label={`Study timer: ${mmss(seconds)} of ${goalMin} minutes. Open timer.`}>
-      <Hourglass progress={seconds / (goalMin * 60)} size={22} />
-      <span className="label whitespace-nowrap tabular-nums">{mmss(seconds)} / {goalMin}:00</span>
-    </button>
+    <div className="flex items-stretch border-2 border-ink bg-white shadow-[3px_3px_0_var(--ink)]">
+      <button onClick={open} className="flex items-center gap-1.5 px-2 py-1"
+        aria-label={`Study timer: ${mmss(seconds)} of ${goalMin} minutes${running ? ', running' : ', paused'}. Open timer.`}>
+        <Hourglass progress={seconds / (goalMin * 60)} size={22} />
+        <span className={`label whitespace-nowrap tabular-nums ${running ? 'text-timer' : ''}`}>{mmss(seconds)} / {goalMin}:00</span>
+      </button>
+      <button onClick={running ? pauseTimer : startTimer} className={`grid w-8 place-items-center border-l-2 border-ink ${running ? 'bg-timer text-white' : 'bg-timer-soft'}`}
+        aria-label={running ? 'Pause study timer' : 'Start study timer'}>
+        {running ? <Pause size={15} fill="currentColor" /> : <Play size={15} fill="currentColor" />}
+      </button>
+    </div>
   )
 }
 
