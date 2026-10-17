@@ -1,0 +1,12 @@
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+python-dotenv==1.0.1
+openai==1.58.1
+httpx==0.28.1
+pymongo==4.10.1
+sentry-sdk[fastapi]==2.19.2
+fastembed==0.4.2
+numpy<2.1
+rapidfuzz==3.11.0
+pypdf==5.1.0
