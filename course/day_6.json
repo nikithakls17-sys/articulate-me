@@ -15,16 +15,16 @@
       "title": "How Know your audience works",
       "steps": [
         {
-          "label": "Analyze Audience",
-          "text": "Look at demographics like age and occupation to find a starting point for your speech."
+          "label": "Ask who",
+          "text": "Who is listening, and what do they already know about this?"
         },
         {
-          "label": "Infer Needs",
-          "text": "Guess what your listeners already know or value based on that data."
+          "label": "Keep the core",
+          "text": "Decide the one message that stays the same for every listener."
         },
         {
-          "label": "Adjust Language",
-          "text": "Change your vocabulary and examples so they fit the listeners' knowledge and context."
+          "label": "Adjust the words",
+          "text": "Change vocabulary, detail and examples so they fit what this listener knows."
         }
       ],
       "cite": {
@@ -60,19 +60,23 @@
     },
     {
       "kind": "table",
-      "title": "Adapting Your Content",
+      "title": "Same message, two listeners",
       "columns": [
-        "Audience",
-        "Approach"
+        "For an expert",
+        "For a beginner"
       ],
       "rows": [
         [
-          "Teachers",
-          "Assume they value education"
+          "\"I refactored the API to cut latency.\"",
+          "\"I rebuilt how the app talks to the server.\""
         ],
         [
-          "Non-teachers",
-          "Explain why education is valuable"
+          "\"p95 dropped from 800 to 300 ms.\"",
+          "\"Pages now load about twice as fast.\""
+        ],
+        [
+          "Skip the basics",
+          "One everyday comparison"
         ]
       ],
       "cite": {
@@ -87,10 +91,10 @@
     {
       "kind": "before_after",
       "title": "Before and after",
-      "situation": "Explaining a project to different people.",
-      "before": "My project uses a New Deal style approach to fix the local economy.",
-      "after": "My project uses a government-funded program, similar to how the 1930s 'New Deal' worked, to fix the economy.",
-      "why": "Younger adults may not know specific historical terms like 'New Deal.'"
+      "situation": "A friend with no tech background asks what you worked on.",
+      "before": "I refactored our API layer so the p95 latency dropped a lot.",
+      "after": "I rebuilt how our app talks to the server, so pages now load about twice as fast.",
+      "why": "Same core message, with the jargon swapped for words this listener already knows."
     },
     {
       "kind": "why",
@@ -112,14 +116,14 @@
   ],
   "quiz": [
     {
-      "q": "You are speaking to a group of teenagers. How should you apply the 'Analyze Audience' step?",
+      "q": "You are about to explain your job to a room of high school students. What should you work out first?",
       "options": [
-        "Use a wide range of complex vocabulary",
-        "Check their age to determine a starting point",
-        "Assume they already know all historical references"
+        "Which technical terms sound most impressive",
+        "What they already know about your field",
+        "How to fit in every detail"
       ],
       "answer": 1,
-      "explain": "Demographics like age help you find a starting point for your speech."
+      "explain": "Start from who is listening and what they already know."
     },
     {
       "q": "Based on your audience data, you realize your listeners are unfamiliar with a specific technical term. What is the next step?",
@@ -132,14 +136,14 @@
       "explain": "Adjusting language ensures the message fits the listeners' knowledge."
     },
     {
-      "q": "Why would you change 'New Deal style' to 'government-funded program' when speaking to younger adults?",
+      "q": "You explain the same project to your manager and then to your grandmother. What should stay the same?",
       "options": [
-        "To make the sentence longer",
-        "To reduce the risk of misunderstandings",
-        "To avoid using demographics"
+        "The core message",
+        "The vocabulary",
+        "The level of detail"
       ],
-      "answer": 1,
-      "explain": "Adjusting language helps you connect and prevents misunderstandings."
+      "answer": 0,
+      "explain": "Words and detail change for each listener; the core message doesn't."
     }
   ],
   "examples": {

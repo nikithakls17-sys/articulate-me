@@ -64,19 +64,23 @@
     },
     {
       "kind": "table",
-      "title": "Effective Signposting",
+      "title": "Lost listener vs. guided listener",
       "columns": [
-        "Avoid",
-        "Use"
+        "Without signposts",
+        "With signposts"
       ],
       "rows": [
         [
-          "Complex phrasing",
-          "Simplistic signposts"
+          "Starts with step one, no warning",
+          "\"There are three steps.\""
         ],
         [
-          "Disconnected points",
-          "Brief markers like 'First'"
+          "\"And then... and also...\"",
+          "\"First... next... finally...\""
+        ],
+        [
+          "Just stops",
+          "\"So: pull, check, send.\""
         ]
       ],
       "cite": {
@@ -91,10 +95,10 @@
     {
       "kind": "before_after",
       "title": "Before and after",
-      "situation": "Explaining how to make a sandwich.",
-      "before": "Get bread. Put jam on it. Eat it.",
-      "after": "I'll show you in three steps. First, get bread. Next, put jam on it. Finally, eat it. To sum up, that is how you make a sandwich.",
-      "why": "It uses a preview, clear signposts, and a summary."
+      "situation": "A new teammate asks how the weekly report gets made.",
+      "before": "So you pull the numbers and there's the dashboard thing and then someone checks it, and it goes out, and also you have to tag the team lead.",
+      "after": "There are three steps. First, pull the numbers from the dashboard. Next, ask the team lead to check them. Finally, send it out on Friday. So: pull, check, send.",
+      "why": "A preview, an ordering word before each step and a one-line sum-up."
     },
     {
       "kind": "why",

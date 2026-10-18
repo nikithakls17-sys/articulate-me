@@ -16,15 +16,15 @@
       "steps": [
         {
           "label": "Acknowledge",
-          "text": "Actively listen to the question to help you formulate your answer."
+          "text": "Show you heard the question, or the worry behind it."
         },
         {
           "label": "Bridge",
-          "text": "Use a transition phrase to connect the question to your response."
+          "text": "Use a phrase like 'what I can tell you is' to move to your answer."
         },
         {
           "label": "Answer",
-          "text": "Be short and sweet. If you lack specific info, explain that honestly."
+          "text": "Short and direct. If you don't know, say so honestly. Don't dodge."
         }
       ],
       "cite": {
@@ -41,8 +41,8 @@
       "title": "Key terms",
       "terms": [
         {
-          "term": "Regulators",
-          "meaning": "Gestures that control the flow of interaction."
+          "term": "Active listening",
+          "meaning": "Paying full attention to the question before you answer it."
         },
         {
           "term": "Transitions",
@@ -144,7 +144,7 @@
   ],
   "examples": {
     "student": "That is a fair question regarding the methodology. Moving to the data, I focused on a smaller sample size to ensure accuracy. While I don't have the national figures, the local trend is clear.",
-    "job_seeker": "I appreciate you bringing up my gap in employment. To give you some context, I spent that year focusing on professional certifications. This allowed me to return to the workforce with advanced technical skills.",
+    "job_seeker": "That's a fair question, and I can see why three industries looks like drifting. What I can tell you is that each move built one skill: analysing customers. That's exactly the skill this role needs.",
     "customer_facing": "I hear your frustration regarding the delay. What I can do right now is provide a complimentary upgrade while we track the shipment. I don't have the exact arrival time, but I will monitor it personally.",
     "creator": "I see why you'd feel the plot twist was rushed. To explain the creative choice, I wanted to emphasize the chaos of the moment. I'm still refining that scene in the edit to make it smoother.",
     "everyday": "I understand you're stressed about the party planning. That being said, I simply cannot host it at my house this year. I'm happy to help you find a great venue instead.",
@@ -185,7 +185,7 @@
       "partner": "Dave",
       "role": "A curious coworker",
       "setup": "You recently moved from abroad and are eating lunch with colleagues.",
-      "opening": "Why do people in your country do things that way? It seems completely inefficient compared to how we do it here."
+      "opening": "Can I ask you something honestly? Why did you leave a good job back home to start over here? That seems like a big risk."
     }
   },
   "rubric": [
