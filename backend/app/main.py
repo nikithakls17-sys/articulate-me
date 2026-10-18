@@ -580,12 +580,32 @@ def explain(conv_id: str, body: ExplainBody):
 
 # ---------- feedback corner ----------
 
+# Tap-answer questions on the feedback card: id -> option ids. The frontend holds the labels (api.ts FEEDBACK_OPTIONS).
+LIKED = ("pages", "flip", "partner", "voices", "quoting", "new_here", "notes", "characters", "progress")
+OFF = ("too_long", "too_slow", "confusing_nav", "robotic", "generic", "nothing")
+RETRY = ("yes", "somewhat", "no", "no_retry")
+YMN = ("yes", "maybe", "no")
+PRICE = ("0", "1-3", "3-5", "5-10")
+WHO = ("students", "job_seekers", "customer_facing", "creators", "international", "everyone")
+CHOICES = {"liked": LIKED, "off": OFF, "retry_help": RETRY, "come_back": YMN, "pay": YMN, "fair_price": PRICE, "who": WHO}
+MULTI = ("liked", "off", "who")
+
+
 class FeedbackBody(BaseModel):
     user_id: str | None = None  # only used to look up worlds and metrics; never stored
     context: Literal["lesson", "practice", "menu"] = "menu"
     day: int | None = None
     rating: int | None = Field(None, ge=1, le=5)
-    pay: Literal["yes", "maybe", "no"] | None = None
+    design: int | None = Field(None, ge=1, le=5)
+    liked: list[Literal[LIKED]] = Field([], max_length=len(LIKED))  # type: ignore[valid-type]
+    off: list[Literal[OFF]] = Field([], max_length=len(OFF))  # type: ignore[valid-type]
+    retry_help: Literal[RETRY] | None = None  # type: ignore[valid-type]
+    come_back: Literal[YMN] | None = None  # type: ignore[valid-type]
+    pay: Literal[YMN] | None = None  # type: ignore[valid-type]
+    fair_price: Literal[PRICE] | None = None  # type: ignore[valid-type]
+    who: list[Literal[WHO]] = Field([], max_length=len(WHO))  # type: ignore[valid-type]
+    improve: str = Field("", max_length=300)
+    # first version of the card; old responses still have these
     want_next: str = Field("", max_length=500)
     confusing: str = Field("", max_length=500)
     first_name: str = Field("", max_length=40)
@@ -604,8 +624,12 @@ def _metric_snapshot(a: dict | None) -> dict | None:
 @app.post("/api/feedback")
 def send_feedback(body: FeedbackBody):
     """Anonymous: no user id, audio or transcripts are stored, only numbers from the first and latest attempt."""
-    want, confusing, name = body.want_next.strip(), body.confusing.strip(), body.first_name.strip()
-    if body.rating is None and body.pay is None and not want and not confusing:
+    text = {k: getattr(body, k).strip() for k in ("improve", "want_next", "confusing", "first_name")}
+    picks = {k: sorted(set(getattr(body, k)), key=CHOICES[k].index) for k in MULTI}
+    single = {k: getattr(body, k) for k in ("rating", "design", "retry_help", "come_back", "pay")}
+    # the fair-price follow-up is only asked after Maybe or No
+    single["fair_price"] = body.fair_price if body.pay in ("maybe", "no") else None
+    if not any(single.values()) and not any(picks.values()) and not any(text.values()):
         raise HTTPException(400, "Answer at least one question first")
     user = _normalize(store().get_user(body.user_id)) if body.user_id else None
     attempts = store().list_attempts(body.user_id) if user else []
@@ -615,7 +639,7 @@ def send_feedback(body: FeedbackBody):
     doc = {
         "id": uuid.uuid4().hex, "created_at": now_iso(), "context": body.context, "day": body.day,
         "lesson": plan["technique"] if plan else None, "worlds": user["worlds"] if user else [],
-        "rating": body.rating, "pay": body.pay, "want_next": want, "confusing": confusing, "first_name": name,
+        **single, **picks, **text,
         "attempts": len(attempts), "before": _metric_snapshot(first), "after": _metric_snapshot(latest),
     }
     store().insert("feedback", doc)
@@ -627,6 +651,12 @@ def _avg(xs: list) -> float | None:
     return round(sum(xs) / len(xs), 1) if xs else None
 
 
+def _tally(rows: list[dict], q: str, opts: tuple) -> dict:
+    answers = [r.get(q) for r in rows if r.get(q) not in (None, [], "")]
+    picked = lambda v, o: o in v if isinstance(v, list) else v == o  # noqa: E731
+    return {"answered": len(answers), "counts": {str(o): sum(picked(v, o) for v in answers) for o in opts}}
+
+
 @app.get("/api/admin/feedback")
 def admin_feedback(x_admin_password: str = Header("")):
     if not config.ADMIN_PASSWORD:
@@ -634,15 +664,15 @@ def admin_feedback(x_admin_password: str = Header("")):
     if not secrets.compare_digest(x_admin_password.encode(), config.ADMIN_PASSWORD.encode()):
         raise HTTPException(401, "Wrong password")
     rows = sorted(store().find("feedback"), key=lambda d: d["created_at"], reverse=True)
-    paid = [r["pay"] for r in rows if r.get("pay")]
     paired = [r for r in rows if r.get("before") and r.get("after")]
     return {
         "summary": {
             "responses": len(rows),
             "avg_rating": _avg([r.get("rating") for r in rows]),
-            "ratings": len([r for r in rows if r.get("rating")]),
-            "pay": {k: round(100 * paid.count(k) / len(paid)) if paid else 0 for k in ("yes", "maybe", "no")},
-            "pay_answers": len(paid),
+            "avg_design": _avg([r.get("design") for r in rows]),
+            # per question: how many answered it, and how many picked each option (multi-pick counts can sum past it)
+            "questions": {q: _tally(rows, q, opts) for q, opts in
+                          {"rating": tuple(range(1, 6)), "design": tuple(range(1, 6)), **CHOICES}.items()},
             "with_progress": len(paired),
             "before": {k: _avg([r["before"].get(k) for r in paired]) for k in METRIC_KEYS},
             "after": {k: _avg([r["after"].get(k) for r in paired]) for k in METRIC_KEYS},

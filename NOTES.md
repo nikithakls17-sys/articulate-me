@@ -155,3 +155,16 @@ New read-aloud (`reading.ts`): every sentence / step / key term / table cell on 
   - WES 41%: confirmed in the report PDF, p. 10 ("41% of international students say it is difficult to form close friendships with domestic students"); 2019 survey of international students at U.S. institutions, 1,921 responses.
   - Coach $100-300/hour: VocalImage's coach page ("typically runs $100-300 per hour"). It's a speaking-app company, which the footnote says; Yoodli (also an app) says ~$150/hour.
   - NACE: now uses the draft's 98.7% / 55.4% (Job Outlook 2026). The report itself is members-only, so the footnote cites Purdue Global's summary, which gives the same pair (Jobscan's 2026 write-up matches too). Fallback if that page goes: NACE's public Job Outlook 2025 figures, 96.1% / 53.5% (NACE article, Jan 13 2025).
+
+## Feedback card v2 + "Practice this" (Oct 19, on main)
+- Card is now mostly taps, under a minute: usefulness 1-5, liked (pick any), felt off (pick any; "Nothing" clears the rest),
+  design 1-5, retry helped, come back tomorrow, pay $5 (Maybe/No opens "what price feels fair"), who should use it, one
+  short "improve" line. First name dropped: the brief said anonymous, so no name field any more.
+- Option ids live in two places that must match: CHOICES in backend/app/main.py and FEEDBACK_OPTIONS in frontend/src/api.ts.
+  Backend rejects unknown ids (422), de-dupes picks, drops fair_price unless pay is Maybe/No.
+- Admin: per-question bar charts (count and % of people who answered that question; pick-any shares can pass 100%),
+  usefulness and design averages, before/after table kept. Old v1 responses (want_next/confusing/first_name) still listed.
+- First tester finished a chapter and never found Practice. Practice needs the quiz (it unlocks the day), so the end page
+  and the last-page button now say "Practice this" and lead through the 3-question check; after the check the next step
+  is a large "Practice this" card above "Back to course".
+- Bug caught in the browser: fast taps overwrote each other (stale state); the card now uses functional updates.

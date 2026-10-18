@@ -133,19 +133,47 @@ export interface Progress {
   targets: (Target & { current: number | null; done: boolean })[]
 }
 
-export type PayAnswer = 'yes' | 'maybe' | 'no'
+/** Tap-answer questions on the feedback card. Ids must match CHOICES in backend/app/main.py. */
+export const FEEDBACK_OPTIONS = {
+  liked: [
+    ['pages', 'Textbook pages'], ['flip', 'Page-flip design'], ['partner', 'Talking with the AI partner'], ['voices', 'The voices'],
+    ['quoting', 'Feedback quoting my words'], ['new_here', 'New Here'], ['notes', 'Notes'], ['characters', 'Characters'],
+    ['progress', 'Progress and badges'],
+  ],
+  off: [
+    ['too_long', 'Too long'], ['too_slow', 'Too slow'], ['confusing_nav', 'Confusing to navigate'],
+    ['robotic', 'Voice sounded robotic'], ['generic', 'Feedback felt generic'], ['nothing', 'Nothing'],
+  ],
+  retry_help: [['yes', 'Yes'], ['somewhat', 'Somewhat'], ['no', 'No'], ['no_retry', "Didn't retry"]],
+  come_back: [['yes', 'Yes'], ['maybe', 'Maybe'], ['no', 'No']],
+  pay: [['yes', 'Yes'], ['maybe', 'Maybe'], ['no', 'No']],
+  fair_price: [['0', '$0'], ['1-3', '$1-3'], ['3-5', '$3-5'], ['5-10', '$5-10']],
+  who: [
+    ['students', 'Students'], ['job_seekers', 'Job seekers'], ['customer_facing', 'Customer-facing workers'],
+    ['creators', 'Creators'], ['international', 'International students'], ['everyone', 'Everyone'],
+  ],
+} as const satisfies Record<string, readonly (readonly [string, string])[]>
+type Opt<K extends keyof typeof FEEDBACK_OPTIONS> = (typeof FEEDBACK_OPTIONS)[K][number][0]
+export type PayAnswer = Opt<'pay'>
 export interface FeedbackForm {
-  context: 'lesson' | 'practice' | 'menu'; day?: number | null; rating: number | null; pay: PayAnswer | null
-  want_next: string; confusing: string; first_name: string
+  context: 'lesson' | 'practice' | 'menu'; day?: number | null
+  rating: number | null; design: number | null
+  liked: Opt<'liked'>[]; off: Opt<'off'>[]; who: Opt<'who'>[]
+  retry_help: Opt<'retry_help'> | null; come_back: Opt<'come_back'> | null; pay: PayAnswer | null; fair_price: Opt<'fair_price'> | null
+  improve: string
 }
 interface MetricSnapshot { fillers_per_min: number | null; wpm: number | null; rubric_score: number | null }
-export interface FeedbackRow extends Omit<FeedbackForm, 'day'> {
-  id: string; created_at: string; day: number | null; lesson: string | null; worlds: World[]; attempts: number
-  before: MetricSnapshot | null; after: MetricSnapshot | null
+/** Older responses (first card) have want_next/confusing/first_name and none of the tap answers. */
+export interface FeedbackRow extends Partial<Omit<FeedbackForm, 'day' | 'context'>> {
+  id: string; created_at: string; context: FeedbackForm['context']; day: number | null; lesson: string | null; worlds: World[]
+  attempts: number; before: MetricSnapshot | null; after: MetricSnapshot | null
+  want_next?: string; confusing?: string; first_name?: string
 }
+export type FeedbackQuestion = 'rating' | 'design' | keyof typeof FEEDBACK_OPTIONS
 export interface FeedbackAdmin {
   summary: {
-    responses: number; avg_rating: number | null; ratings: number; pay: Record<PayAnswer, number>; pay_answers: number
+    responses: number; avg_rating: number | null; avg_design: number | null
+    questions: Record<FeedbackQuestion, { answered: number; counts: Record<string, number> }>
     with_progress: number; before: MetricSnapshot; after: MetricSnapshot
   }
   responses: FeedbackRow[]

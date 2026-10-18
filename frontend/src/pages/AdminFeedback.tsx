@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Lock } from 'lucide-react'
-import { api, WORLD_LABELS, type FeedbackAdmin } from '../api'
+import { api, FEEDBACK_OPTIONS, WORLD_LABELS, type FeedbackAdmin, type FeedbackQuestion, type FeedbackRow } from '../api'
 
 const METRICS = [
   { key: 'fillers_per_min', label: 'Fillers / min', lower: true },
@@ -9,6 +9,63 @@ const METRICS = [
 ] as const
 
 const fmt = (n: number | null | undefined) => (n === null || n === undefined ? '–' : String(n))
+
+const SCALE = [1, 2, 3, 4, 5].map((n) => [String(n), String(n)] as const)
+const CHARTS: { q: FeedbackQuestion; title: string; multi?: boolean; note?: string }[] = [
+  { q: 'rating', title: '1. How useful was this?' },
+  { q: 'liked', title: '2. What did you like most?', multi: true },
+  { q: 'off', title: '3. What felt off?', multi: true },
+  { q: 'design', title: '4. How do you like the design?' },
+  { q: 'retry_help', title: '5. Did the feedback help on your retry?' },
+  { q: 'come_back', title: '6. Would you come back tomorrow?' },
+  { q: 'pay', title: '7. Would you pay $5/month?' },
+  { q: 'fair_price', title: '7b. What price feels fair?', note: 'asked after Maybe or No' },
+  { q: 'who', title: '8. Who should use this?', multi: true },
+]
+const optionsFor = (q: FeedbackQuestion) => (q === 'rating' || q === 'design' ? SCALE : FEEDBACK_OPTIONS[q])
+const labelOf = (q: keyof typeof FEEDBACK_OPTIONS, id: string) =>
+  (FEEDBACK_OPTIONS[q] as readonly (readonly [string, string])[]).find(([o]) => o === id)?.[1] ?? id
+
+/** One question: a horizontal bar per option, count and share of the people who answered it. */
+function Chart({ title, multi, note, answered, counts, opts }: {
+  title: string; multi?: boolean; note?: string; answered: number; counts: Record<string, number>
+  opts: readonly (readonly [string, string])[]
+}) {
+  return (
+    <figure className="card flex flex-col gap-2">
+      <figcaption>
+        <p className="font-bold">{title}</p>
+        <p className="label text-muted">{answered} answered{multi ? ' · pick any, so shares can add past 100%' : ''}{note ? ` · ${note}` : ''}</p>
+      </figcaption>
+      <dl className="flex flex-col gap-1.5">
+        {opts.map(([id, label]) => {
+          const n = counts[id] ?? 0
+          const pct = answered ? Math.round((100 * n) / answered) : 0
+          return (
+            <div key={id} className="grid grid-cols-[minmax(0,40%)_1fr_4.75rem] items-center gap-2 text-sm">
+              <dt className="truncate" title={label}>{label}</dt>
+              <dd className="h-5 border-2 border-ink bg-white"><div className="h-full bg-check" style={{ width: `${pct}%` }} /></dd>
+              <dd className="text-right tabular-nums"><b>{n}</b> <span className="text-muted">· {pct}%</span></dd>
+            </div>
+          )
+        })}
+      </dl>
+    </figure>
+  )
+}
+
+function Answers({ r }: { r: FeedbackRow }) {
+  const chips: string[] = []
+  if (r.rating) chips.push(`Useful ${r.rating}/5`)
+  if (r.design) chips.push(`Design ${r.design}/5`)
+  if (r.liked?.length) chips.push(`Liked: ${r.liked.map((x) => labelOf('liked', x)).join(', ')}`)
+  if (r.off?.length) chips.push(`Off: ${r.off.map((x) => labelOf('off', x)).join(', ')}`)
+  if (r.retry_help) chips.push(`Retry helped: ${labelOf('retry_help', r.retry_help)}`)
+  if (r.come_back) chips.push(`Back tomorrow: ${labelOf('come_back', r.come_back)}`)
+  if (r.pay) chips.push(`Pay $5: ${labelOf('pay', r.pay)}${r.fair_price ? ` · fair ${labelOf('fair_price', r.fair_price)}` : ''}`)
+  if (r.who?.length) chips.push(`For: ${r.who.map((x) => labelOf('who', x)).join(', ')}`)
+  return <div className="mt-2 flex flex-wrap gap-2">{chips.map((c) => <span key={c} className="chip">{c}</span>)}</div>
+}
 
 /** Private: every feedback response plus a summary. The password stays in this tab's memory only. */
 export default function AdminFeedback() {
@@ -52,21 +109,17 @@ export default function AdminFeedback() {
       </header>
 
       <section className="grid gap-3 sm:grid-cols-2">
-        <div className="card bg-check-soft!">
-          <p className="label">Average usefulness</p>
-          <p className="font-heading text-5xl font-bold">{fmt(s.avg_rating)}<span className="text-2xl text-muted"> / 5</span></p>
-          <p className="label text-muted">{s.ratings} rating{s.ratings === 1 ? '' : 's'}</p>
-        </div>
-        <div className="card bg-target-soft!">
-          <p className="label">Would pay $5/month</p>
-          <div className="mt-2 flex h-6 border-2 border-ink" aria-hidden>
-            <span className="bg-leaf" style={{ width: `${s.pay.yes}%` }} />
-            <span className="bg-check" style={{ width: `${s.pay.maybe}%` }} />
-            <span className="bg-white" style={{ width: `${s.pay.no}%` }} />
+        {([['Average usefulness', s.avg_rating, 'rating'], ['Average design', s.avg_design, 'design']] as const).map(([t, v, q]) => (
+          <div key={q} className="card bg-check-soft!">
+            <p className="label">{t}</p>
+            <p className="font-heading text-5xl font-bold">{fmt(v)}<span className="text-2xl text-muted"> / 5</span></p>
+            <p className="label text-muted">{s.questions[q].answered} rating{s.questions[q].answered === 1 ? '' : 's'}</p>
           </div>
-          <p className="mt-2 font-bold">Yes {s.pay.yes}% · Maybe {s.pay.maybe}% · No {s.pay.no}%</p>
-          <p className="label text-muted">{s.pay_answers} answer{s.pay_answers === 1 ? '' : 's'}</p>
-        </div>
+        ))}
+      </section>
+
+      <section className="flex flex-col gap-3">
+        {CHARTS.map((c) => <Chart key={c.q} {...c} {...s.questions[c.q]} opts={optionsFor(c.q)} />)}
       </section>
 
       <section className="card">
@@ -106,15 +159,13 @@ export default function AdminFeedback() {
               {r.worlds.length > 0 && <span>{r.worlds.map((w) => WORLD_LABELS[w]?.label ?? w).join(', ')}</span>}
               {r.first_name && <span className="text-ink">{r.first_name}</span>}
             </div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {r.rating !== null && <span className="chip bg-check-soft">Useful {r.rating}/5</span>}
-              {r.pay && <span className="chip bg-target-soft">Pay: {r.pay}</span>}
-              {r.before && (
-                <span className="chip">
-                  {METRICS.map((m) => `${m.label.split(' ')[0]} ${fmt(r.before?.[m.key])}${r.after ? ` → ${fmt(r.after[m.key])}` : ''}`).join(' · ')}
-                </span>
-              )}
-            </div>
+            <Answers r={r} />
+            {r.before && (
+              <p className="label mt-2 text-muted">
+                {METRICS.map((m) => `${m.label.split(' ')[0]} ${fmt(r.before?.[m.key])}${r.after ? ` → ${fmt(r.after[m.key])}` : ''}`).join(' · ')}
+              </p>
+            )}
+            {r.improve && <p className="mt-2"><span className="label text-muted">Improve: </span>{r.improve}</p>}
             {r.want_next && <p className="mt-2"><span className="label text-muted">Wants next: </span>{r.want_next}</p>}
             {r.confusing && <p className="mt-1"><span className="label text-coral-dark">Confusing / broken: </span>{r.confusing}</p>}
           </article>

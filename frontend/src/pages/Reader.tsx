@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Highlighter, Loader2, Play, Square, Volume1, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Highlighter, Loader2, Mic, Play, Square, Volume1, Volume2, VolumeX, X } from 'lucide-react'
 import { api, type Lesson, type QuizResult } from '../api'
 import { useSession } from '../session'
 import PageView from '../components/PageView'
@@ -105,9 +105,10 @@ export default function Reader() {
     study.refreshTargets()
   }
 
+  // a tester finished a chapter and never found the Practice tab: the way out of every chapter is a conversation
   const nextStep = day === 1 && !user.days['0']?.practiced
-    ? { to: '/talk/0', label: "Next: let's see where you're starting" }
-    : { to: `/talk/${day}`, label: `Practice ${lesson.technique} in a conversation` }
+    ? { to: '/talk/0', hint: "First a short warm-up conversation, so we can see where you're starting." }
+    : { to: `/talk/${day}`, hint: `A short spoken conversation using ${lesson.technique.toLowerCase()}, with feedback on your own words.` }
 
   const coverLeft = (
     <div className="flex h-full flex-col justify-between p-8">
@@ -134,8 +135,9 @@ export default function Reader() {
       <Blob mood="proud" accessory="cap" size={80} />
       <p className="label text-check">End of chapter {day}</p>
       <h2 className="text-3xl font-bold">Nice reading, {user.name}.</h2>
-      <p className="text-lg text-muted">Three questions to make sure {lesson.technique} clicked.</p>
-      <button className="btn bg-check" onClick={() => setQuiz(true)}>Start the quick check <ArrowRight size={18} /></button>
+      <p className="text-lg text-muted">Next, try it out loud. Three quick questions first, then your conversation.</p>
+      <button className="btn bg-talk px-6 py-4 text-lg text-white" onClick={() => setQuiz(true)}><Mic size={20} /> Practice this <ArrowRight size={18} /></button>
+      <p className="label text-muted">Quick check, then practice</p>
     </div>
   )
 
@@ -174,7 +176,7 @@ export default function Reader() {
                 {atEnd ? 'End' : spread ? `pp. ${visible.map((n) => n + 1).join('–')} of ${pages.length}` : `p. ${current + 1} of ${pages.length}`}
               </p>
               {atEnd
-                ? <button className="btn-primary px-4" onClick={() => setQuiz(true)}>Quick check</button>
+                ? <button className="btn bg-talk px-4 text-white" onClick={() => setQuiz(true)}><Mic size={16} /> Practice this</button>
                 : <button className="btn-primary px-3" onClick={() => turn(pos + 1)} aria-label="Next page"><ChevronRight /></button>}
             </div>
           )}
@@ -209,7 +211,7 @@ export default function Reader() {
         <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
           <div className="card border-l-[10px] border-l-check">
             <p className="label text-check">End of chapter {day} · quick check</p>
-            <div className="mt-2"><BlobSays mood="thinking" size={56}>Three quick ones, {user.name}. No trick questions, promise.</BlobSays></div>
+            <div className="mt-2"><BlobSays mood="thinking" size={56}>Three quick ones, {user.name}, then your practice conversation. No trick questions, promise.</BlobSays></div>
           </div>
           {lesson.quiz.map((q, qi) => (
             <fieldset key={qi} className="card flex flex-col gap-2">
@@ -248,7 +250,11 @@ export default function Reader() {
                   <p className="label mt-1 text-muted">+{result.xp} XP · chapter complete</p>
                 </div>
               </div>
-              <button className="btn-primary" onClick={() => nav(nextStep.to)}>{nextStep.label}</button>
+              <div className="card flex flex-col gap-3 bg-talk-soft!">
+                <p className="label">Next step</p>
+                <button className="btn bg-talk py-4 text-lg text-white" onClick={() => nav(nextStep.to)}><Mic size={20} /> Practice this <ArrowRight size={18} /></button>
+                <p className="text-muted">{nextStep.hint}</p>
+              </div>
               <button className="btn-ghost" onClick={() => nav('/')}>Back to course</button>
               {askFeedback && <FeedbackCorner context="lesson" day={lesson.day} onClose={() => setAskFeedback(false)} />}
             </>
