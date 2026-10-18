@@ -19,6 +19,8 @@ services:
         sync: false
       - key: MONGODB_URI
         sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
       - key: SENTRY_DSN
         sync: false
       - key: SENTRY_ENVIRONMENT

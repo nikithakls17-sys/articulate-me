@@ -9,6 +9,7 @@ import { getVolume, setVolume, stopSpeaking } from '../voice'
 import { useReadAloud } from '../reading'
 import { useStudy } from '../study'
 import Blob, { BlobSays, blobFor } from '../components/Blob'
+import FeedbackCorner from '../components/FeedbackCorner'
 
 const FIGURE_KINDS = new Set(['steps', 'table', 'before_after', 'example'])
 
@@ -28,6 +29,7 @@ export default function Reader() {
   const [selection, setSelection] = useState('')
   const [saved, setSaved] = useState('')
   const [volume, setVol] = useState(getVolume)
+  const [askFeedback, setAskFeedback] = useState(true)
   const bookRef = useRef<HTMLDivElement>(null)
   const posRef = useRef(0)
   const leavesRef = useRef(0)
@@ -248,6 +250,7 @@ export default function Reader() {
               </div>
               <button className="btn-primary" onClick={() => nav(nextStep.to)}>{nextStep.label}</button>
               <button className="btn-ghost" onClick={() => nav('/')}>Back to course</button>
+              {askFeedback && <FeedbackCorner context="lesson" day={lesson.day} onClose={() => setAskFeedback(false)} />}
             </>
           )}
         </div>

@@ -5,6 +5,7 @@ import { api, WORLD_LABELS, type Attempt, type Conversation, type Explanation, t
 import { useSession } from '../session'
 import { speak, stopSpeaking, unlockAudio, useRecorder } from '../voice'
 import FeedbackView from '../components/FeedbackView'
+import FeedbackCorner from '../components/FeedbackCorner'
 import { WORLD_ICONS } from '../icons'
 import Blob, { BlobSays, blobFor } from '../components/Blob'
 
@@ -25,6 +26,7 @@ export default function Talk() {
   const [attempt, setAttempt] = useState<Attempt | null>(null)
   const [error, setError] = useState('')
   const [line, setLine] = useState(0)
+  const [askFeedback, setAskFeedback] = useState(true)
   const [explained, setExplained] = useState<Record<number, Explanation | 'loading' | 'error'>>({})
   const rec = useRecorder(MAX_SEC)
   const bottom = useRef<HTMLDivElement>(null)
@@ -240,7 +242,10 @@ export default function Talk() {
       )}
 
       {stage === 'feedback' && attempt && (
-        <FeedbackView attempt={attempt} technique={day === 0 ? null : lesson.technique} onRetry={retry} onDone={() => nav('/')} />
+        <>
+          <FeedbackView attempt={attempt} technique={day === 0 ? null : lesson.technique} onRetry={retry} onDone={() => nav('/')} />
+          {askFeedback && <div className="mt-6"><FeedbackCorner context="practice" day={day} onClose={() => setAskFeedback(false)} /></div>}
+        </>
       )}
     </div>
   )

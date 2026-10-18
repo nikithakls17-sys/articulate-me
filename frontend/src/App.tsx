@@ -1,4 +1,4 @@
-import { BookOpen, Info, Library, Map, MessageCircle, PanelRightClose, PanelRightOpen, Pause, Play, TrendingUp } from 'lucide-react'
+import { BookOpen, Info, Library, Map, MessageCircle, MessageSquareText, PanelRightClose, PanelRightOpen, Pause, Play, TrendingUp } from 'lucide-react'
 import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useSession } from './session'
 import { Logo } from './icons'
@@ -18,6 +18,8 @@ import Study from './pages/Study'
 import ProgressPage from './pages/Progress'
 import Sources from './pages/Sources'
 import About from './pages/About'
+import Feedback from './pages/Feedback'
+import AdminFeedback from './pages/AdminFeedback'
 
 const TABS = [
   { to: '/', icon: Map, label: 'Course' },
@@ -75,6 +77,10 @@ function TopBar({ showTabs }: { showTabs: boolean }) {
           </nav>
         )}
         <div className="ml-auto flex items-center gap-2">
+          <NavLink to="/feedback" aria-label="Give feedback" title="Give feedback"
+            className={({ isActive }) => `flex items-center gap-1.5 border-2 border-ink p-1.5 lg:px-2.5 ${isActive ? 'bg-ink text-white' : 'bg-white'}`}>
+            <MessageSquareText size={18} aria-hidden /><span className="label hidden whitespace-nowrap lg:inline">Give feedback</span>
+          </NavLink>
           <HourglassButton />
           <ThemeToggle />
           {!laptop && (
@@ -156,6 +162,8 @@ export default function App() {
           <Route path="/welcome" element={user ? <Navigate to="/" /> : <Welcome />} />
           <Route path="/sources" element={<Sources />} />
           <Route path="/about" element={<About />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/admin/feedback" element={<AdminFeedback />} />
           <Route path="/blobs" element={<Navigate to="/about#squad" />} />
           {user ? (
             <>

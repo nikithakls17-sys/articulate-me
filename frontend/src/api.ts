@@ -133,6 +133,24 @@ export interface Progress {
   targets: (Target & { current: number | null; done: boolean })[]
 }
 
+export type PayAnswer = 'yes' | 'maybe' | 'no'
+export interface FeedbackForm {
+  context: 'lesson' | 'practice' | 'menu'; day?: number | null; rating: number | null; pay: PayAnswer | null
+  want_next: string; confusing: string; first_name: string
+}
+interface MetricSnapshot { fillers_per_min: number | null; wpm: number | null; rubric_score: number | null }
+export interface FeedbackRow extends Omit<FeedbackForm, 'day'> {
+  id: string; created_at: string; day: number | null; lesson: string | null; worlds: World[]; attempts: number
+  before: MetricSnapshot | null; after: MetricSnapshot | null
+}
+export interface FeedbackAdmin {
+  summary: {
+    responses: number; avg_rating: number | null; ratings: number; pay: Record<PayAnswer, number>; pay_answers: number
+    with_progress: number; before: MetricSnapshot; after: MetricSnapshot
+  }
+  responses: FeedbackRow[]
+}
+
 export interface Health { mode: string; llm: string; model: string; grader: string; stt: string; tts: boolean; tts_engine: string; max_recording_sec: number }
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
@@ -184,6 +202,8 @@ export const api = {
     f.append('audio', audio, audioName(audio))
     return req<TurnResult>(`/api/conversations/${convId}/turns`, { method: 'POST', body: f })
   },
+  sendFeedback: (userId: string | undefined, f: FeedbackForm) => req<{ ok: boolean }>('/api/feedback', send('POST', { user_id: userId, ...f })),
+  adminFeedback: (password: string) => req<FeedbackAdmin>('/api/admin/feedback', { headers: { 'X-Admin-Password': password } }),
   finishConversation: (convId: string) => req<Attempt>(`/api/conversations/${convId}/finish`, send('POST', { local_date: localDate() })),
 }
 

@@ -1,21 +1,23 @@
 import asyncio
 import re
+import secrets
 import mimetypes
 import threading
 import json
 import uuid
 from datetime import date, datetime, timedelta
+from typing import Literal
 
 import sentry_sdk
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from . import config, conversation, feedback, llm, metrics, stt, voices
 from .course_plan import (BADGES, COUNTRIES, EXPRESSIONS, MINUTES_PER_LESSON, NEW_HERE_PLAN, NEW_HERE_WORLD, PLAN, SETTINGS, WEEKS,
-                          WORLDS, all_plans)
+                          WORLDS, all_plans, plan_for)
 from . import wiktionary
 from .observability import init_sentry
 from .store import now_iso, store
@@ -573,6 +575,79 @@ def explain(conv_id: str, body: ExplainBody):
                          temperature=0.2, max_tokens=60, operation="explain_plain")["text"]
         plain = feedback._first_sentences(plain, 2)
     return {"items": items, "plain": plain}
+
+
+# ---------- feedback corner ----------
+
+class FeedbackBody(BaseModel):
+    user_id: str | None = None  # only used to look up worlds and metrics; never stored
+    context: Literal["lesson", "practice", "menu"] = "menu"
+    day: int | None = None
+    rating: int | None = Field(None, ge=1, le=5)
+    pay: Literal["yes", "maybe", "no"] | None = None
+    want_next: str = Field("", max_length=500)
+    confusing: str = Field("", max_length=500)
+    first_name: str = Field("", max_length=40)
+
+
+METRIC_KEYS = ("fillers_per_min", "wpm", "rubric_score")
+
+
+def _metric_snapshot(a: dict | None) -> dict | None:
+    if not a:
+        return None
+    return {"fillers_per_min": a["metrics"].get("fillers_per_min"), "wpm": a["metrics"].get("wpm"),
+            "rubric_score": a.get("rubric_score")}
+
+
+@app.post("/api/feedback")
+def send_feedback(body: FeedbackBody):
+    """Anonymous: no user id, audio or transcripts are stored, only numbers from the first and latest attempt."""
+    want, confusing, name = body.want_next.strip(), body.confusing.strip(), body.first_name.strip()
+    if body.rating is None and body.pay is None and not want and not confusing:
+        raise HTTPException(400, "Answer at least one question first")
+    user = _normalize(store().get_user(body.user_id)) if body.user_id else None
+    attempts = store().list_attempts(body.user_id) if user else []
+    first = next((a for a in attempts if a["day"] == 0), attempts[0] if attempts else None)
+    latest = attempts[-1] if attempts and attempts[-1] is not first else None
+    plan = plan_for(body.day) if body.day is not None else None
+    doc = {
+        "id": uuid.uuid4().hex, "created_at": now_iso(), "context": body.context, "day": body.day,
+        "lesson": plan["technique"] if plan else None, "worlds": user["worlds"] if user else [],
+        "rating": body.rating, "pay": body.pay, "want_next": want, "confusing": confusing, "first_name": name,
+        "attempts": len(attempts), "before": _metric_snapshot(first), "after": _metric_snapshot(latest),
+    }
+    store().insert("feedback", doc)
+    return {"ok": True}
+
+
+def _avg(xs: list) -> float | None:
+    xs = [x for x in xs if isinstance(x, (int, float))]
+    return round(sum(xs) / len(xs), 1) if xs else None
+
+
+@app.get("/api/admin/feedback")
+def admin_feedback(x_admin_password: str = Header("")):
+    if not config.ADMIN_PASSWORD:
+        raise HTTPException(404, "Admin page is off. Set ADMIN_PASSWORD to turn it on.")
+    if not secrets.compare_digest(x_admin_password.encode(), config.ADMIN_PASSWORD.encode()):
+        raise HTTPException(401, "Wrong password")
+    rows = sorted(store().find("feedback"), key=lambda d: d["created_at"], reverse=True)
+    paid = [r["pay"] for r in rows if r.get("pay")]
+    paired = [r for r in rows if r.get("before") and r.get("after")]
+    return {
+        "summary": {
+            "responses": len(rows),
+            "avg_rating": _avg([r.get("rating") for r in rows]),
+            "ratings": len([r for r in rows if r.get("rating")]),
+            "pay": {k: round(100 * paid.count(k) / len(paid)) if paid else 0 for k in ("yes", "maybe", "no")},
+            "pay_answers": len(paid),
+            "with_progress": len(paired),
+            "before": {k: _avg([r["before"].get(k) for r in paired]) for k in METRIC_KEYS},
+            "after": {k: _avg([r["after"].get(k) for r in paired]) for k in METRIC_KEYS},
+        },
+        "responses": rows,
+    }
 
 
 # ---------- voice ----------

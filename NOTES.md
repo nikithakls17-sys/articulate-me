@@ -117,3 +117,9 @@ New read-aloud (`reading.ts`): every sentence / step / key term / table cell on 
 
 ## Eval set (Oct 18)
 - 20 hand-written samples in `eval/samples/` (Days 1-3; 6 good, 6 partial, 4 bad, 4 tricky; 2 multi-turn), 67 rubric labels. Draft labels written while authoring; Niki's labels in `eval/labels.csv` will be the reference. Tricky cases target signal-word matching (circular "because", empty "for example", three identical reasons, off-topic third reason, unconnected story hook). Not run through any model yet; regenerate with `eval/make_samples.py`.
+
+## Feedback corner (Oct 18)
+- Optional card after a chapter's quick check and after a practice conversation, plus "Give feedback" in the top bar and on Progress (`/feedback`). Questions: usefulness 1-5, would you pay $5/month (yes/maybe/no), what next, anything confusing or broken, optional first name.
+- **Anonymous by construction:** the client sends its user id only so the server can look up worlds and metrics; the stored row has no user id, audio or transcript. Before/after = first attempt (baseline when there is one) vs latest: fillers/min, wpm, rubric score. Collection `feedback` (Mongo in hosted mode).
+- `/admin/feedback`: password from `ADMIN_PASSWORD` sent as an `X-Admin-Password` header and checked with `secrets.compare_digest`; empty password = endpoint returns 404. Password lives in page state only. Summary: average rating, % yes/maybe/no, before/after averages over learners with 2+ attempts.
+- Tested with a temp store: empty answer 400, rating 9 422, no/wrong password 401, summary maths right, no user id or transcript in rows.

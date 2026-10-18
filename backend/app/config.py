@@ -33,6 +33,8 @@ TTS_ENABLED = bool(ELEVENLABS_API_KEY) and HOSTED
 MONGODB_URI = _env("MONGODB_URI")
 MONGODB_DB = _env("MONGODB_DB", "italk")
 
+ADMIN_PASSWORD = _env("ADMIN_PASSWORD")  # /admin/feedback; empty = page disabled
+
 SENTRY_DSN = _env("SENTRY_DSN")
 SENTRY_ENVIRONMENT = _env("SENTRY_ENVIRONMENT", "dev")
 
