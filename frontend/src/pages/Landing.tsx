@@ -20,6 +20,27 @@ const COPY = {
     "watched someone's attention drift halfway through your story?",
     'been told "just be more confident" with no idea how?',
   ],
+  why: {
+    heading: 'Nobody teaches this. Everyone is judged on it.',
+    caption: 'The gap, in three numbers.',
+    // NACE: Niki's draft had 98.7% / 55.4% (Job Outlook 2026); not findable in public NACE pages (the report is
+    // members-only), so this uses the published Job Outlook 2025 figures until the 2026 source is confirmed.
+    rows: [
+      { label: 'Employers who say communication skills matter in new graduates', value: '96.1%', bar: 96.1, note: 1 },
+      { label: 'Employers who rate new graduates as proficient communicators', value: '53.5%', bar: 53.5, note: 1 },
+      { label: 'International students who find it hard to make close friends with local students', value: '41%', bar: 41, note: 2 },
+      { label: 'A private speaking coach', value: '$100–300', unit: 'per hour', note: 3 },
+      { label: 'Articulate Me', value: '$5', unit: 'per month', highlight: true },
+    ],
+    sources: [
+      { n: 1, text: 'NACE, Job Outlook 2025, via "The Gap in Perceptions of New Grads\' Competency Proficiency" (Jan 2025).',
+        url: 'https://naceweb.org/career-readiness/competencies/the-gap-in-perceptions-of-new-grads-competency-proficiency-and-resources-to-shrink-it' },
+      { n: 2, text: 'World Education Services, "Are U.S. HEIs Meeting the Needs of International Students?" (2019), p. 10.',
+        url: 'https://knowledge.wes.org/rs/317-CTM-316/images/research-report-are-us-hei-meeting-the-needs-of-international-students.pdf' },
+      { n: 3, text: 'Typical U.S. rate quoted by VocalImage, a speaking-app company.',
+        url: 'https://www.vocalimage.app/en/public-speaking/coach/' },
+    ],
+  },
   quote: "Speaking well isn't a personality. It's a skill.",
   quoteAfter: 'And skills can be learned, one technique at a time.',
   steps: [
@@ -152,6 +173,49 @@ export default function Landing() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* why this exists: a textbook figure with footnoted sources */}
+      <section className="mx-auto max-w-[1200px] px-4 py-6 lg:px-8 lg:py-10" aria-labelledby="why">
+        <h2 id="why" className="mb-5 text-3xl font-bold sm:text-4xl lg:text-5xl">{COPY.why.heading}</h2>
+        <Reveal>
+          <figure className="mx-auto max-w-3xl border-2 border-ink bg-white shadow-[6px_6px_0_var(--ink)]">
+            <figcaption className="flex items-baseline gap-3 border-b-2 border-ink bg-paper-deep px-4 py-2">
+              <span className="label">Figure 1</span>
+              <span className="italic">{COPY.why.caption}</span>
+            </figcaption>
+            <table className="w-full text-left">
+              <caption className="sr-only">{COPY.why.heading}</caption>
+              <tbody>
+                {COPY.why.rows.map((r) => (
+                  <tr key={r.label} className={`border-b border-ink last:border-b-0 ${r.highlight ? 'bg-check-soft' : ''}`}>
+                    <th scope="row" className={`px-4 py-3 align-top leading-snug ${r.highlight ? 'font-bold' : 'font-normal'}`}>
+                      {r.label}
+                      {r.note && <sup><a href={`#src-${r.note}`} className="label ml-0.5 no-underline" aria-label={`Source ${r.note}`}>{r.note}</a></sup>}
+                    </th>
+                    <td className="w-[34%] px-3 py-3 align-top sm:w-[30%] sm:px-4">
+                      <span className="whitespace-nowrap font-heading text-xl font-bold tabular-nums leading-none sm:text-3xl">{r.value}</span>
+                      {'unit' in r && <span className="label mt-1 block text-muted">{r.unit}</span>}
+                      {r.bar !== undefined && (
+                        <span className="mt-1.5 block h-2 border border-ink bg-cream" aria-hidden>
+                          <span className="block h-full bg-ink" style={{ width: `${r.bar}%` }} />
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <ol className="border-t-2 border-ink px-4 py-2.5 text-xs leading-relaxed text-muted">
+              {COPY.why.sources.map((s) => (
+                <li key={s.n} id={`src-${s.n}`}>
+                  <span className="label mr-1">{s.n}</span>{s.text}{' '}
+                  <a href={s.url} target="_blank" rel="noreferrer" className="underline">Source</a>
+                </li>
+              ))}
+            </ol>
+          </figure>
+        </Reveal>
       </section>
 
       {/* pull quote */}
