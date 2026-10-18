@@ -3,7 +3,7 @@ import csv
 import json
 from pathlib import Path
 
-ROOT = Path(r"C:\Users\nikit\i-talk-you-listen")
+ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "eval" / "samples"
 OUT.mkdir(parents=True, exist_ok=True)
 
