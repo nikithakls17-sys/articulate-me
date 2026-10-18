@@ -23,18 +23,18 @@ const COPY = {
   why: {
     heading: 'Nobody teaches this. Everyone is judged on it.',
     caption: 'The gap, in three numbers.',
-    // NACE: Niki's draft had 98.7% / 55.4% (Job Outlook 2026); not findable in public NACE pages (the report is
-    // members-only), so this uses the published Job Outlook 2025 figures until the 2026 source is confirmed.
+    // NACE Job Outlook 2026 is members-only; the 98.7% / 55.4% pair is cited from Purdue Global's summary of it.
+    // Fallback if that link goes: Job Outlook 2025 published 96.1% / 53.5% on naceweb.org.
     rows: [
-      { label: 'Employers who say communication skills matter in new graduates', value: '96.1%', bar: 96.1, note: 1 },
-      { label: 'Employers who rate new graduates as proficient communicators', value: '53.5%', bar: 53.5, note: 1 },
+      { label: 'Employers who say communication skills matter in new graduates', value: '98.7%', bar: 98.7, note: 1 },
+      { label: 'Employers who rate new graduates as proficient communicators', value: '55.4%', bar: 55.4, note: 1 },
       { label: 'International students who find it hard to make close friends with local students', value: '41%', bar: 41, note: 2 },
       { label: 'A private speaking coach', value: '$100–300', unit: 'per hour', note: 3 },
       { label: 'Articulate Me', value: '$5', unit: 'per month', highlight: true },
     ],
     sources: [
-      { n: 1, text: 'NACE, Job Outlook 2025, via "The Gap in Perceptions of New Grads\' Competency Proficiency" (Jan 2025).',
-        url: 'https://naceweb.org/career-readiness/competencies/the-gap-in-perceptions-of-new-grads-competency-proficiency-and-resources-to-shrink-it' },
+      { n: 1, text: 'NACE, Job Outlook 2026, as summarised by Purdue Global.',
+        url: 'https://www.purdueglobal.edu/blog/careers/top-soft-skills-employers-want/' },
       { n: 2, text: 'World Education Services, "Are U.S. HEIs Meeting the Needs of International Students?" (2019), p. 10.',
         url: 'https://knowledge.wes.org/rs/317-CTM-316/images/research-report-are-us-hei-meeting-the-needs-of-international-students.pdf' },
       { n: 3, text: 'Typical U.S. rate quoted by VocalImage, a speaking-app company.',
