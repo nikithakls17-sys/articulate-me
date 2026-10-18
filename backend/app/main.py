@@ -573,7 +573,8 @@ def explain(conv_id: str, body: ExplainBody):
     if not items:
         plain = llm.chat([{"role": "user", "content": f'Say this in simpler everyday English, one sentence: "{line}"'}],
                          temperature=0.2, max_tokens=60, operation="explain_plain")["text"]
-        plain = feedback._first_sentences(plain, 2)
+        # partner lines are usually questions, so the rewording is too: keep them
+        plain = feedback._first_sentences(plain, 2, keep_questions=True) or None
     return {"items": items, "plain": plain}
 
 

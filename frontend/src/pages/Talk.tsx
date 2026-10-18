@@ -271,7 +271,9 @@ function ExplainThat({ state, onAsk }: { state: Explanation | 'loading' | 'error
             {it.url ? <a href={it.url} target="_blank" rel="noreferrer" className="underline">{it.source}</a> : it.source}
           </span>
         </p>
-      )) : <p className="leading-snug"><span className="label text-muted">In other words: </span>{state.plain}</p>}
+      )) : state.plain
+        ? <p className="leading-snug"><span className="label text-muted">In other words: </span>{state.plain}</p>
+        : <p className="leading-snug">No slang or idioms in this line. It means what it says.</p>}
     </div>
   )
 }

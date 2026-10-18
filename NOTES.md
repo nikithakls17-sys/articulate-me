@@ -123,3 +123,13 @@ New read-aloud (`reading.ts`): every sentence / step / key term / table cell on 
 - **Anonymous by construction:** the client sends its user id only so the server can look up worlds and metrics; the stored row has no user id, audio or transcript. Before/after = first attempt (baseline when there is one) vs latest: fillers/min, wpm, rubric score. Collection `feedback` (Mongo in hosted mode).
 - `/admin/feedback`: password from `ADMIN_PASSWORD` sent as an `X-Admin-Password` header and checked with `secrets.compare_digest`; empty password = endpoint returns 404. Password lives in page state only. Summary: average rating, % yes/maybe/no, before/after averages over learners with 2+ attempts.
 - Tested with a temp store: empty answer 400, rating 9 422, no/wrong password 401, summary maths right, no user id or transcript in rows.
+
+## Hosted mode, first end-to-end run (Oct 18)
+- `DO_MODEL=gemma-4-31B-it`: the only Gemma on our DigitalOcean serverless inference account (82 models listed). No thinking-token problem: "reply with exactly: ready" came back in 1.5 s with `finish_reason=stop`, JSON mode clean in 0.5 s. `reasoning_effort` is still only sent to Ollama.
+- Flow tested through the real API (FastAPI TestClient against Atlas, DO, ElevenLabs): new user → Day 1 PREP conversation with Dana (strict interviewer) → two spoken turns → grade → Explain that → TTS → feedback corner. Learner audio was ElevenLabs speech transcoded to **webm/opus (turn 1) and mp4/aac (turn 2)**, the two formats real phones send. Test user and all its documents deleted from Atlas afterwards.
+- Scribe kept the filler ("because, um, when a team is lost") and punctuation. Grader: 4/4 used, every quote passed the validator on the first pass (no retry), feedback 2 sentences, one fix, rewrite. 
+- TTS: all three calls answered by `eleven_v4` (no fallback to flash), mp3.
+- Latency (s): turn 1 3.8, turn 2 2.8 (STT + partner reply), grading 5.1, Explain 1.6, TTS 2.1. Compare local gemma3:1b stepwise grading: tens of seconds.
+- WPM 181 here is ElevenLabs' speaking speed, not a person's; ignore it.
+- **Bug found: "Explain that" returned an empty answer.** The plain-English fallback reused `_first_sentences`, which drops questions (right for feedback), but partner lines are almost always questions, so the rewording was thrown away. Now `keep_questions=True` there, empty → null, and the card says "No slang or idioms in this line" instead of a blank "In other words:".
+- Atlas `chunks` is empty: the runtime never does a vector search (chapters come from `course/*.json`, synced into Atlas `lessons` at boot). Ingest is only needed to build chapters 4-7 against Atlas.
