@@ -30,7 +30,7 @@ export default function FeedbackCorner({ context, day, onClose }:
 
   if (state === 'sent') {
     return (
-      <aside className="card flex items-center gap-3 bg-check-soft" aria-live="polite">
+      <aside className="card flex items-center gap-3 bg-check-soft!" aria-live="polite">
         <Check className="shrink-0" size={22} strokeWidth={3} />
         <p className="flex-1">Thank you{f.first_name.trim() ? `, ${f.first_name.trim()}` : ''}. That helps a lot.</p>
         {onClose && <button className="label underline" onClick={onClose}>Close</button>}
@@ -39,7 +39,7 @@ export default function FeedbackCorner({ context, day, onClose }:
   }
 
   return (
-    <aside className="card flex flex-col gap-4 bg-check-soft" aria-labelledby="fb-title">
+    <aside className="card flex flex-col gap-4 bg-check-soft!" aria-labelledby="fb-title">
       <div className="flex items-start justify-between gap-3 border-b-2 border-ink pb-2">
         <div>
           <p className="label">Feedback corner · optional</p>

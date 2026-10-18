@@ -88,7 +88,7 @@ export default function FeedbackView({ attempt, technique, onRetry, onDone }:
       </section>
 
       {(attempt.fix || attempt.rewrite) && (
-        <section className="card border-sky/30 bg-blue-50">
+        <section className="card border-sky/30 bg-blue-50!">
           <p className="flex items-center gap-1.5 text-sm font-extrabold uppercase tracking-wide text-sky"><Wrench size={16} /> Your one fix</p>
           <p className="mt-1 text-lg font-bold">{attempt.fix}</p>
           {attempt.rewrite && (

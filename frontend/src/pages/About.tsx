@@ -23,9 +23,9 @@ export default function About() {
 
       <section className="grid gap-3 md:grid-cols-3">
         {[
-          [BookOpen, 'Read', 'Short illustrated chapters written from CC-licensed college textbooks, with citations.', 'bg-read-soft'],
-          [MessageCircle, 'Talk', 'A conversation partner (an interviewer, a professor, a customer) who makes you use the technique.', 'bg-talk-soft'],
-          [Sparkles, 'Grow', 'Feedback that quotes what you said, one fix, a retry, and your before-and-after numbers.', 'bg-good-soft'],
+          [BookOpen, 'Read', 'Short illustrated chapters written from CC-licensed college textbooks, with citations.', 'bg-read-soft!'],
+          [MessageCircle, 'Talk', 'A conversation partner (an interviewer, a professor, a customer) who makes you use the technique.', 'bg-talk-soft!'],
+          [Sparkles, 'Grow', 'Feedback that quotes what you said, one fix, a retry, and your before-and-after numbers.', 'bg-leaf-soft!'],
         ].map(([Icon, t, d, bg]) => {
           const I = Icon as typeof BookOpen
           return (

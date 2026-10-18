@@ -115,7 +115,7 @@ export default function Overview() {
         </div>
       </section>
 
-      <div className="card bg-leaf-soft border-leaf/30 text-sm">
+      <div className="card bg-leaf-soft! border-leaf/30 text-sm">
         <b>After your first chapter</b> we'll have a quick 2-question chat to see where you're starting. That's your
         “before” picture for the progress chart.
       </div>

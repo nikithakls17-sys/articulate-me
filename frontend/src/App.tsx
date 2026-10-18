@@ -18,6 +18,7 @@ import Study from './pages/Study'
 import ProgressPage from './pages/Progress'
 import Sources from './pages/Sources'
 import About from './pages/About'
+import Landing from './pages/Landing'
 import Feedback from './pages/Feedback'
 import AdminFeedback from './pages/AdminFeedback'
 
@@ -102,6 +103,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   const laptop = useMedia('(min-width: 1024px)')
   const tablet = useMedia('(min-width: 768px)')
   const onboarding = pathname === '/welcome' || !user
+  if (!user && pathname === '/') return <>{children}</> // the landing page draws its own full-width layout
   const immersive = ['/read/', '/talk/'].some((p) => pathname.startsWith(p))
   const wide = pathname.startsWith('/read/')
 
@@ -178,7 +180,10 @@ export default function App() {
               <Route path="/progress" element={<ProgressPage />} />
             </>
           ) : (
-            <Route path="*" element={<Navigate to="/welcome" />} />
+            <>
+              <Route path="/" element={<Landing />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </>
           )}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

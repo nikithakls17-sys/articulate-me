@@ -1,10 +1,28 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, Check, ChevronRight, Flame, Info, MessageCircle, MessageSquareText, Shield, Target } from 'lucide-react'
+import { BookOpen, Check, ChevronRight, Copy, KeyRound, Flame, Info, MessageCircle, MessageSquareText, Shield, Target } from 'lucide-react'
 import { api, type AttemptSummary, type Progress } from '../api'
 import { useSession } from '../session'
 import BadgeIcon from '../components/BadgeIcon'
 import { BlobSays } from '../components/Blob'
+
+/** No accounts: this id is the only key to someone's progress, for picking up on another device. */
+function ResumeCode({ id }: { id: string }) {
+  const [copied, setCopied] = useState(false)
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(id); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch { /* select it by hand */ }
+  }
+  return (
+    <section className="card flex flex-col gap-2">
+      <h2 className="flex items-center gap-2 text-xl font-bold"><KeyRound size={20} aria-hidden /> Resume code</h2>
+      <p className="text-muted">There's no account. To carry on from another phone or laptop, choose "I've been here before" there and paste this code. Keep it private: it opens your progress.</p>
+      <div className="flex flex-wrap items-stretch gap-2">
+        <code className="min-w-0 flex-1 select-all break-all border-2 border-ink bg-cream p-2 text-sm">{id}</code>
+        <button className="btn-ghost px-4 py-2" onClick={copy}>{copied ? <><Check size={16} /> Copied</> : <><Copy size={16} /> Copy</>}</button>
+      </div>
+    </section>
+  )
+}
 
 export default function ProgressPage() {
   const { user } = useSession()
@@ -119,6 +137,7 @@ export default function ProgressPage() {
         <span className="flex-1 font-bold">Sources & privacy</span>
         <ChevronRight className="text-muted" />
       </Link>
+      {user && <ResumeCode id={user.id} />}
     </div>
   )
 }

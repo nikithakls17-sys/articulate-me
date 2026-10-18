@@ -162,7 +162,7 @@ export default function Talk() {
               </ul>
             </div>
           ) : (
-            <div className="card bg-leaf-soft border-leaf/30">
+            <div className="card bg-leaf-soft! border-leaf/30">
               <p className="font-bold">No technique needed. Just talk the way you normally would, so we can measure where you're starting.</p>
             </div>
           )}
@@ -182,7 +182,7 @@ export default function Talk() {
           <p className="flex items-center gap-2 text-sm text-muted">
             <WorldIcon size={16} /> {maxTurns} short replies. {sc.partner.split(' ')[0]} speaks first; tap the mic to answer.
           </p>
-          {error && <p className="card border-coral/40 bg-orange-50 font-bold text-coral-dark">{error}</p>}
+          {error && <p className="card border-coral/40 bg-orange-50! font-bold text-coral-dark">{error}</p>}
           <button className="btn-primary" onClick={start}><Volume2 /> Start the conversation</button>
         </>
       )}

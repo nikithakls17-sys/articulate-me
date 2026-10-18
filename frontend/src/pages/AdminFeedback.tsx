@@ -52,15 +52,15 @@ export default function AdminFeedback() {
       </header>
 
       <section className="grid gap-3 sm:grid-cols-2">
-        <div className="card bg-check-soft">
+        <div className="card bg-check-soft!">
           <p className="label">Average usefulness</p>
           <p className="font-heading text-5xl font-bold">{fmt(s.avg_rating)}<span className="text-2xl text-muted"> / 5</span></p>
           <p className="label text-muted">{s.ratings} rating{s.ratings === 1 ? '' : 's'}</p>
         </div>
-        <div className="card bg-target-soft">
+        <div className="card bg-target-soft!">
           <p className="label">Would pay $5/month</p>
           <div className="mt-2 flex h-6 border-2 border-ink" aria-hidden>
-            <span className="bg-good" style={{ width: `${s.pay.yes}%` }} />
+            <span className="bg-leaf" style={{ width: `${s.pay.yes}%` }} />
             <span className="bg-check" style={{ width: `${s.pay.maybe}%` }} />
             <span className="bg-white" style={{ width: `${s.pay.no}%` }} />
           </div>
