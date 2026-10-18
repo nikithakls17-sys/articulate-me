@@ -79,4 +79,12 @@ def chat_json(messages: list[dict], **kw) -> tuple[dict, dict]:
     if out.get("finish_reason") == "length":
         # Ollama's default context is 4096 tokens: a long prompt leaves little room and the JSON gets cut off
         raise ValueError(f"output truncated at {out['output_tokens']} tokens (prompt {out['input_tokens']})")
-    return parse_json(out["text"]), out
+    data = parse_json(out["text"])
+    if data == {}:
+        # DigitalOcean's JSON mode answers some long prompts with a bare {} (5 of 6 runs for the Day 5 chapter);
+        # the same prompt without response_format gives fenced JSON that parse_json handles. Retry once that way.
+        out = chat(messages, json_mode=False, **kw)
+        if out.get("finish_reason") == "length":
+            raise ValueError(f"output truncated at {out['output_tokens']} tokens (prompt {out['input_tokens']})")
+        data = parse_json(out["text"])
+    return data, out

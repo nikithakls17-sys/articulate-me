@@ -1,0 +1,234 @@
+{
+  "day": 4,
+  "technique": "Signposting",
+  "title": "Signposts",
+  "learn": "Guide your listener with \"first, next, finally.\"",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "Signposts",
+      "body": "Signposts are like mile markers. They tell your listener exactly where they are in your story so they don't get lost.",
+      "learn": "Guide your listener with \"first, next, finally.\""
+    },
+    {
+      "kind": "steps",
+      "title": "How Signposting works",
+      "steps": [
+        {
+          "label": "Preview",
+          "text": "Give an internal preview to let listeners know what is coming up next."
+        },
+        {
+          "label": "Signpost",
+          "text": "Use brief terms like First, Next, and Finally to show movement through your content."
+        },
+        {
+          "label": "Sum Up",
+          "text": "Use an internal summary to remind the audience of what they just heard."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 232,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0227"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Signpost",
+          "meaning": "A guide helping the audience keep up with speech content."
+        },
+        {
+          "term": "Internal Preview",
+          "meaning": "A sentence outlining what will be discussed within a section."
+        },
+        {
+          "term": "Internal Summary",
+          "meaning": "A reminder of information just delivered in the speech."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 235,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0231"
+      }
+    },
+    {
+      "kind": "table",
+      "title": "Effective Signposting",
+      "columns": [
+        "Avoid",
+        "Use"
+      ],
+      "rows": [
+        [
+          "Complex phrasing",
+          "Simplistic signposts"
+        ],
+        [
+          "Disconnected points",
+          "Brief markers like 'First'"
+        ]
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 235,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0231"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "Explaining how to make a sandwich.",
+      "before": "Get bread. Put jam on it. Eat it.",
+      "after": "I'll show you in three steps. First, get bread. Next, put jam on it. Finally, eat it. To sum up, that is how you make a sandwich.",
+      "why": "It uses a preview, clear signposts, and a summary."
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Clear organization helps the audience listen for main points, which leads to higher retention of your message.",
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Building and Organizing Your Speech",
+        "page": 232,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0227"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your world"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "Which phrase best serves as an internal preview before starting a presentation?",
+      "options": [
+        "In summary, we discussed three points.",
+        "I will outline three main steps.",
+        "First, let's look at the data."
+      ],
+      "answer": 1,
+      "explain": "Previews let listeners know what is coming up next."
+    },
+    {
+      "q": "You have just finished explaining a complex point. What should you do to help the audience?",
+      "options": [
+        "Use an internal summary.",
+        "Use a signpost like 'Next'.",
+        "Give an internal preview."
+      ],
+      "answer": 0,
+      "explain": "Summaries remind the audience of what they just heard."
+    },
+    {
+      "q": "Which sequence correctly uses signposts to show movement through content?",
+      "options": [
+        "First, Next, Finally",
+        "Summary, Preview, First",
+        "Next, First, Summary"
+      ],
+      "answer": 0,
+      "explain": "These terms show movement through the speech content."
+    }
+  ],
+  "examples": {
+    "student": "I'll explain my thesis in three parts. First, I'll cover the data collection; next, the analysis; and finally, the results. So, that covers the methodology and the outcome.",
+    "job_seeker": "I'll highlight three key achievements. First, I grew sales by 20%; next, I led a team of five; and finally, I streamlined our CRM. In short, I bring growth, leadership, and efficiency.",
+    "customer_facing": "I'll show you how to use this device in three steps. First, plug it in; next, sync the app; and finally, press start. To recap, it's just plug, sync, and start.",
+    "creator": "In this video, I'll show you how to bake this cake. First, we prep the oven; next, we mix ingredients; and finally, we frost it. Now that we've baked and frosted, let's taste it.",
+    "everyday": "I'll tell you how to get to the park. First, go straight; next, turn left at the light; and finally, it's on your right. So, straight, left, and then you're there.",
+    "new_here": "I'll explain my move in three stages. First, the visa process; next, the house hunt; and finally, finding a job. So, that was my journey from applying to working here."
+  },
+  "scenarios": {
+    "student": {
+      "partner": "Professor Miller",
+      "role": "Thesis Supervisor",
+      "setup": "You are presenting your research plan for the semester.",
+      "opening": "Can you walk me through your research process step-by-step? I tend to lose the thread if the logic isn't very clear."
+    },
+    "job_seeker": {
+      "partner": "Sarah",
+      "role": "Hiring Manager",
+      "setup": "You are answering a behavioral question about your previous experience.",
+      "opening": "Could you explain exactly how you handled that project from start to finish? I get lost easily with long stories."
+    },
+    "customer_facing": {
+      "partner": "Mr. Henderson",
+      "role": "Frustrated Customer",
+      "setup": "You are helping a client set up a complex piece of software.",
+      "opening": "I'm not tech-savvy and I get confused quickly. Can you walk me through the setup process one step at a time?"
+    },
+    "creator": {
+      "partner": "Leo",
+      "role": "Video Collaborator",
+      "setup": "You are planning the structure of a tutorial video together.",
+      "opening": "Can you walk me through the sequence of the tutorial? I get lost if the flow isn't explicitly mapped out."
+    },
+    "everyday": {
+      "partner": "Jen",
+      "role": "New Neighbor",
+      "setup": "You are giving directions to a local hidden gem in the neighborhood.",
+      "opening": "Could you tell me how to get there step-by-step? I have a terrible sense of direction and get lost easily."
+    },
+    "new_here": {
+      "partner": "Marcus",
+      "role": "Coworker",
+      "setup": "You are sharing your experience of relocating to the city.",
+      "opening": "I've always wondered how people move countries. Can you walk me through the steps you took? I get lost in the details."
+    }
+  },
+  "rubric": [
+    {
+      "id": "preview",
+      "check": "Previews how many steps or parts there are, or what is coming"
+    },
+    {
+      "id": "signposts",
+      "check": "Uses ordering words between steps (e.g. 'first', 'next', 'then', 'finally')"
+    },
+    {
+      "id": "steps_in_order",
+      "check": "The steps are in a logical order a listener could follow"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Basis for Strong Public Speaking",
+      "section": "Building and Organizing Your Speech",
+      "page": 232,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0227"
+    },
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Basis for Strong Public Speaking",
+      "section": "Building and Organizing Your Speech",
+      "page": 235,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0231"
+    }
+  ],
+  "generated": {
+    "model": "gemma-4-31B-it",
+    "prompt_version": "v1",
+    "input_tokens": 3528,
+    "output_tokens": 1300,
+    "latency_ms": 28539
+  }
+}

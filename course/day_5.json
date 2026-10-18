@@ -1,0 +1,246 @@
+{
+  "day": 5,
+  "technique": "The deliberate pause",
+  "title": "The pause",
+  "learn": "Use silence, not \"um,\" to make your key line land.",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "The pause",
+      "body": "Silence is a tool. Using pauses helps your audience digest information and makes your most important points feel more significant.",
+      "learn": "Use silence, not \"um,\" to make your key line land."
+    },
+    {
+      "kind": "steps",
+      "title": "How The deliberate pause works",
+      "steps": [
+        {
+          "label": "Pick your line",
+          "text": "Identify the most important point you want to communicate."
+        },
+        {
+          "label": "Pause before",
+          "text": "Stop for a beat to create meaning and capture attention."
+        },
+        {
+          "label": "Speak slowly",
+          "text": "Slowing your rate helps the point come across as important."
+        },
+        {
+          "label": "Pause after",
+          "text": "Give the audience time to absorb and process the information."
+        },
+        {
+          "label": "Stay silent",
+          "text": "When you need to think, use silence instead of filler sounds."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Final Steps",
+        "section": "Delivery: A Recipe for Great Speaking",
+        "page": 361,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0364"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Vocalized pauses",
+          "meaning": "Filler sounds like 'uh' or 'um' used during a pause."
+        },
+        {
+          "term": "Pacing",
+          "meaning": "The speed and spacing of words to create meaning."
+        },
+        {
+          "term": "Nonfluencies",
+          "meaning": "Another term for vocalized pauses or fillers."
+        }
+      ],
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 11: Delivery",
+        "section": "",
+        "page": 495,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0407"
+      }
+    },
+    {
+      "kind": "table",
+      "title": "Pause Habits",
+      "columns": [
+        "Avoid",
+        "Aim For"
+      ],
+      "rows": [
+        [
+          "Vocalized pauses",
+          "Controlled silence"
+        ],
+        [
+          "Frantic speed",
+          "Deliberate pace"
+        ],
+        [
+          "Pausing too often",
+          "Well-placed pauses"
+        ]
+      ],
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 11: Delivery",
+        "section": "",
+        "page": 495,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0407"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "Telling a coworker about a project deadline.",
+      "before": "The deadline is, um, tomorrow, so we should probably, like, finish the slides tonight.",
+      "after": "The deadline is... (pause) tomorrow. (pause) We need to finish the slides tonight.",
+      "why": "It replaces distracting fillers with a deliberate pace."
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Controlled pauses prevent the audience from becoming distracted and give them the necessary time to mentally digest your words.",
+      "cite": {
+        "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+        "chapter": "Chapter 11: Delivery",
+        "section": "",
+        "page": 495,
+        "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+        "chunk_id": "exploring-0407"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your world"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "You have identified your most important point. How should you deliver it to maximize impact?",
+      "options": [
+        "Speak quickly to keep the energy high",
+        "Pause before, speak slowly, then pause after",
+        "Pause only after the point is finished"
+      ],
+      "answer": 1,
+      "explain": "This sequence creates attention, emphasizes the point, and allows for digestion."
+    },
+    {
+      "q": "You forget your next word while speaking. What is the best way to handle this gap?",
+      "options": [
+        "Use a filler sound like 'um' to keep flow",
+        "Speed up your pacing to cover the gap",
+        "Stay silent until you remember the word"
+      ],
+      "answer": 2,
+      "explain": "Silence should be used instead of vocalized pauses or fillers when thinking."
+    },
+    {
+      "q": "Why should you include a pause immediately after delivering a key piece of information?",
+      "options": [
+        "To create a moment of suspense",
+        "To give the audience time to absorb the information",
+        "To signal that you have finished the entire presentation"
+      ],
+      "answer": 1,
+      "explain": "Pausing after a point helps the audience process and digest the information."
+    }
+  ],
+  "examples": {
+    "student": "My research covers three main areas. But the most critical finding... [pause] ...is that the current model is fundamentally flawed. [pause] This changes how we view the entire dataset.",
+    "job_seeker": "I have a decade of experience in sales. However, my greatest strength... [pause] ...is my ability to listen to what the client isn't saying. [pause] That is how I close the deal.",
+    "customer_facing": "I understand this delay is frustrating. Here is the solution... [pause] ...I am going to personally oversee your order until it arrives. [pause] You have my word.",
+    "creator": "Everyone thinks success is about luck. But the truth... [pause] ...is that it's about showing up when you're terrified. [pause] Let me show you why.",
+    "everyday": "I know you really want me to come to the party. But... [pause] ...I need to prioritize my mental health this weekend. [pause] I hope you understand.",
+    "new_here": "Adjusting to this city has been a challenge. But the most important thing I've learned... [pause] ...is that kindness is a universal language. [pause] It makes every difference."
+  },
+  "scenarios": {
+    "student": {
+      "partner": "Professor Higgins",
+      "role": "Your thesis advisor",
+      "setup": "You are presenting your final research findings during a one-on-one review.",
+      "opening": "You've given me a lot of data today. If there is just one key takeaway you want me to remember, what is it?"
+    },
+    "job_seeker": {
+      "partner": "Sarah",
+      "role": "Hiring Manager",
+      "setup": "You are at the end of a high-stakes interview for a leadership role.",
+      "opening": "We have a few great candidates. Before you go, what is the one thing you want me to remember about you?"
+    },
+    "customer_facing": {
+      "partner": "Mr. Thompson",
+      "role": "An upset long-term client",
+      "setup": "A shipment was lost, and you are calling the client to resolve the conflict.",
+      "opening": "I'm tired of excuses. Just tell me the one thing I should remember about how you're fixing this."
+    },
+    "creator": {
+      "partner": "Marcus",
+      "role": "A potential brand collaborator",
+      "setup": "You are pitching a new video series concept to a producer.",
+      "opening": "Your portfolio is impressive, but this project is huge. What's the one core message you want the viewers to remember?"
+    },
+    "everyday": {
+      "partner": "Chloe",
+      "role": "A pushy close friend",
+      "setup": "You are trying to set a boundary regarding your free time.",
+      "opening": "Come on, just one night! If you're really saying no, what's the one reason you want me to remember?"
+    },
+    "new_here": {
+      "partner": "David",
+      "role": "A friendly new coworker",
+      "setup": "You are sharing your experience of moving to the country during a coffee break.",
+      "opening": "It must have been a whirlwind move. Looking back, what's the one thing you want me to remember about your journey?"
+    }
+  },
+  "rubric": [
+    {
+      "id": "key_line",
+      "check": "Has one clear key line or message that stands out"
+    },
+    {
+      "id": "pause_marked",
+      "check": "The transcript shows a pause around the key line (a pause marker [pause] next to it)"
+    },
+    {
+      "id": "few_fillers",
+      "check": "Uses silence instead of filler words (um, uh, like) around the key line"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Final Steps",
+      "section": "Delivery: A Recipe for Great Speaking",
+      "page": 361,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0364"
+    },
+    {
+      "book": "Exploring Public Speaking, 4th ed. (Tucker et al.)",
+      "chapter": "Chapter 11: Delivery",
+      "section": "",
+      "page": 495,
+      "url": "https://open.maricopa.edu/exploringpublicspeaking/",
+      "chunk_id": "exploring-0407"
+    }
+  ],
+  "generated": {
+    "model": "gemma-4-31B-it",
+    "prompt_version": "v1",
+    "input_tokens": 3140,
+    "output_tokens": 1553,
+    "latency_ms": 28805
+  }
+}

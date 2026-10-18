@@ -1,0 +1,230 @@
+{
+  "day": 6,
+  "technique": "Know your audience",
+  "title": "Know your audience",
+  "learn": "Say the same thing differently for different listeners.",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "Know your audience",
+      "body": "You aren't just dumping content on people. To be successful, you must make your message meaningful and applicable to the specific people listening to you.",
+      "learn": "Say the same thing differently for different listeners."
+    },
+    {
+      "kind": "steps",
+      "title": "How Know your audience works",
+      "steps": [
+        {
+          "label": "Analyze Audience",
+          "text": "Look at demographics like age and occupation to find a starting point for your speech."
+        },
+        {
+          "label": "Infer Needs",
+          "text": "Guess what your listeners already know or value based on that data."
+        },
+        {
+          "label": "Adjust Language",
+          "text": "Change your vocabulary and examples so they fit the listeners' knowledge and context."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Engaging Your Audience",
+        "page": 67,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0060"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Audience Analysis",
+          "meaning": "Discovering information about your literal audience to make informed decisions."
+        },
+        {
+          "term": "Demographics",
+          "meaning": "Characteristics like age or occupation used to understand an audience."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Engaging Your Audience",
+        "page": 67,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0060"
+      }
+    },
+    {
+      "kind": "table",
+      "title": "Adapting Your Content",
+      "columns": [
+        "Audience",
+        "Approach"
+      ],
+      "rows": [
+        [
+          "Teachers",
+          "Assume they value education"
+        ],
+        [
+          "Non-teachers",
+          "Explain why education is valuable"
+        ]
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Basis for Strong Public Speaking",
+        "section": "Engaging Your Audience",
+        "page": 67,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0060"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "Explaining a project to different people.",
+      "before": "My project uses a New Deal style approach to fix the local economy.",
+      "after": "My project uses a government-funded program, similar to how the 1930s 'New Deal' worked, to fix the economy.",
+      "why": "Younger adults may not know specific historical terms like 'New Deal.'"
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Adjusting your language based on audience analysis reduces the risk of misunderstandings and helps you connect with your listeners.",
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "Taking your Speech to the Next Level",
+        "section": "The Importance of Language and Style",
+        "page": 330,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0336"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your world"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "You are speaking to a group of teenagers. How should you apply the 'Analyze Audience' step?",
+      "options": [
+        "Use a wide range of complex vocabulary",
+        "Check their age to determine a starting point",
+        "Assume they already know all historical references"
+      ],
+      "answer": 1,
+      "explain": "Demographics like age help you find a starting point for your speech."
+    },
+    {
+      "q": "Based on your audience data, you realize your listeners are unfamiliar with a specific technical term. What is the next step?",
+      "options": [
+        "Continue using the term to sound professional",
+        "Ignore the term and skip that part of the speech",
+        "Change your vocabulary to fit their context"
+      ],
+      "answer": 2,
+      "explain": "Adjusting language ensures the message fits the listeners' knowledge."
+    },
+    {
+      "q": "Why would you change 'New Deal style' to 'government-funded program' when speaking to younger adults?",
+      "options": [
+        "To make the sentence longer",
+        "To reduce the risk of misunderstandings",
+        "To avoid using demographics"
+      ],
+      "answer": 1,
+      "explain": "Adjusting language helps you connect and prevents misunderstandings."
+    }
+  ],
+  "examples": {
+    "student": "Since we're all biology majors, I'll skip the basics of cell structure and dive straight into the mitochondrial dysfunction. We can focus our discussion on the specific protein mutations mentioned in the paper.",
+    "job_seeker": "In my previous role, I managed the full ETL pipeline to optimize data flow. Basically, I made sure the company's information moved from the source to the dashboard quickly and without errors.",
+    "customer_facing": "This medication helps regulate your blood pressure by relaxing your blood vessels. Think of it like opening a valve on a hose to stop the pressure from building up too high.",
+    "creator": "For those of you who are pro gamers, you know the 'meta' is shifting. For everyone else, that just means the most effective strategies for winning have changed recently.",
+    "everyday": "I'm really passionate about blockchain technology. It's essentially a digital ledger that no one can cheat, which makes it great for secure transactions without a middleman.",
+    "new_here": "Back home, we have a tradition called 'Lunar New Year' where families gather for a feast. It's very similar to how people celebrate Thanksgiving here with a big family meal."
+  },
+  "scenarios": {
+    "student": {
+      "partner": "Professor Lee",
+      "role": "Your university professor",
+      "setup": "You are explaining your thesis topic. The professor wants you to practice for a general audience.",
+      "opening": "Could you explain your research project to me first, and then explain how you would describe it to a ten-year-old?"
+    },
+    "job_seeker": {
+      "partner": "Sarah",
+      "role": "A hiring manager",
+      "setup": "You are in a job interview describing a complex technical achievement from your past.",
+      "opening": "Can you describe your most complex project? After that, try explaining it as if I have no technical background."
+    },
+    "customer_facing": {
+      "partner": "Mr. Jones",
+      "role": "An elderly patient",
+      "setup": "You are a healthcare provider explaining a new treatment plan to a patient.",
+      "opening": "What exactly does this medicine do in my body? Could you explain it simply, like you're talking to a grandparent?"
+    },
+    "creator": {
+      "partner": "Alex",
+      "role": "A potential collaborator",
+      "setup": "You are pitching a video concept that uses very niche community slang.",
+      "opening": "Tell me about your video idea. Then, how would you explain the hook to someone who has never seen a video like this?"
+    },
+    "everyday": {
+      "partner": "Jamie",
+      "role": "A new acquaintance at a party",
+      "setup": "You are talking about your hobby, which is quite complex or specialized.",
+      "opening": "What is that hobby you mentioned? Can you explain it to me, and then explain it as if I'm a complete beginner?"
+    },
+    "new_here": {
+      "partner": "Maria",
+      "role": "A friendly coworker",
+      "setup": "You are describing a cultural tradition from your home country to a local colleague.",
+      "opening": "I'd love to hear about a tradition from your country! Could you explain it to me, then simplify it for someone who knows nothing about your culture?"
+    }
+  },
+  "rubric": [
+    {
+      "id": "two_versions",
+      "check": "Gives two explanations aimed at clearly different listeners"
+    },
+    {
+      "id": "word_choice_changes",
+      "check": "Word choice or detail level clearly changes between the two versions"
+    },
+    {
+      "id": "same_core",
+      "check": "Both versions keep the same core message"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Basis for Strong Public Speaking",
+      "section": "Engaging Your Audience",
+      "page": 67,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0060"
+    },
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "Taking your Speech to the Next Level",
+      "section": "The Importance of Language and Style",
+      "page": 330,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0336"
+    }
+  ],
+  "generated": {
+    "model": "gemma-4-31B-it",
+    "prompt_version": "v1",
+    "input_tokens": 3895,
+    "output_tokens": 1291,
+    "latency_ms": 23321
+  }
+}

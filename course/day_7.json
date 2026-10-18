@@ -1,0 +1,222 @@
+{
+  "day": 7,
+  "technique": "Handling a tough question",
+  "title": "Tough questions",
+  "learn": "Acknowledge, bridge, answer.",
+  "pages": [
+    {
+      "kind": "intro",
+      "title": "Tough questions",
+      "body": "Tough questions can be scary, but you don't need to fake an answer. Use this method to stay professional and keep your audience engaged.",
+      "learn": "Acknowledge, bridge, answer."
+    },
+    {
+      "kind": "steps",
+      "title": "How Handling a tough question works",
+      "steps": [
+        {
+          "label": "Acknowledge",
+          "text": "Actively listen to the question to help you formulate your answer."
+        },
+        {
+          "label": "Bridge",
+          "text": "Use a transition phrase to connect the question to your response."
+        },
+        {
+          "label": "Answer",
+          "text": "Be short and sweet. If you lack specific info, explain that honestly."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Final Steps",
+        "section": "Delivery: A Recipe for Great Speaking",
+        "page": 385,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0396"
+      }
+    },
+    {
+      "kind": "terms",
+      "title": "Key terms",
+      "terms": [
+        {
+          "term": "Regulators",
+          "meaning": "Gestures that control the flow of interaction."
+        },
+        {
+          "term": "Transitions",
+          "meaning": "Phrases used to tie different messages together."
+        }
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Final Steps",
+        "section": "Delivery: A Recipe for Great Speaking",
+        "page": 385,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0396"
+      }
+    },
+    {
+      "kind": "table",
+      "title": "Handling Q&A",
+      "columns": [
+        "Do",
+        "Don't"
+      ],
+      "rows": [
+        [
+          "Be short and sweet",
+          "Give drawn-out answers"
+        ],
+        [
+          "Explain missing info",
+          "Fake your way through"
+        ]
+      ],
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Final Steps",
+        "section": "Delivery: A Recipe for Great Speaking",
+        "page": 385,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0396"
+      }
+    },
+    {
+      "kind": "before_after",
+      "title": "Before and after",
+      "situation": "A client asks for a specific statistic you don't have.",
+      "before": "Uh, I think it was around 20%? I'm not totally sure, but it was probably something like that.",
+      "after": "I hear your concern about the data. What I can tell you is that I don't have that specific number now, but I can email it to you.",
+      "why": "It avoids faking the answer and stays brief."
+    },
+    {
+      "kind": "why",
+      "title": "Why it works",
+      "body": "Active listening and honest, brief responses ensure the audience stays interested without the speaker feeling the need to fake information.",
+      "cite": {
+        "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+        "chapter": "The Final Steps",
+        "section": "Delivery: A Recipe for Great Speaking",
+        "page": 385,
+        "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+        "chunk_id": "stand-0396"
+      }
+    },
+    {
+      "kind": "example",
+      "title": "Hear it in your world"
+    }
+  ],
+  "quiz": [
+    {
+      "q": "A client asks for a statistic you don't know. What is the professional way to respond?",
+      "options": [
+        "Give your best guess to keep the flow going.",
+        "State honestly that you lack the info and offer a follow-up.",
+        "Ignore the question and move to the next topic."
+      ],
+      "answer": 1,
+      "explain": "Avoid faking answers; be honest and brief."
+    },
+    {
+      "q": "What is the purpose of using a 'bridge' during a tough question?",
+      "options": [
+        "To avoid answering the question entirely.",
+        "To connect the question to your response using a transition.",
+        "To signal the audience to stop talking."
+      ],
+      "answer": 1,
+      "explain": "Bridges use transition phrases to tie messages together."
+    },
+    {
+      "q": "Which sequence correctly follows the method for handling tough questions?",
+      "options": [
+        "Answer, Bridge, Acknowledge",
+        "Bridge, Acknowledge, Answer",
+        "Acknowledge, Bridge, Answer"
+      ],
+      "answer": 2,
+      "explain": "The steps are Acknowledge, Bridge, then Answer."
+    }
+  ],
+  "examples": {
+    "student": "That is a fair question regarding the methodology. Moving to the data, I focused on a smaller sample size to ensure accuracy. While I don't have the national figures, the local trend is clear.",
+    "job_seeker": "I appreciate you bringing up my gap in employment. To give you some context, I spent that year focusing on professional certifications. This allowed me to return to the workforce with advanced technical skills.",
+    "customer_facing": "I hear your frustration regarding the delay. What I can do right now is provide a complimentary upgrade while we track the shipment. I don't have the exact arrival time, but I will monitor it personally.",
+    "creator": "I see why you'd feel the plot twist was rushed. To explain the creative choice, I wanted to emphasize the chaos of the moment. I'm still refining that scene in the edit to make it smoother.",
+    "everyday": "I understand you're stressed about the party planning. That being said, I simply cannot host it at my house this year. I'm happy to help you find a great venue instead.",
+    "new_here": "I realize it sounds strange compared to how things work back home. To put it simply, I'm still getting used to the local customs. I'm not entirely sure about the etiquette here, but I'm learning."
+  },
+  "scenarios": {
+    "student": {
+      "partner": "Professor Lee",
+      "role": "Your strict thesis advisor",
+      "setup": "You are presenting your final research findings to the class.",
+      "opening": "You've ignored the most obvious counter-argument in your research. Why should we trust your conclusions if your data is so limited?"
+    },
+    "job_seeker": {
+      "partner": "Sarah",
+      "role": "Hiring Manager",
+      "setup": "You are in a second-round interview for a competitive management role.",
+      "opening": "Looking at your resume, you've changed industries three times in five years. Are you actually committed to this career, or just drifting?"
+    },
+    "customer_facing": {
+      "partner": "Mr. Henderson",
+      "role": "An angry long-term client",
+      "setup": "You work at a logistics firm; a shipment is three days late.",
+      "opening": "This is the second time this month my order is late. Why should I keep paying for a premium service that clearly doesn't work?"
+    },
+    "creator": {
+      "partner": "Marcus",
+      "role": "A critical lead producer",
+      "setup": "You are pitching a rough cut of your short film.",
+      "opening": "The pacing in the second act is a disaster. Do you really think an audience is going to sit through ten minutes of silence?"
+    },
+    "everyday": {
+      "partner": "Jenna",
+      "role": "A pushy close friend",
+      "setup": "You are discussing where to host a large group gathering.",
+      "opening": "Since you have the biggest living room, it only makes sense for everyone to come to your place. Why are you making this difficult?"
+    },
+    "new_here": {
+      "partner": "Dave",
+      "role": "A curious coworker",
+      "setup": "You recently moved from abroad and are eating lunch with colleagues.",
+      "opening": "Why do people in your country do things that way? It seems completely inefficient compared to how we do it here."
+    }
+  },
+  "rubric": [
+    {
+      "id": "acknowledge",
+      "check": "Acknowledges the question or the concern behind it before answering"
+    },
+    {
+      "id": "bridge",
+      "check": "Uses a bridge phrase to move to their answer (e.g. 'what I can tell you is', 'the way I see it')"
+    },
+    {
+      "id": "answer",
+      "check": "Gives a direct, specific answer rather than dodging"
+    }
+  ],
+  "citations": [
+    {
+      "book": "Stand up, Speak out: The Practice and Ethics of Public Speaking (UWM edition)",
+      "chapter": "The Final Steps",
+      "section": "Delivery: A Recipe for Great Speaking",
+      "page": 385,
+      "url": "https://wisconsin.pressbooks.pub/uwmpublicspeaking/",
+      "chunk_id": "stand-0396"
+    }
+  ],
+  "generated": {
+    "model": "gemma-4-31B-it",
+    "prompt_version": "v1",
+    "input_tokens": 3947,
+    "output_tokens": 1447,
+    "latency_ms": 25819
+  }
+}
