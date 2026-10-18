@@ -1,0 +1,51 @@
+{
+  "id": "d1-07",
+  "day": 1,
+  "technique": "PREP",
+  "world": "student",
+  "category": "tricky",
+  "partner": "Professor Okafor",
+  "role": "Course Professor",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "I'm a little unsure about the direction of the final project. What do you think we should focus on for the main argument?"
+    },
+    {
+      "speaker": "user",
+      "text": "We should focus on cost. Because cost is important. For example, things cost money. So, cost."
+    }
+  ],
+  "transcript": "We should focus on cost. Because cost is important. For example, things cost money. So, cost.",
+  "rubric": [
+    {
+      "id": "point_first",
+      "check": "States their main point or answer in the first 1-2 sentences of an answer"
+    },
+    {
+      "id": "reason",
+      "check": "Gives a reason for the point (often signalled by 'because' or 'the reason is')"
+    },
+    {
+      "id": "example",
+      "check": "Gives a specific example, story or piece of evidence that supports the reason"
+    },
+    {
+      "id": "point_again",
+      "check": "Ends an answer by restating the main point"
+    }
+  ],
+  "draft_labels": {
+    "point_first": "used",
+    "reason": "partly",
+    "example": "missing",
+    "point_again": "used"
+  },
+  "niki_labels": {
+    "point_first": null,
+    "reason": null,
+    "example": null,
+    "point_again": null
+  },
+  "why": "Uses the signal words (because, for example) with a circular reason and an empty example. A grader that pattern-matches will over-score this."
+}

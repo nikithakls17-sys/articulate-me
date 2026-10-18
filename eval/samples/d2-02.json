@@ -1,0 +1,45 @@
+{
+  "id": "d2-02",
+  "day": 2,
+  "technique": "Rule of three",
+  "world": "everyday",
+  "category": "good",
+  "partner": "Friend",
+  "role": "Friend",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "Come on, you have to try this new spot! Why are you being so resistant to going out tonight?"
+    },
+    {
+      "speaker": "user",
+      "text": "Okay, three reasons I'm staying in. One, I'm broke until Friday. Two, I have a presentation at nine. And three, honestly, I'm exhausted. Next week, I'm all yours."
+    }
+  ],
+  "transcript": "Okay, three reasons I'm staying in. One, I'm broke until Friday. Two, I have a presentation at nine. And three, honestly, I'm exhausted. Next week, I'm all yours.",
+  "rubric": [
+    {
+      "id": "three_reasons",
+      "check": "Gives exactly three distinct reasons or points (not two, not four or more)"
+    },
+    {
+      "id": "clearly_separated",
+      "check": "The three reasons are clearly separated so a listener could count them"
+    },
+    {
+      "id": "tied_to_case",
+      "check": "Each reason clearly supports the one case they are making"
+    }
+  ],
+  "draft_labels": {
+    "three_reasons": "used",
+    "clearly_separated": "used",
+    "tied_to_case": "used"
+  },
+  "niki_labels": {
+    "three_reasons": null,
+    "clearly_separated": null,
+    "tied_to_case": null
+  },
+  "why": "Short, casual, clearly counted."
+}

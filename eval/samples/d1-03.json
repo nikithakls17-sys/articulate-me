@@ -1,0 +1,51 @@
+{
+  "id": "d1-03",
+  "day": 1,
+  "technique": "PREP",
+  "world": "everyday",
+  "category": "partial",
+  "partner": "Sam",
+  "role": "Social Friend",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "You seem hesitant about going to the party. Why don't you just say yes and come with us?"
+    },
+    {
+      "speaker": "user",
+      "text": "Honestly, I'm not going to come tonight. I have an exam at nine tomorrow and I really need to sleep."
+    }
+  ],
+  "transcript": "Honestly, I'm not going to come tonight. I have an exam at nine tomorrow and I really need to sleep.",
+  "rubric": [
+    {
+      "id": "point_first",
+      "check": "States their main point or answer in the first 1-2 sentences of an answer"
+    },
+    {
+      "id": "reason",
+      "check": "Gives a reason for the point (often signalled by 'because' or 'the reason is')"
+    },
+    {
+      "id": "example",
+      "check": "Gives a specific example, story or piece of evidence that supports the reason"
+    },
+    {
+      "id": "point_again",
+      "check": "Ends an answer by restating the main point"
+    }
+  ],
+  "draft_labels": {
+    "point_first": "used",
+    "reason": "used",
+    "example": "missing",
+    "point_again": "missing"
+  },
+  "niki_labels": {
+    "point_first": null,
+    "reason": null,
+    "example": null,
+    "point_again": null
+  },
+  "why": "Clear point and reason, but no example and no closing point."
+}

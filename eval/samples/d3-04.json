@@ -1,0 +1,45 @@
+{
+  "id": "d3-04",
+  "day": 3,
+  "technique": "Open strong",
+  "world": "creator",
+  "category": "partial",
+  "partner": "Alex",
+  "role": "Casting Director for a new series",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "So many people are pitching ideas. What is the one surprising element in your concept that you think will grab the audience immediately?"
+    },
+    {
+      "speaker": "user",
+      "text": "Have you ever eaten a whole pizza by yourself? Anyway, my series is a documentary about small-town libraries closing. I'm Sam, I've directed two short films."
+    }
+  ],
+  "transcript": "Have you ever eaten a whole pizza by yourself? Anyway, my series is a documentary about small-town libraries closing. I'm Sam, I've directed two short films.",
+  "rubric": [
+    {
+      "id": "hook_first",
+      "check": "Their first sentence is a hook: a question, a short story, or a surprising fact (not 'Hi, my name is')"
+    },
+    {
+      "id": "hook_connects",
+      "check": "The hook connects to what they say next"
+    },
+    {
+      "id": "who_you_are",
+      "check": "Still makes clear who they are or what their idea is"
+    }
+  ],
+  "draft_labels": {
+    "hook_first": "used",
+    "hook_connects": "missing",
+    "who_you_are": "used"
+  },
+  "niki_labels": {
+    "hook_first": null,
+    "hook_connects": null,
+    "who_you_are": null
+  },
+  "why": "Hook first, but it has nothing to do with the pitch."
+}

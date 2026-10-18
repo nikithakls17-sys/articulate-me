@@ -1,0 +1,45 @@
+{
+  "id": "d3-01",
+  "day": 3,
+  "technique": "Open strong",
+  "world": "job_seeker",
+  "category": "good",
+  "partner": "Ms. Chen",
+  "role": "Hiring Manager for a tech firm",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "We've heard many strong resumes today; what unique perspective are you bringing to this role that sets you apart?"
+    },
+    {
+      "speaker": "user",
+      "text": "What happens when a hospital's scheduling app crashes at two in the morning? I found out, because I was the intern on call. I'm Priya, a software developer, and since that night I've been obsessed with building systems that don't fail when people need them most."
+    }
+  ],
+  "transcript": "What happens when a hospital's scheduling app crashes at two in the morning? I found out, because I was the intern on call. I'm Priya, a software developer, and since that night I've been obsessed with building systems that don't fail when people need them most.",
+  "rubric": [
+    {
+      "id": "hook_first",
+      "check": "Their first sentence is a hook: a question, a short story, or a surprising fact (not 'Hi, my name is')"
+    },
+    {
+      "id": "hook_connects",
+      "check": "The hook connects to what they say next"
+    },
+    {
+      "id": "who_you_are",
+      "check": "Still makes clear who they are or what their idea is"
+    }
+  ],
+  "draft_labels": {
+    "hook_first": "used",
+    "hook_connects": "used",
+    "who_you_are": "used"
+  },
+  "niki_labels": {
+    "hook_first": null,
+    "hook_connects": null,
+    "who_you_are": null
+  },
+  "why": "Question hook that leads straight into who she is."
+}

@@ -1,0 +1,45 @@
+{
+  "id": "d3-03",
+  "day": 3,
+  "technique": "Open strong",
+  "world": "student",
+  "category": "partial",
+  "partner": "Professor Davies",
+  "role": "Professor overseeing a major project",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "Before you dive into the details, can you tell me what makes your approach to this topic stand out from everyone else's?"
+    },
+    {
+      "speaker": "user",
+      "text": "Hi, my name is Aisha, I'm a third-year biology student. Um, did you know that most of the food waste on campus comes from just one dining hall? My project is about fixing that."
+    }
+  ],
+  "transcript": "Hi, my name is Aisha, I'm a third-year biology student. Um, did you know that most of the food waste on campus comes from just one dining hall? My project is about fixing that.",
+  "rubric": [
+    {
+      "id": "hook_first",
+      "check": "Their first sentence is a hook: a question, a short story, or a surprising fact (not 'Hi, my name is')"
+    },
+    {
+      "id": "hook_connects",
+      "check": "The hook connects to what they say next"
+    },
+    {
+      "id": "who_you_are",
+      "check": "Still makes clear who they are or what their idea is"
+    }
+  ],
+  "draft_labels": {
+    "hook_first": "missing",
+    "hook_connects": "used",
+    "who_you_are": "used"
+  },
+  "niki_labels": {
+    "hook_first": null,
+    "hook_connects": null,
+    "who_you_are": null
+  },
+  "why": "Good hook, but it comes second, after 'Hi, my name is'."
+}

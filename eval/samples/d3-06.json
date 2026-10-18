@@ -1,0 +1,45 @@
+{
+  "id": "d3-06",
+  "day": 3,
+  "technique": "Open strong",
+  "world": "everyday",
+  "category": "tricky",
+  "partner": "Sarah",
+  "role": "New acquaintance at a party",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "Everyone here seems to know each other. What's one thing about yourself that you think would make people want to keep talking to you?"
+    },
+    {
+      "speaker": "user",
+      "text": "So last week, um, I was at the bus stop and this lady, she, um, she had like a parrot, an actual parrot, on her shoulder, and the parrot said hi to me and I said hi back and, uh, yeah. Anyway. I'm Mei, I'm, um, new in the area."
+    }
+  ],
+  "transcript": "So last week, um, I was at the bus stop and this lady, she, um, she had like a parrot, an actual parrot, on her shoulder, and the parrot said hi to me and I said hi back and, uh, yeah. Anyway. I'm Mei, I'm, um, new in the area.",
+  "rubric": [
+    {
+      "id": "hook_first",
+      "check": "Their first sentence is a hook: a question, a short story, or a surprising fact (not 'Hi, my name is')"
+    },
+    {
+      "id": "hook_connects",
+      "check": "The hook connects to what they say next"
+    },
+    {
+      "id": "who_you_are",
+      "check": "Still makes clear who they are or what their idea is"
+    }
+  ],
+  "draft_labels": {
+    "hook_first": "partly",
+    "hook_connects": "missing",
+    "who_you_are": "used"
+  },
+  "niki_labels": {
+    "hook_first": null,
+    "hook_connects": null,
+    "who_you_are": null
+  },
+  "why": "Starts with a story, but it rambles and never connects to who she is."
+}

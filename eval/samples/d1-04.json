@@ -1,0 +1,51 @@
+{
+  "id": "d1-04",
+  "day": 1,
+  "technique": "PREP",
+  "world": "customer_facing",
+  "category": "partial",
+  "partner": "Mr. Reyes",
+  "role": "Upset Client",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "I'm extremely upset about this charge! Can you explain exactly how we can fix this problem for me right now?"
+    },
+    {
+      "speaker": "user",
+      "text": "Okay, so, um, I totally understand, these charges can be really confusing, and our system changed last month and a lot of people have been calling about it, and, uh, what I can do is refund the duplicate charge today. Because the system charged you twice. So, the refund today, that's what I'll do."
+    }
+  ],
+  "transcript": "Okay, so, um, I totally understand, these charges can be really confusing, and our system changed last month and a lot of people have been calling about it, and, uh, what I can do is refund the duplicate charge today. Because the system charged you twice. So, the refund today, that's what I'll do.",
+  "rubric": [
+    {
+      "id": "point_first",
+      "check": "States their main point or answer in the first 1-2 sentences of an answer"
+    },
+    {
+      "id": "reason",
+      "check": "Gives a reason for the point (often signalled by 'because' or 'the reason is')"
+    },
+    {
+      "id": "example",
+      "check": "Gives a specific example, story or piece of evidence that supports the reason"
+    },
+    {
+      "id": "point_again",
+      "check": "Ends an answer by restating the main point"
+    }
+  ],
+  "draft_labels": {
+    "point_first": "partly",
+    "reason": "used",
+    "example": "missing",
+    "point_again": "used"
+  },
+  "niki_labels": {
+    "point_first": null,
+    "reason": null,
+    "example": null,
+    "point_again": null
+  },
+  "why": "The point is buried after a ramble; good reason and restatement; no example."
+}

@@ -1,0 +1,53 @@
+{
+  "id": "d2-01",
+  "day": 2,
+  "technique": "Rule of three",
+  "world": "job_seeker",
+  "category": "good",
+  "partner": "Interviewer",
+  "role": "Hiring Manager",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "Your resume looks good, but frankly, many candidates are qualified. Convince me—what are the three main reasons I should hire you over someone else?"
+    },
+    {
+      "speaker": "user",
+      "text": "There are three reasons. First, I've already done this job: two years running the help desk on my campus. Second, I learn tools fast, I picked up your CRM over a weekend just for this interview."
+    },
+    {
+      "speaker": "partner",
+      "text": "Okay. And the third?"
+    },
+    {
+      "speaker": "user",
+      "text": "Third, I stay calm with upset customers. My satisfaction score was four point eight out of five. So, experience, speed, and calm."
+    }
+  ],
+  "transcript": "There are three reasons. First, I've already done this job: two years running the help desk on my campus. Second, I learn tools fast, I picked up your CRM over a weekend just for this interview. Third, I stay calm with upset customers. My satisfaction score was four point eight out of five. So, experience, speed, and calm.",
+  "rubric": [
+    {
+      "id": "three_reasons",
+      "check": "Gives exactly three distinct reasons or points (not two, not four or more)"
+    },
+    {
+      "id": "clearly_separated",
+      "check": "The three reasons are clearly separated so a listener could count them"
+    },
+    {
+      "id": "tied_to_case",
+      "check": "Each reason clearly supports the one case they are making"
+    }
+  ],
+  "draft_labels": {
+    "three_reasons": "used",
+    "clearly_separated": "used",
+    "tied_to_case": "used"
+  },
+  "niki_labels": {
+    "three_reasons": null,
+    "clearly_separated": null,
+    "tied_to_case": null
+  },
+  "why": "Previews the count, signposts each reason, sums up; split across two turns."
+}

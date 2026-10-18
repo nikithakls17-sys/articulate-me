@@ -1,0 +1,45 @@
+{
+  "id": "d3-05",
+  "day": 3,
+  "technique": "Open strong",
+  "world": "customer_facing",
+  "category": "bad",
+  "partner": "Mr. Harris",
+  "role": "a frustrated customer on their third call",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "I've already explained this twice today. Before I go through it again, why should I believe you're the one who can fix it?"
+    },
+    {
+      "speaker": "user",
+      "text": "Um, okay, so, I'm from the billing team and I'll look into it. Can you give me your account number?"
+    }
+  ],
+  "transcript": "Um, okay, so, I'm from the billing team and I'll look into it. Can you give me your account number?",
+  "rubric": [
+    {
+      "id": "hook_first",
+      "check": "Their first sentence is a hook: a question, a short story, or a surprising fact (not 'Hi, my name is')"
+    },
+    {
+      "id": "hook_connects",
+      "check": "The hook connects to what they say next"
+    },
+    {
+      "id": "who_you_are",
+      "check": "Still makes clear who they are or what their idea is"
+    }
+  ],
+  "draft_labels": {
+    "hook_first": "missing",
+    "hook_connects": "missing",
+    "who_you_are": "used"
+  },
+  "niki_labels": {
+    "hook_first": null,
+    "hook_connects": null,
+    "who_you_are": null
+  },
+  "why": "No hook at all."
+}

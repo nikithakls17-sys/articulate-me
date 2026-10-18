@@ -1,0 +1,45 @@
+{
+  "id": "d2-04",
+  "day": 2,
+  "technique": "Rule of three",
+  "world": "creator",
+  "category": "partial",
+  "partner": "Casting Director",
+  "role": "Director/Casting Director",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "Your concept is interesting, but I need more concrete direction. Give me three solid reasons why this vision will actually work on screen."
+    },
+    {
+      "speaker": "user",
+      "text": "It'll work because the cast is great, the budget's realistic, the locations are cheap, we already have a social following, and the timing with the festival is perfect, and also streaming platforms want this genre right now."
+    }
+  ],
+  "transcript": "It'll work because the cast is great, the budget's realistic, the locations are cheap, we already have a social following, and the timing with the festival is perfect, and also streaming platforms want this genre right now.",
+  "rubric": [
+    {
+      "id": "three_reasons",
+      "check": "Gives exactly three distinct reasons or points (not two, not four or more)"
+    },
+    {
+      "id": "clearly_separated",
+      "check": "The three reasons are clearly separated so a listener could count them"
+    },
+    {
+      "id": "tied_to_case",
+      "check": "Each reason clearly supports the one case they are making"
+    }
+  ],
+  "draft_labels": {
+    "three_reasons": "missing",
+    "clearly_separated": "partly",
+    "tied_to_case": "used"
+  },
+  "niki_labels": {
+    "three_reasons": null,
+    "clearly_separated": null,
+    "tied_to_case": null
+  },
+  "why": "Six reasons in one breath: too many to remember."
+}

@@ -1,0 +1,51 @@
+{
+  "id": "d1-05",
+  "day": 1,
+  "technique": "PREP",
+  "world": "creator",
+  "category": "bad",
+  "partner": "Priya",
+  "role": "Show Producer",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "Your concept is interesting, but what is the main takeaway you want the audience to have from the very beginning?"
+    },
+    {
+      "speaker": "user",
+      "text": "So, um, the show is kind of about a lot of things, like, friendship and growing up and also, uh, cooking a bit, and there's this one character who, I mean, it depends on the episode really. There's a lot going on. I think people will like it."
+    }
+  ],
+  "transcript": "So, um, the show is kind of about a lot of things, like, friendship and growing up and also, uh, cooking a bit, and there's this one character who, I mean, it depends on the episode really. There's a lot going on. I think people will like it.",
+  "rubric": [
+    {
+      "id": "point_first",
+      "check": "States their main point or answer in the first 1-2 sentences of an answer"
+    },
+    {
+      "id": "reason",
+      "check": "Gives a reason for the point (often signalled by 'because' or 'the reason is')"
+    },
+    {
+      "id": "example",
+      "check": "Gives a specific example, story or piece of evidence that supports the reason"
+    },
+    {
+      "id": "point_again",
+      "check": "Ends an answer by restating the main point"
+    }
+  ],
+  "draft_labels": {
+    "point_first": "missing",
+    "reason": "missing",
+    "example": "missing",
+    "point_again": "missing"
+  },
+  "niki_labels": {
+    "point_first": null,
+    "reason": null,
+    "example": null,
+    "point_again": null
+  },
+  "why": "Rambling with no single takeaway."
+}

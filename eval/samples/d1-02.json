@@ -1,0 +1,59 @@
+{
+  "id": "d1-02",
+  "day": 1,
+  "technique": "PREP",
+  "world": "student",
+  "category": "good",
+  "partner": "Professor Okafor",
+  "role": "Course Professor",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "I'm a little unsure about the direction of the final project. What do you think we should focus on for the main argument?"
+    },
+    {
+      "speaker": "user",
+      "text": "I think the main argument should be cost, not convenience. Because cost is what the council actually votes on."
+    },
+    {
+      "speaker": "partner",
+      "text": "Hmm. But isn't convenience what students complain about most?"
+    },
+    {
+      "speaker": "user",
+      "text": "It is, but like, our own survey showed seventy percent of residents ranked taxes first, and only twelve percent said convenience. So yeah, I'd still lead with cost."
+    }
+  ],
+  "transcript": "I think the main argument should be cost, not convenience. Because cost is what the council actually votes on. It is, but like, our own survey showed seventy percent of residents ranked taxes first, and only twelve percent said convenience. So yeah, I'd still lead with cost.",
+  "rubric": [
+    {
+      "id": "point_first",
+      "check": "States their main point or answer in the first 1-2 sentences of an answer"
+    },
+    {
+      "id": "reason",
+      "check": "Gives a reason for the point (often signalled by 'because' or 'the reason is')"
+    },
+    {
+      "id": "example",
+      "check": "Gives a specific example, story or piece of evidence that supports the reason"
+    },
+    {
+      "id": "point_again",
+      "check": "Ends an answer by restating the main point"
+    }
+  ],
+  "draft_labels": {
+    "point_first": "used",
+    "reason": "used",
+    "example": "used",
+    "point_again": "used"
+  },
+  "niki_labels": {
+    "point_first": null,
+    "reason": null,
+    "example": null,
+    "point_again": null
+  },
+  "why": "PREP spread across two turns; example arrives in the second reply."
+}

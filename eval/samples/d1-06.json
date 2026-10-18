@@ -1,0 +1,51 @@
+{
+  "id": "d1-06",
+  "day": 1,
+  "technique": "PREP",
+  "world": "job_seeker",
+  "category": "bad",
+  "partner": "Dana",
+  "role": "Hiring Manager",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "Your resume is impressive, but tell me, what is the single most valuable skill you bring to this specific team?"
+    },
+    {
+      "speaker": "user",
+      "text": "Uh, I'd say I'm a hard worker, a team player, good with people, I learn fast, I'm passionate about, you know, everything really."
+    }
+  ],
+  "transcript": "Uh, I'd say I'm a hard worker, a team player, good with people, I learn fast, I'm passionate about, you know, everything really.",
+  "rubric": [
+    {
+      "id": "point_first",
+      "check": "States their main point or answer in the first 1-2 sentences of an answer"
+    },
+    {
+      "id": "reason",
+      "check": "Gives a reason for the point (often signalled by 'because' or 'the reason is')"
+    },
+    {
+      "id": "example",
+      "check": "Gives a specific example, story or piece of evidence that supports the reason"
+    },
+    {
+      "id": "point_again",
+      "check": "Ends an answer by restating the main point"
+    }
+  ],
+  "draft_labels": {
+    "point_first": "partly",
+    "reason": "missing",
+    "example": "missing",
+    "point_again": "missing"
+  },
+  "niki_labels": {
+    "point_first": null,
+    "reason": null,
+    "example": null,
+    "point_again": null
+  },
+  "why": "A list of adjectives instead of one point; nothing supports it."
+}

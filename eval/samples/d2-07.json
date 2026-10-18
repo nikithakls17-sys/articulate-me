@@ -1,0 +1,45 @@
+{
+  "id": "d2-07",
+  "day": 2,
+  "technique": "Rule of three",
+  "world": "student",
+  "category": "tricky",
+  "partner": "Professor",
+  "role": "Course Professor",
+  "turns": [
+    {
+      "speaker": "partner",
+      "text": "You want to use this new software for our project, but I'm hesitant. Can you tell me exactly why this is better than the old system?"
+    },
+    {
+      "speaker": "user",
+      "text": "First, the new software saves us time, because it formats the citations for us. Second, it's free with our student login. Third, my roommate uses it for gaming and it's super fun."
+    }
+  ],
+  "transcript": "First, the new software saves us time, because it formats the citations for us. Second, it's free with our student login. Third, my roommate uses it for gaming and it's super fun.",
+  "rubric": [
+    {
+      "id": "three_reasons",
+      "check": "Gives exactly three distinct reasons or points (not two, not four or more)"
+    },
+    {
+      "id": "clearly_separated",
+      "check": "The three reasons are clearly separated so a listener could count them"
+    },
+    {
+      "id": "tied_to_case",
+      "check": "Each reason clearly supports the one case they are making"
+    }
+  ],
+  "draft_labels": {
+    "three_reasons": "used",
+    "clearly_separated": "used",
+    "tied_to_case": "partly"
+  },
+  "niki_labels": {
+    "three_reasons": null,
+    "clearly_separated": null,
+    "tied_to_case": null
+  },
+  "why": "Three clear reasons, but the third has nothing to do with the project."
+}
