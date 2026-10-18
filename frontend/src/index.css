@@ -42,22 +42,22 @@
 
 /* ---------- dark mode: same colour coding, darker soft fills, light ink for borders/shadows ---------- */
 :root[data-theme="dark"] {
-  --paper: #1a1917; --paper-deep: #26241f; --surface: #23211e; --ink: #f2ede4; --ink-soft: #b3aba0;
-  --read: #6f9ff4; --read-soft: #1d2b45;  --talk: #f0745e; --talk-soft: #45231c;
-  --check: #f2c14e; --check-soft: #3f3416; --good: #4fbf8a; --good-soft: #17382a;
-  --notes: #e77bb8; --notes-soft: #42203a; --timer: #f4a24f; --timer-soft: #452c15;
-  --target: #3dbdb1; --target-soft: #153835; --accent-deep: #ffb4a5; --highlight: #a07a1c;
-  --grid-line: rgba(242, 237, 228, 0.05); --grain-blend: screen; --grain-opacity: 0.12; --keyterm-bg: var(--check-soft);
+  --paper: #3a3835; --paper-deep: #44423e; --surface: #4a4844; --ink: #ece7df; --ink-soft: #c4bdb2;
+  --read: #7ea8f2; --read-soft: #3d4a63;  --talk: #f08068; --talk-soft: #634640;
+  --check: #f2c35a; --check-soft: #5e5438; --good: #5fc596; --good-soft: #3c5a4b;
+  --notes: #ea8bc0; --notes-soft: #5f4456; --timer: #f4aa60; --timer-soft: #634d38;
+  --target: #4cc4b8; --target-soft: #3a5956; --accent-deep: #ffbcae; --highlight: #9a7a2e;
+  --grid-line: rgba(236, 231, 223, 0.06); --grain-blend: soft-light; --grain-opacity: 0.25; --keyterm-bg: var(--check-soft);
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #1a1917; --paper-deep: #26241f; --surface: #23211e; --ink: #f2ede4; --ink-soft: #b3aba0;
-    --read: #6f9ff4; --read-soft: #1d2b45;  --talk: #f0745e; --talk-soft: #45231c;
-    --check: #f2c14e; --check-soft: #3f3416; --good: #4fbf8a; --good-soft: #17382a;
-    --notes: #e77bb8; --notes-soft: #42203a; --timer: #f4a24f; --timer-soft: #452c15;
-    --target: #3dbdb1; --target-soft: #153835; --accent-deep: #ffb4a5; --highlight: #a07a1c;
-    --grid-line: rgba(242, 237, 228, 0.05); --grain-blend: screen; --grain-opacity: 0.12; --keyterm-bg: var(--check-soft);
+    --paper: #3a3835; --paper-deep: #44423e; --surface: #4a4844; --ink: #ece7df; --ink-soft: #c4bdb2;
+    --read: #7ea8f2; --read-soft: #3d4a63;  --talk: #f08068; --talk-soft: #634640;
+    --check: #f2c35a; --check-soft: #5e5438; --good: #5fc596; --good-soft: #3c5a4b;
+    --notes: #ea8bc0; --notes-soft: #5f4456; --timer: #f4aa60; --timer-soft: #634d38;
+    --target: #4cc4b8; --target-soft: #3a5956; --accent-deep: #ffbcae; --highlight: #9a7a2e;
+    --grid-line: rgba(236, 231, 223, 0.06); --grain-blend: soft-light; --grain-opacity: 0.25; --keyterm-bg: var(--check-soft);
     color-scheme: dark;
   }
 }

@@ -27,7 +27,7 @@ export function useTheme() {
   const setTheme = (t: Theme) => {
     try { localStorage.setItem(KEY, t) } catch { /* ignore */ }
     document.documentElement.dataset.theme = t
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', t === 'dark' ? '#1a1917' : '#ebe8e2')
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', t === 'dark' ? '#3a3835' : '#ebe8e2')
     setThemeState(t)
   }
   return { theme, toggle: () => setTheme(theme === 'dark' ? 'light' : 'dark') }
